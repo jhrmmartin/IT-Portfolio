@@ -93,11 +93,13 @@
     <nav class="fixed w-full z-50 top-0 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-gray-100 dark:border-slate-800 transition-colors duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
+                <!-- Logo/Name -->
                 <a href="#home" class="font-bold text-xl tracking-tight text-primary dark:text-white hover:text-accent dark:hover:text-accent transition">
                     Jehrome Martin
                 </a>
                 
-                <div class="flex items-center gap-6">
+                <div class="flex items-center gap-4 md:gap-6">
+                    <!-- Desktop Menu (Hidden on mobile) -->
                     <div class="hidden md:flex space-x-8">
                         <a href="#home" class="text-sm font-medium hover:text-accent dark:hover:text-accent transition">Home</a>
                         <a href="#about" class="text-sm font-medium hover:text-accent dark:hover:text-accent transition">About</a>
@@ -106,10 +108,25 @@
                     </div>
                     
                     <!-- Theme Toggle Button -->
-                    <button id="theme-toggle" class="p-2 rounded-full bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-700 transition" aria-label="Toggle Dark Mode">
+                    <button id="theme-toggle" class="p-2 rounded-full bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-700 transition flex items-center justify-center w-10 h-10" aria-label="Toggle Dark Mode">
                         <i id="theme-icon" class="fa-solid fa-moon"></i>
                     </button>
+
+                    <!-- Hamburger Button (Mobile Only) -->
+                    <button id="mobile-menu-btn" class="md:hidden p-2 text-gray-600 dark:text-gray-300 hover:text-accent dark:hover:text-accent transition flex items-center justify-center w-10 h-10" aria-label="Toggle Menu">
+                        <i id="mobile-menu-icon" class="fa-solid fa-bars text-xl"></i>
+                    </button>
                 </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden absolute w-full bg-white dark:bg-slate-900 border-b border-gray-100 dark:border-slate-800 shadow-lg transition-colors duration-300">
+            <div class="px-4 pt-2 pb-6 space-y-2 flex flex-col">
+                <a href="#home" class="mobile-link block px-4 py-3 rounded-lg text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-slate-800 hover:text-accent dark:hover:text-accent transition">Home</a>
+                <a href="#about" class="mobile-link block px-4 py-3 rounded-lg text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-slate-800 hover:text-accent dark:hover:text-accent transition">About</a>
+                <a href="#works" class="mobile-link block px-4 py-3 rounded-lg text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-slate-800 hover:text-accent dark:hover:text-accent transition">Works</a>
+                <a href="#contact" class="mobile-link block px-4 py-3 rounded-lg text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-slate-800 hover:text-accent dark:hover:text-accent transition">Contact</a>
             </div>
         </div>
     </nav>
@@ -195,7 +212,7 @@
                                 <span class="skill-tag px-4 py-2 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-sm font-semibold rounded-lg cursor-default border border-blue-100 dark:border-blue-800">Figma</span>
                                 <span class="skill-tag px-4 py-2 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-sm font-semibold rounded-lg cursor-default border border-blue-100 dark:border-blue-800">Unity</span>
                                 <span class="skill-tag px-4 py-2 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-sm font-semibold rounded-lg cursor-default border border-blue-100 dark:border-blue-800">Python</span>
-                                <span class="skill-tag px-4 py-2 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-sm font-semibold rounded-lg cursor-default border border-blue-100 dark:border-blue-800">C#</span>
+                                <span class="skill-tag px-4 py-2 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-sm font-semibold rounded-lg cursor-default border border-blue-100 dark:border-blue-800">C</span>
                             </div>
                         </div>
                         <div>
@@ -374,7 +391,7 @@
                 <a href="resume.pdf" target="_blank" class="flex items-center gap-4 px-10 py-5 bg-accent text-white rounded-full shadow-[0_0_20px_rgba(59,130,246,0.4)] hover:shadow-[0_0_30px_rgba(59,130,246,0.6)] hover:bg-blue-600 hover:-translate-y-2 transition-all duration-300 group">
                     <i class="fa-solid fa-file-pdf text-3xl"></i>
                     <div class="text-left">
-                        <p class="text-xs text-blue-100 font-medium uppercase tracking-wider mb-1">
+                        <p class="text-xs text-blue-100 font-medium uppercase tracking-wider mb-1">Curriculum Vitae</p>
                         <p class="text-lg font-bold leading-none">View My Resume</p>
                     </div>
                 </a>
@@ -425,6 +442,35 @@
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             
+            /* --- Mobile Menu Logic --- */
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileMenuIcon = document.getElementById('mobile-menu-icon');
+            const mobileLinks = document.querySelectorAll('.mobile-link');
+
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+                
+                // Toggle between hamburger and close icon
+                if (mobileMenu.classList.contains('hidden')) {
+                    mobileMenuIcon.classList.remove('fa-xmark');
+                    mobileMenuIcon.classList.add('fa-bars');
+                } else {
+                    mobileMenuIcon.classList.remove('fa-bars');
+                    mobileMenuIcon.classList.add('fa-xmark');
+                }
+            });
+
+            // Close mobile menu when clicking a link
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                    mobileMenuIcon.classList.remove('fa-xmark');
+                    mobileMenuIcon.classList.add('fa-bars');
+                });
+            });
+
+
             /* --- Theme Toggle Logic --- */
             const themeToggleBtn = document.getElementById('theme-toggle');
             const themeIcon = document.getElementById('theme-icon');
