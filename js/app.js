@@ -442,37 +442,66 @@ window.PortfolioApp = {
   },
 
   async loadData() {
+    // 1. If the owner has unpublished local draft edits in this browser, preview them
+    const hasDraft = localStorage.getItem('jehrome_has_unpublished_draft') === 'true';
     const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) {
+    if (hasDraft && saved) {
       try {
         this.data = JSON.parse(saved);
         return;
       } catch (e) {
-        console.warn('Failed to parse saved portfolio data, falling back to JSON/default.', e);
+        console.warn('Failed to parse local draft, falling back to live data.', e);
       }
     }
 
+    // 2. Fetch live data directly from GitHub Raw API first (instant real-time updates across all browsers!)
     try {
-      const res = await fetch('data/portfolio-data.json');
+      const ghRes = await fetch('https://api.github.com/repos/jhrmmartin/IT-Portfolio/contents/data/portfolio-data.json', {
+        headers: { 'Accept': 'application/vnd.github.raw+json' },
+        cache: 'no-store'
+      });
+      if (ghRes.ok) {
+        this.data = await ghRes.json();
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(this.data));
+        return;
+      }
+    } catch (_) {
+      // Fallback to local/Vercel static file if offline or rate-limited
+    }
+
+    // 3. Fetch live data from local/Vercel server with cache-busting
+    try {
+      const res = await fetch(`data/portfolio-data.json?t=${Date.now()}`, { cache: 'no-store' });
       if (res.ok) {
         this.data = await res.json();
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(this.data));
         return;
       }
     } catch (_) {
       // Expected if opened directly via file:// protocol
     }
 
+    // 3. Fallback to cached localStorage or built-in defaults
+    if (saved) {
+      try {
+        this.data = JSON.parse(saved);
+        return;
+      } catch (_) {}
+    }
+
     this.data = structuredClone(DEFAULT_PORTFOLIO_DATA);
   },
 
-  saveData(newData) {
+  saveData(newData, isDraft = true) {
     this.data = newData;
     localStorage.setItem(STORAGE_KEY, JSON.stringify(this.data));
+    localStorage.setItem('jehrome_has_unpublished_draft', isDraft ? 'true' : 'false');
     this.renderAll();
   },
 
   resetToDefault() {
     localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem('jehrome_has_unpublished_draft');
     this.data = structuredClone(DEFAULT_PORTFOLIO_DATA);
     this.activeMateriaId = null;
     this.renderAll();

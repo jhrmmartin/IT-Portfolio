@@ -256,17 +256,19 @@ window.PortfolioEditor = {
       { id: 'certs', label: 'Certifications', icon: 'fa-solid fa-certificate' },
       { id: 'custom', label: 'Custom Modules', icon: 'fa-solid fa-layer-group' },
       { id: 'profile', label: 'Profile & HUD Stats', icon: 'fa-solid fa-user-astronaut' },
-      { id: 'security', label: 'Security & Passcode', icon: 'fa-solid fa-shield-halved' }
+      { id: 'security', label: 'Live Cloud Sync & Security', icon: 'fa-solid fa-cloud-arrow-up' }
     ];
+
+    const hasDraft = localStorage.getItem('jehrome_has_unpublished_draft') === 'true';
 
     container.innerHTML = `
       <!-- Top Bar -->
       <div class="flex flex-wrap items-center justify-between gap-4 border-b border-emerald-500/30 pb-4 mb-5">
         <div>
           <div class="flex items-center gap-2">
-            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span class="w-2.5 h-2.5 rounded-full ${hasDraft ? 'bg-amber-400' : 'bg-emerald-400'} animate-pulse"></span>
             <span class="text-xs font-mono-hud text-emerald-400 uppercase tracking-widest">
-              SHINRA / TACTICAL TERMINAL • OWNER CLEARANCE VERIFIED
+              SHINRA / TACTICAL TERMINAL • ${hasDraft ? 'UNPUBLISHED DRAFT CHANGES' : 'SYNCED WITH LIVE SITE'}
             </span>
           </div>
           <h3 id="cmsModalTitle" class="text-xl font-bold mt-0.5">
@@ -277,9 +279,18 @@ window.PortfolioEditor = {
         <div class="flex flex-wrap items-center gap-2">
           <button
             type="button"
+            id="cms-publish-live-btn"
+            class="px-3.5 py-1.5 rounded text-xs font-mono-hud font-bold bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-lg shadow-emerald-500/25 transition flex items-center gap-1.5"
+            title="Push your changes live to GitHub & Vercel so everyone's browser sees them immediately!"
+          >
+            <i class="fa-solid fa-cloud-arrow-up"></i> Publish Live to Website
+          </button>
+
+          <button
+            type="button"
             id="cms-export-json-btn"
             class="px-3 py-1.5 rounded text-xs font-mono-hud bg-cyan-500/20 hover:bg-cyan-500/35 text-cyan-300 border border-cyan-500/40 transition"
-            title="Download portfolio-data.json to drop into your /data folder"
+            title="Download portfolio-data.json backup"
           >
             <i class="fa-solid fa-download mr-1"></i> Export JSON
           </button>
@@ -744,20 +755,52 @@ window.PortfolioEditor = {
     }
 
     /* ------------------------------------------------------------------------
-       TAB 6: SECURITY & PASSCODE SETTINGS
+       TAB 6: LIVE CLOUD SYNC (GITHUB + VERCEL) & PASSCODE SETTINGS
        ------------------------------------------------------------------------ */
+    const savedGhToken = localStorage.getItem('jehrome_gh_token') || '';
+    const savedGhRepo = localStorage.getItem('jehrome_gh_repo') || 'jhrmmartin/IT-Portfolio';
+
     return `
       <div class="space-y-6">
-        <div class="p-5 rounded-lg bg-slate-900/90 border border-emerald-500/30 space-y-4">
-          <h4 class="text-sm font-mono-hud uppercase text-emerald-400 font-bold">
-            <i class="fa-solid fa-shield-halved mr-1"></i> Owner-Only Access & Security Architecture
-          </h4>
-          <ul class="text-xs space-y-2 opacity-85 list-disc pl-5 leading-relaxed">
-            <li><strong>Hidden from Public Visitors:</strong> All public "Customize" buttons have been removed from the navigation bar and footer so regular visitors and recruiters only see your polished portfolio.</li>
-            <li><strong>How You Open This Editor:</strong> Press <code class="px-1.5 py-0.5 rounded bg-slate-800 text-emerald-300">Ctrl + Shift + E</code> on desktop, add <code class="px-1.5 py-0.5 rounded bg-slate-800 text-emerald-300">?admin=1</code> to the URL, or rapidly click <code class="px-1.5 py-0.5 rounded bg-slate-800 text-emerald-300">SYS.BUILD // FF7-Y0</code> 5 times in the footer on mobile.</li>
-            <li><strong>Static File Immunity:</strong> Public visitors can never alter your live hosted website file (<code class="text-cyan-300">data/portfolio-data.json</code>). Only <strong>you</strong> can permanently publish changes by clicking <strong>"Export JSON"</strong> and uploading/committing <code class="text-cyan-300">portfolio-data.json</code> to your repository.</li>
-          </ul>
-        </div>
+        <!-- Real-Time GitHub & Vercel Live Cloud Sync Configuration -->
+        <form id="cms-github-sync-form" class="bg-slate-900/90 border border-emerald-500/40 rounded-lg p-5 space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <h4 class="text-sm font-mono-hud uppercase text-emerald-400 font-bold">
+              <i class="fa-solid fa-cloud-arrow-up mr-1"></i> 1-Click Real-Time Live Website Sync (GitHub + Vercel)
+            </h4>
+            <a
+              href="https://github.com/settings/tokens/new?scopes=repo&description=Jehrome+Portfolio+Live+CMS"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-xs font-mono-hud text-cyan-300 hover:underline"
+            >
+              Get GitHub Token (1-Click) <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i>
+            </a>
+          </div>
+
+          <p class="text-xs opacity-85 leading-relaxed">
+            Why didn't edits show on other people's browsers before? Because browser edits start as a <strong>local preview</strong> on your device.
+            By pasting your GitHub Personal Access Token below once, clicking <strong>"Publish Live to Website"</strong> in the top bar will commit your changes directly to <code class="text-emerald-300">jhrmmartin/IT-Portfolio</code> so <strong>every visitor's browser updates in real-time!</strong>
+          </p>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label class="block text-xs font-mono-hud mb-1 opacity-80">GitHub Repository</label>
+              <input type="text" name="ghRepo" value="${esc(savedGhRepo)}" required class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm font-mono-hud">
+            </div>
+            <div class="md:col-span-2">
+              <label class="block text-xs font-mono-hud mb-1 opacity-80">GitHub Personal Access Token (Stored Privately in Your Browser Only) *</label>
+              <input type="password" name="ghToken" value="${esc(savedGhToken)}" required placeholder="ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm font-mono-hud">
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-3">
+            <button type="submit" class="px-5 py-2 rounded text-xs font-mono-hud font-bold bg-emerald-500 hover:bg-emerald-400 text-slate-950 transition">
+              <i class="fa-solid fa-floppy-disk mr-1"></i> Save Token & Publish Live Now
+            </button>
+            ${savedGhToken ? `<span class="text-xs font-mono-hud text-emerald-400"><i class="fa-solid fa-circle-check mr-1"></i> Token Saved in Browser</span>` : `<span class="text-xs font-mono-hud text-amber-400">Token not set yet</span>`}
+          </div>
+        </form>
 
         <form id="cms-passcode-change-form" class="bg-slate-900/90 border border-cyan-500/30 rounded-lg p-5 space-y-4 max-w-lg">
           <h4 class="text-sm font-mono-hud uppercase text-cyan-400 font-bold">
@@ -1087,6 +1130,22 @@ window.PortfolioEditor = {
       });
     }
 
+    // Publish Live to GitHub & Vercel
+    document.getElementById('cms-publish-live-btn')?.addEventListener('click', () => {
+      this.publishToGitHub();
+    });
+
+    const ghSyncForm = document.getElementById('cms-github-sync-form');
+    if (ghSyncForm) {
+      ghSyncForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const fd = new FormData(ghSyncForm);
+        localStorage.setItem('jehrome_gh_repo', fd.get('ghRepo').trim());
+        localStorage.setItem('jehrome_gh_token', fd.get('ghToken').trim());
+        this.publishToGitHub();
+      });
+    }
+
     /* --- Passcode Change Form Events --- */
     const passForm = document.getElementById('cms-passcode-change-form');
     if (passForm) {
@@ -1104,6 +1163,79 @@ window.PortfolioEditor = {
         passForm.reset();
         this.flashStatus('Updated owner security passcode!');
       });
+    }
+  },
+
+  async publishToGitHub() {
+    const app = window.PortfolioApp;
+    const token = localStorage.getItem('jehrome_gh_token');
+    const repo = localStorage.getItem('jehrome_gh_repo') || 'jhrmmartin/IT-Portfolio';
+
+    if (!token) {
+      this.activeTab = 'security';
+      this.renderEditorUI();
+      this.flashStatus('Please paste your GitHub Personal Access Token below once to enable 1-click Live Website Publishing!');
+      return;
+    }
+
+    const btn = document.getElementById('cms-publish-live-btn');
+    if (btn) {
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Publishing Live...';
+    }
+    this.flashStatus('Connecting to GitHub API and publishing live to all browsers...');
+
+    try {
+      const apiUrl = `https://api.github.com/repos/${repo}/contents/data/portfolio-data.json`;
+      const headers = {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/vnd.github+json',
+        'Content-Type': 'application/json'
+      };
+
+      // 1. Get current file SHA from GitHub
+      let sha = undefined;
+      const getRes = await fetch(apiUrl, { headers, cache: 'no-store' });
+      if (getRes.ok) {
+        const fileMeta = await getRes.json();
+        sha = fileMeta.sha;
+      }
+
+      // 2. Encode UTF-8 JSON to Base64 safely
+      const jsonStr = JSON.stringify(app.data, null, 2);
+      const utf8Bytes = new TextEncoder().encode(jsonStr);
+      let binary = '';
+      for (let i = 0; i < utf8Bytes.length; i++) {
+        binary += String.fromCharCode(utf8Bytes[i]);
+      }
+      const base64Content = btoa(binary);
+
+      // 3. Commit updated portfolio-data.json directly to main branch
+      const putRes = await fetch(apiUrl, {
+        method: 'PUT',
+        headers,
+        body: JSON.stringify({
+          message: 'Live portfolio update via Tactical Terminal CMS',
+          content: base64Content,
+          sha,
+          branch: 'main'
+        })
+      });
+
+      if (!putRes.ok) {
+        const errData = await putRes.json().catch(() => ({}));
+        throw new Error(errData.message || `GitHub API returned ${putRes.status}`);
+      }
+
+      app.saveData(app.data, false);
+      this.renderEditorUI();
+      this.flashStatus('PUBLISHED LIVE! Your changes are now live for everyone on all browsers & devices!');
+    } catch (err) {
+      if (btn) {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> Publish Live to Website';
+      }
+      alert(`Failed to publish to GitHub: ${err.message}. Check your token in the "Live Cloud Sync & Security" tab.`);
     }
   },
 
