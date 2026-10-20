@@ -335,14 +335,13 @@
       "description": "An educational mobile game teaching disaster preparedness and emergency go-bag readiness to Grade 6 students.",
       "tags": [
         "Educational",
-        "Mobile Game",
-        "Capstone"
+        "Mobile Game"
       ],
       "linkedMateria": [
-        "mat-leadership",
         "mat-gamedesign",
+        "mat-unity",
         "mat-docs",
-        "mat-unity"
+        "mat-leadership"
       ],
       "substoryNumber": "SUBSTORY #05",
       "substoryTitle": "Operation Go-Bag Readiness",
@@ -350,9 +349,9 @@
       "weakness": "Dry Educational Content (Solved via Gamified Time-Trial Packing)",
       "tacticalGauges": {
         "design": 95,
-        "engineering": 80,
-        "documentation": 95,
-        "leadership": 100
+        "engineering": 85,
+        "documentation": 90,
+        "leadership": 90
       }
     }
   ],
