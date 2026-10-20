@@ -85,11 +85,23 @@
                         type="button"
                         id="sfx-toggle-btn"
                         class="px-2.5 py-1.5 rounded-lg bg-slate-900/90 border border-slate-700/80 hover:border-emerald-400/60 text-xs font-mono-hud flex items-center gap-1.5 transition"
-                        title="Toggle Classic FF7 Menu Sound Effects"
-                        aria-label="Toggle Menu Sound Effects"
+                        title="Toggle Classic FF7 & Yakuza 0 Sound Effects"
+                        aria-label="Toggle Sound Effects"
                     >
                         <i id="sfx-toggle-icon" class="fa-solid fa-volume-xmark opacity-60"></i>
                         <span id="sfx-toggle-label" class="hidden md:inline">SFX: OFF</span>
+                    </button>
+
+                    <!-- Retro SFX Jukebox & Soundboard Modal Trigger -->
+                    <button
+                        type="button"
+                        id="sfx-soundboard-btn"
+                        class="px-2.5 py-1.5 rounded-lg bg-slate-900/90 border border-slate-700/80 hover:border-cyan-400/60 text-xs font-mono-hud flex items-center gap-1.5 transition"
+                        title="Open Retro SFX Jukebox (Sample FF7 & Yakuza 0 Sounds)"
+                        aria-label="Open Retro Soundboard"
+                    >
+                        <i class="fa-solid fa-music text-cyan-400"></i>
+                        <span class="hidden xl:inline text-cyan-300">JUKEBOX</span>
                     </button>
 
                     <!-- Mobile Hamburger Button -->
@@ -120,6 +132,15 @@
                     <button type="button" data-theme-btn="classic" class="px-2.5 py-1 rounded text-xs font-mono-hud bg-slate-900 border border-slate-700">1997</button>
                     <button type="button" data-theme-btn="yakuza" class="px-2.5 py-1 rounded text-xs font-mono-hud bg-slate-900 border border-slate-700 text-amber-400">YAKUZA</button>
                 </div>
+            </div>
+            <div class="pt-2 border-t border-slate-800">
+                <button
+                    type="button"
+                    id="mobile-soundboard-btn"
+                    class="w-full py-2 rounded bg-cyan-950/40 border border-cyan-500/40 text-cyan-300 text-xs font-mono-hud flex items-center justify-center gap-2 hover:bg-cyan-900/40 transition"
+                >
+                    <i class="fa-solid fa-music"></i> Open SFX Jukebox & Soundboard
+                </button>
             </div>
         </div>
     </nav>
@@ -592,6 +613,109 @@
          ====================================================================== -->
     <dialog id="cms-modal" class="ff-dialog ff-dialog-wide" closedby="any" aria-labelledby="cmsModalTitle">
         <div id="cms-modal-content" class="ff-panel p-6 sm:p-8 bg-slate-950/95 text-slate-100 border border-emerald-400/50"></div>
+    </dialog>
+
+    <!-- ======================================================================
+         MODAL 3: RETRO SFX JUKEBOX & SOUNDBOARD
+         Uses declarative closedby="any" per modern-web-guidance
+         ====================================================================== -->
+    <dialog id="soundboard-modal" class="ff-dialog ff-dialog-wide" closedby="any" aria-labelledby="soundboardModalTitle">
+        <div id="soundboard-modal-content" class="ff-panel p-6 sm:p-8 bg-slate-950/95 text-slate-100 border border-emerald-400/50 max-w-3xl w-full">
+            <!-- Header -->
+            <div class="flex items-center justify-between border-b border-emerald-500/25 pb-3 mb-5">
+                <div class="flex items-center gap-3">
+                    <span class="w-3 h-3 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <h2 id="soundboardModalTitle" class="text-sm sm:text-base font-mono-hud font-bold uppercase tracking-wider text-emerald-400">
+                        RETRO SFX JUKEBOX // FF7 & YAKUZA 0 SOUNDBOARD
+                    </h2>
+                </div>
+                <button type="button" id="soundboard-close-btn" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition font-mono-hud text-xs" aria-label="Close soundboard">
+                    <i class="fa-solid fa-xmark mr-1"></i> CLOSE
+                </button>
+            </div>
+
+            <p class="text-xs sm:text-sm text-slate-300 mb-5 leading-relaxed font-mono-hud">
+                Real-time procedural Web Audio synthesis engine (zero audio files / 0kb bandwidth). Click any sound below to sample the soundscape!
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <!-- Final Fantasy VII Section -->
+                <div class="p-4 rounded-xl bg-slate-900/80 border border-emerald-500/30">
+                    <div class="flex items-center justify-between mb-3 pb-2 border-b border-emerald-500/20 text-emerald-400 font-mono-hud text-xs font-bold uppercase">
+                        <span class="flex items-center gap-2"><i class="fa-solid fa-meteor"></i> Final Fantasy VII & Cloud</span>
+                        <span class="text-[10px] text-emerald-500/80">SOLDIER 1st Class</span>
+                    </div>
+                    <div class="grid grid-cols-1 gap-2">
+                        <button type="button" data-sfx-play="cursor" class="px-3 py-2 rounded bg-slate-950/80 hover:bg-emerald-500/20 border border-emerald-500/30 hover:border-emerald-400 text-xs font-mono-hud text-left flex items-center justify-between transition group">
+                            <span><i class="fa-solid fa-play text-emerald-400 mr-2 text-[10px] group-hover:scale-125 transition-transform"></i>Cursor Move</span>
+                            <span class="text-[10px] opacity-60">Iconic Blip</span>
+                        </button>
+                        <button type="button" data-sfx-play="select" class="px-3 py-2 rounded bg-slate-950/80 hover:bg-emerald-500/20 border border-emerald-500/30 hover:border-emerald-400 text-xs font-mono-hud text-left flex items-center justify-between transition group">
+                            <span><i class="fa-solid fa-play text-emerald-400 mr-2 text-[10px] group-hover:scale-125 transition-transform"></i>Menu Confirm</span>
+                            <span class="text-[10px] opacity-60">Crystal Triad</span>
+                        </button>
+                        <button type="button" data-sfx-play="cancel" class="px-3 py-2 rounded bg-slate-950/80 hover:bg-emerald-500/20 border border-emerald-500/30 hover:border-emerald-400 text-xs font-mono-hud text-left flex items-center justify-between transition group">
+                            <span><i class="fa-solid fa-play text-emerald-400 mr-2 text-[10px] group-hover:scale-125 transition-transform"></i>Cancel / Dismiss</span>
+                            <span class="text-[10px] opacity-60">Falling Chirp</span>
+                        </button>
+                        <button type="button" data-sfx-play="materia" class="px-3 py-2 rounded bg-slate-950/80 hover:bg-emerald-500/20 border border-emerald-500/30 hover:border-emerald-400 text-xs font-mono-hud text-left flex items-center justify-between transition group">
+                            <span><i class="fa-solid fa-play text-emerald-400 mr-2 text-[10px] group-hover:scale-125 transition-transform"></i>Materia Equip</span>
+                            <span class="text-[10px] opacity-60">Crystal Shimmer</span>
+                        </button>
+                        <button type="button" data-sfx-play="cloudFanfare" class="px-3 py-2 rounded bg-slate-950/80 hover:bg-emerald-500/20 border border-emerald-500/30 hover:border-emerald-400 text-xs font-mono-hud text-left flex items-center justify-between transition group">
+                            <span><i class="fa-solid fa-play text-emerald-400 mr-2 text-[10px] group-hover:scale-125 transition-transform"></i>Cloud Victory Fanfare</span>
+                            <span class="text-[10px] opacity-60">Victory Brass Motif</span>
+                        </button>
+                        <button type="button" data-sfx-play="swordSlash" class="px-3 py-2 rounded bg-slate-950/80 hover:bg-emerald-500/20 border border-emerald-500/30 hover:border-emerald-400 text-xs font-mono-hud text-left flex items-center justify-between transition group">
+                            <span><i class="fa-solid fa-play text-emerald-400 mr-2 text-[10px] group-hover:scale-125 transition-transform"></i>Buster Sword Cleave</span>
+                            <span class="text-[10px] opacity-60">Blade Whoosh</span>
+                        </button>
+                        <button type="button" data-sfx-play="limitBreak" class="px-3 py-2 rounded bg-slate-950/80 hover:bg-emerald-500/20 border border-emerald-500/30 hover:border-emerald-400 text-xs font-mono-hud text-left flex items-center justify-between transition group">
+                            <span><i class="fa-solid fa-play text-emerald-400 mr-2 text-[10px] group-hover:scale-125 transition-transform"></i>Limit Break Charge</span>
+                            <span class="text-[10px] opacity-60">Mako Surge</span>
+                        </button>
+                        <button type="button" data-sfx-play="assess" class="px-3 py-2 rounded bg-slate-950/80 hover:bg-emerald-500/20 border border-emerald-500/30 hover:border-emerald-400 text-xs font-mono-hud text-left flex items-center justify-between transition group">
+                            <span><i class="fa-solid fa-play text-emerald-400 mr-2 text-[10px] group-hover:scale-125 transition-transform"></i>Tactical Assess</span>
+                            <span class="text-[10px] opacity-60">Intel Chord</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Yakuza 0 Section -->
+                <div class="p-4 rounded-xl bg-slate-900/80 border border-red-500/30">
+                    <div class="flex items-center justify-between mb-3 pb-2 border-b border-red-500/20 text-red-400 font-mono-hud text-xs font-bold uppercase">
+                        <span class="flex items-center gap-2"><i class="fa-solid fa-dragon"></i> Yakuza 0, Kiryu & Majima</span>
+                        <span class="text-[10px] text-amber-400">Kamurocho 1988</span>
+                    </div>
+                    <div class="grid grid-cols-1 gap-2">
+                        <button type="button" data-sfx-play="substory" class="px-3 py-2 rounded bg-slate-950/80 hover:bg-red-500/20 border border-red-500/30 hover:border-red-400 text-xs font-mono-hud text-left flex items-center justify-between transition group">
+                            <span><i class="fa-solid fa-play text-red-400 mr-2 text-[10px] group-hover:scale-125 transition-transform"></i>Substory Intro</span>
+                            <span class="text-[10px] opacity-60">Dramatic Chord</span>
+                        </button>
+                        <button type="button" data-sfx-play="kiryuHeat" class="px-3 py-2 rounded bg-slate-950/80 hover:bg-red-500/20 border border-red-500/30 hover:border-red-400 text-xs font-mono-hud text-left flex items-center justify-between transition group">
+                            <span><i class="fa-solid fa-play text-red-400 mr-2 text-[10px] group-hover:scale-125 transition-transform"></i>Kiryu Dragon Punch</span>
+                            <span class="text-[10px] opacity-60">Heavy Heat Hit</span>
+                        </button>
+                        <button type="button" data-sfx-play="majimaSting" class="px-3 py-2 rounded bg-slate-950/80 hover:bg-amber-500/20 border border-amber-500/30 hover:border-amber-400 text-xs font-mono-hud text-left flex items-center justify-between transition group">
+                            <span><i class="fa-solid fa-play text-amber-400 mr-2 text-[10px] group-hover:scale-125 transition-transform"></i>Majima Whistle & Gleam</span>
+                            <span class="text-[10px] opacity-60">"Kiryu-chan!"</span>
+                        </button>
+                        <button type="button" data-sfx-play="money" class="px-3 py-2 rounded bg-slate-950/80 hover:bg-amber-500/20 border border-amber-500/30 hover:border-amber-400 text-xs font-mono-hud text-left flex items-center justify-between transition group">
+                            <span><i class="fa-solid fa-play text-amber-400 mr-2 text-[10px] group-hover:scale-125 transition-transform"></i>Cash Fountain Explosion</span>
+                            <span class="text-[10px] opacity-60">Bubble Economy</span>
+                        </button>
+                        <button type="button" data-sfx-play="stamp" class="px-3 py-2 rounded bg-slate-950/80 hover:bg-red-500/20 border border-red-500/30 hover:border-red-400 text-xs font-mono-hud text-left flex items-center justify-between transition group">
+                            <span><i class="fa-solid fa-play text-red-400 mr-2 text-[10px] group-hover:scale-125 transition-transform"></i>Chapter Title Stamp</span>
+                            <span class="text-[10px] opacity-60">Heavy Sub Thud</span>
+                        </button>
+                        <button type="button" data-sfx-play="yakuzaSelect" class="px-3 py-2 rounded bg-slate-950/80 hover:bg-red-500/20 border border-red-500/30 hover:border-red-400 text-xs font-mono-hud text-left flex items-center justify-between transition group">
+                            <span><i class="fa-solid fa-play text-red-400 mr-2 text-[10px] group-hover:scale-125 transition-transform"></i>Arcade Menu Strike</span>
+                            <span class="text-[10px] opacity-60">Snappy Click</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </dialog>
 
     <!-- Core Portfolio Application & No-Code Editor Scripts -->

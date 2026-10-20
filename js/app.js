@@ -321,10 +321,17 @@ const DEFAULT_PORTFOLIO_DATA = {
 };
 
 /* ============================================================================
-   WEB AUDIO RETRO SFX SYNTHESIZER (Zero External Assets, Muted by Default)
+   WEB AUDIO RETRO SFX SYNTHESIZER (FF7 & YAKUZA 0 PROCEDURAL ENGINE)
+   Zero External Audio Files - Procedural Real-Time Audio Synthesis
    ============================================================================ */
 const SFX = {
-  enabled: false,
+  enabled: (function() {
+    try {
+      return localStorage.getItem('jehrome_sfx_enabled') === 'true';
+    } catch (e) {
+      return false;
+    }
+  })(),
   ctx: null,
 
   init() {
@@ -332,61 +339,304 @@ const SFX = {
       const AudioCtx = window.AudioContext || window.webkitAudioContext;
       this.ctx = new AudioCtx();
     }
+    if (this.ctx && this.ctx.state === 'suspended') {
+      this.ctx.resume().catch(() => {});
+    }
   },
 
   toggle() {
     this.enabled = !this.enabled;
+    try {
+      localStorage.setItem('jehrome_sfx_enabled', String(this.enabled));
+    } catch (e) {}
+
     if (this.enabled) {
       this.init();
-      if (this.ctx && this.ctx.state === 'suspended') {
-        this.ctx.resume();
+      const theme = document.documentElement.getAttribute('data-theme') || 'mako';
+      if (theme === 'yakuza') {
+        this.playYakuzaSelect();
+      } else {
+        this.playSelect();
       }
-      this.playSelect();
     }
     return this.enabled;
   },
 
-  // Classic FF7 Cursor Move Blip
+  enableAndPlay(fn) {
+    if (!this.enabled) {
+      this.enabled = true;
+      try {
+        localStorage.setItem('jehrome_sfx_enabled', 'true');
+      } catch (e) {}
+      const sfxLabel = document.getElementById('sfx-toggle-label');
+      const sfxIcon = document.getElementById('sfx-toggle-icon');
+      if (sfxLabel) sfxLabel.textContent = 'SFX: ON';
+      if (sfxIcon) sfxIcon.className = 'fa-solid fa-volume-high text-emerald-400';
+    }
+    this.init();
+    if (typeof fn === 'function') {
+      fn();
+    }
+  },
+
+  createNoiseBuffer(duration = 0.2) {
+    if (!this.ctx) return null;
+    const bufferSize = Math.floor(this.ctx.sampleRate * duration);
+    const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+      data[i] = Math.random() * 2 - 1;
+    }
+    return buffer;
+  },
+
+  /* --------------------------------------------------------------------------
+     FINAL FANTASY VII SFX SUITE (MIDGAR, CLOUD, MATERIA & CHIMES)
+     -------------------------------------------------------------------------- */
+
+  // 1. Classic FF7 Cursor Move Blip
   playCursor() {
     if (!this.enabled) return;
     this.init();
+    if (!this.ctx) return;
     const now = this.ctx.currentTime;
     const osc = this.ctx.createOscillator();
     const gain = this.ctx.createGain();
     osc.type = 'triangle';
-    osc.frequency.setValueAtTime(1480, now);
-    osc.frequency.exponentialRampToValueAtTime(1760, now + 0.045);
+    osc.frequency.setValueAtTime(1520, now);
+    osc.frequency.exponentialRampToValueAtTime(1820, now + 0.04);
     gain.gain.setValueAtTime(0.08, now);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.045);
     osc.connect(gain);
     gain.connect(this.ctx.destination);
     osc.start(now);
-    osc.stop(now + 0.055);
+    osc.stop(now + 0.05);
   },
 
-  // Materia Slot / Confirm Chime
+  // 2. FF7 Menu Confirm / Select Chime
   playSelect() {
     if (!this.enabled) return;
     this.init();
+    if (!this.ctx) return;
     const now = this.ctx.currentTime;
     [880, 1318.5, 1760].forEach((freq, idx) => {
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
       osc.type = 'sine';
-      osc.frequency.setValueAtTime(freq, now + idx * 0.04);
-      gain.gain.setValueAtTime(0.09, now + idx * 0.04);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.04 + 0.22);
+      osc.frequency.setValueAtTime(freq, now + idx * 0.035);
+      gain.gain.setValueAtTime(0.09, now + idx * 0.035);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.035 + 0.2);
       osc.connect(gain);
       gain.connect(this.ctx.destination);
-      osc.start(now + idx * 0.04);
-      osc.stop(now + idx * 0.04 + 0.24);
+      osc.start(now + idx * 0.035);
+      osc.stop(now + idx * 0.035 + 0.22);
     });
   },
 
-  // Tactical Assess / Substory Open Chord
+  // 3. FF7 Menu Cancel / Dialog Dismiss Chirp
+  playCancel() {
+    if (!this.enabled) return;
+    this.init();
+    if (!this.ctx) return;
+    const now = this.ctx.currentTime;
+    [980, 520].forEach((freq, idx) => {
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(freq, now + idx * 0.04);
+      gain.gain.setValueAtTime(0.07, now + idx * 0.04);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.04 + 0.055);
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+      osc.start(now + idx * 0.04);
+      osc.stop(now + idx * 0.04 + 0.06);
+    });
+  },
+
+  // 4. FF7 Materia Crystal Socket / Shimmer
+  playMateriaEquip() {
+    if (!this.enabled) return;
+    this.init();
+    if (!this.ctx) return;
+    const now = this.ctx.currentTime;
+    const freqs = [1046.5, 1318.5, 1568, 2093, 2637];
+    freqs.forEach((freq, idx) => {
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, now + idx * 0.024);
+      gain.gain.setValueAtTime(0.075, now + idx * 0.024);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.024 + 0.28);
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+      osc.start(now + idx * 0.024);
+      osc.stop(now + idx * 0.024 + 0.3);
+    });
+
+    // High crystal harmonic shimmer
+    const shimmer = this.ctx.createOscillator();
+    const sGain = this.ctx.createGain();
+    shimmer.type = 'sine';
+    shimmer.frequency.setValueAtTime(3520, now);
+    sGain.gain.setValueAtTime(0.03, now + 0.05);
+    sGain.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
+    shimmer.connect(sGain);
+    sGain.connect(this.ctx.destination);
+    shimmer.start(now + 0.05);
+    shimmer.stop(now + 0.48);
+  },
+
+  // 5. Cloud Strife Victory Fanfare Brass Motif
+  playCloudCheer() {
+    if (!this.enabled) return;
+    this.init();
+    if (!this.ctx) return;
+    const now = this.ctx.currentTime;
+    // FF7 Victory Fanfare Opening Motif: C5, C5, C5, C5(held), Ab4, Bb4, C5 (chord)
+    const melody = [
+      { f: 523.25, start: 0.00, dur: 0.08 },
+      { f: 523.25, start: 0.09, dur: 0.08 },
+      { f: 523.25, start: 0.18, dur: 0.08 },
+      { f: 523.25, start: 0.27, dur: 0.18 },
+      { f: 415.30, start: 0.48, dur: 0.18 },
+      { f: 466.16, start: 0.68, dur: 0.18 },
+      { f: 523.25, start: 0.88, dur: 0.45, chord: [659.25, 783.99] }
+    ];
+
+    melody.forEach(note => {
+      const playTone = (freq) => {
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(freq, now + note.start);
+
+        const filter = this.ctx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(2200, now + note.start);
+
+        gain.gain.setValueAtTime(0.065, now + note.start);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + note.start + note.dur);
+
+        osc.connect(filter);
+        filter.connect(gain);
+        gain.connect(this.ctx.destination);
+
+        osc.start(now + note.start);
+        osc.stop(now + note.start + note.dur + 0.02);
+      };
+
+      playTone(note.f);
+      if (note.chord) {
+        note.chord.forEach(cf => playTone(cf));
+      }
+    });
+  },
+
+  // 6. Buster Sword Slash / Heavy Blade Cleave
+  playSwordSlash() {
+    if (!this.enabled) return;
+    this.init();
+    if (!this.ctx) return;
+    const now = this.ctx.currentTime;
+
+    // Filtered noise sweep (air whoosh)
+    const noise = this.createNoiseBuffer(0.2);
+    if (noise) {
+      const noiseSource = this.ctx.createBufferSource();
+      noiseSource.buffer = noise;
+      const filter = this.ctx.createBiquadFilter();
+      filter.type = 'bandpass';
+      filter.Q.setValueAtTime(2.5, now);
+      filter.frequency.setValueAtTime(3200, now);
+      filter.frequency.exponentialRampToValueAtTime(350, now + 0.16);
+
+      const nGain = this.ctx.createGain();
+      nGain.gain.setValueAtTime(0.12, now);
+      nGain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+
+      noiseSource.connect(filter);
+      filter.connect(nGain);
+      nGain.connect(this.ctx.destination);
+      noiseSource.start(now);
+      noiseSource.stop(now + 0.19);
+    }
+
+    // Heavy low blade swing resonance
+    const lowOsc = this.ctx.createOscillator();
+    const lowGain = this.ctx.createGain();
+    lowOsc.type = 'triangle';
+    lowOsc.frequency.setValueAtTime(260, now);
+    lowOsc.frequency.exponentialRampToValueAtTime(65, now + 0.18);
+    lowGain.gain.setValueAtTime(0.1, now);
+    lowGain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+    lowOsc.connect(lowGain);
+    lowGain.connect(this.ctx.destination);
+    lowOsc.start(now);
+    lowOsc.stop(now + 0.21);
+
+    // Steel blade ring
+    [2400, 3100].forEach((freq) => {
+      const ring = this.ctx.createOscillator();
+      const rGain = this.ctx.createGain();
+      ring.type = 'sine';
+      ring.frequency.setValueAtTime(freq, now + 0.06);
+      rGain.gain.setValueAtTime(0.035, now + 0.06);
+      rGain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+      ring.connect(rGain);
+      rGain.connect(this.ctx.destination);
+      ring.start(now + 0.06);
+      ring.stop(now + 0.24);
+    });
+  },
+
+  // 7. Limit Break Charge / Mako Surge
+  playLimitBreak() {
+    if (!this.enabled) return;
+    this.init();
+    if (!this.ctx) return;
+    const now = this.ctx.currentTime;
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+    const filter = this.ctx.createBiquadFilter();
+
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(140, now);
+    osc.frequency.exponentialRampToValueAtTime(950, now + 0.32);
+
+    filter.type = 'lowpass';
+    filter.Q.setValueAtTime(5, now);
+    filter.frequency.setValueAtTime(280, now);
+    filter.frequency.exponentialRampToValueAtTime(3200, now + 0.32);
+
+    gain.gain.setValueAtTime(0.02, now);
+    gain.gain.linearRampToValueAtTime(0.09, now + 0.26);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.36);
+
+    osc.connect(filter);
+    filter.connect(gain);
+    gain.connect(this.ctx.destination);
+
+    osc.start(now);
+    osc.stop(now + 0.38);
+
+    // Shimmer burst at climax
+    const burst = this.ctx.createOscillator();
+    const bGain = this.ctx.createGain();
+    burst.type = 'sine';
+    burst.frequency.setValueAtTime(1760, now + 0.28);
+    bGain.gain.setValueAtTime(0.06, now + 0.28);
+    bGain.gain.exponentialRampToValueAtTime(0.001, now + 0.48);
+    burst.connect(bGain);
+    bGain.connect(this.ctx.destination);
+    burst.start(now + 0.28);
+    burst.stop(now + 0.5);
+  },
+
+  // 8. Tactical Assess / Intel Chord
   playAssess() {
     if (!this.enabled) return;
     this.init();
+    if (!this.ctx) return;
     const now = this.ctx.currentTime;
     [440, 554.37, 659.25, 880].forEach((freq, idx) => {
       const osc = this.ctx.createOscillator();
@@ -394,26 +644,228 @@ const SFX = {
       osc.type = 'triangle';
       osc.frequency.setValueAtTime(freq, now + idx * 0.03);
       gain.gain.setValueAtTime(0.07, now + idx * 0.03);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.42);
       osc.connect(gain);
       gain.connect(this.ctx.destination);
       osc.start(now + idx * 0.03);
-      osc.stop(now + 0.46);
+      osc.stop(now + 0.44);
     });
   },
 
-  // Yakuza 0 Dramatic Low Impact Stamp
+  /* --------------------------------------------------------------------------
+     YAKUZA 0 SFX SUITE (KAMUROCHO, KIRYU, MAJIMA & BUBBLE ECONOMY)
+     -------------------------------------------------------------------------- */
+
+  // 9. Yakuza 0 Substory Intro / Dramatic Guitar Sting
+  playYakuzaSubstory() {
+    if (!this.enabled) return;
+    this.init();
+    if (!this.ctx) return;
+    const now = this.ctx.currentTime;
+
+    // Dramatic minor pentatonic pluck arpeggio (Japanese Insen scale)
+    const notes = [
+      { f: 146.83, t: 0.00, v: 0.12 }, // D3
+      { f: 220.00, t: 0.02, v: 0.10 }, // A3
+      { f: 293.66, t: 0.04, v: 0.09 }, // D4
+      { f: 349.23, t: 0.06, v: 0.09 }, // F4
+      { f: 440.00, t: 0.08, v: 0.08 }, // A4
+      { f: 587.33, t: 0.10, v: 0.08 }  // D5
+    ];
+
+    notes.forEach(note => {
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(note.f, now + note.t);
+
+      const filter = this.ctx.createBiquadFilter();
+      filter.type = 'bandpass';
+      filter.Q.setValueAtTime(3.5, now + note.t);
+      filter.frequency.setValueAtTime(note.f * 1.8, now + note.t);
+
+      gain.gain.setValueAtTime(note.v, now + note.t);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + note.t + 0.42);
+
+      osc.connect(filter);
+      filter.connect(gain);
+      gain.connect(this.ctx.destination);
+
+      osc.start(now + note.t);
+      osc.stop(now + note.t + 0.45);
+    });
+
+    // Sub-bass gong impact at climax
+    const gong = this.ctx.createOscillator();
+    const gGain = this.ctx.createGain();
+    gong.type = 'sine';
+    gong.frequency.setValueAtTime(82, now + 0.12);
+    gong.frequency.exponentialRampToValueAtTime(42, now + 0.5);
+    gGain.gain.setValueAtTime(0.12, now + 0.12);
+    gGain.gain.exponentialRampToValueAtTime(0.001, now + 0.55);
+    gong.connect(gGain);
+    gGain.connect(this.ctx.destination);
+    gong.start(now + 0.12);
+    gong.stop(now + 0.58);
+  },
+
+  // 10. Kazuma Kiryu Dragon Heat Action Heavy Punch
+  playKiryuHeat() {
+    if (!this.enabled) return;
+    this.init();
+    if (!this.ctx) return;
+    const now = this.ctx.currentTime;
+
+    // Heavy bass punch kick
+    const subOsc = this.ctx.createOscillator();
+    const subGain = this.ctx.createGain();
+    subOsc.type = 'sine';
+    subOsc.frequency.setValueAtTime(170, now);
+    subOsc.frequency.exponentialRampToValueAtTime(44, now + 0.22);
+    subGain.gain.setValueAtTime(0.14, now);
+    subGain.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
+    subOsc.connect(subGain);
+    subGain.connect(this.ctx.destination);
+    subOsc.start(now);
+    subOsc.stop(now + 0.3);
+
+    // Punch transient crack
+    const noise = this.createNoiseBuffer(0.12);
+    if (noise) {
+      const src = this.ctx.createBufferSource();
+      src.buffer = noise;
+      const filter = this.ctx.createBiquadFilter();
+      filter.type = 'highpass';
+      filter.frequency.setValueAtTime(1100, now);
+      const nGain = this.ctx.createGain();
+      nGain.gain.setValueAtTime(0.12, now);
+      nGain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+      src.connect(filter);
+      filter.connect(nGain);
+      nGain.connect(this.ctx.destination);
+      src.start(now);
+      src.stop(now + 0.09);
+    }
+
+    // Mid-range body impact
+    const midOsc = this.ctx.createOscillator();
+    const midGain = this.ctx.createGain();
+    midOsc.type = 'triangle';
+    midOsc.frequency.setValueAtTime(220, now);
+    midOsc.frequency.exponentialRampToValueAtTime(75, now + 0.14);
+    midGain.gain.setValueAtTime(0.09, now);
+    midGain.gain.exponentialRampToValueAtTime(0.001, now + 0.16);
+    midOsc.connect(midGain);
+    midGain.connect(this.ctx.destination);
+    midOsc.start(now);
+    midOsc.stop(now + 0.18);
+  },
+
+  // 11. Goro Majima Mad Dog Slide-Whistle & Knife Gleam
+  playMajimaSting() {
+    if (!this.enabled) return;
+    this.init();
+    if (!this.ctx) return;
+    const now = this.ctx.currentTime;
+
+    // Wild comic slide-whistle glissando (Majima's mocking call)
+    const whistle = this.ctx.createOscillator();
+    const wGain = this.ctx.createGain();
+    whistle.type = 'sine';
+    whistle.frequency.setValueAtTime(680, now);
+    whistle.frequency.linearRampToValueAtTime(1950, now + 0.14);
+    whistle.frequency.linearRampToValueAtTime(1050, now + 0.24);
+    wGain.gain.setValueAtTime(0.08, now);
+    wGain.gain.exponentialRampToValueAtTime(0.001, now + 0.26);
+    whistle.connect(wGain);
+    wGain.connect(this.ctx.destination);
+    whistle.start(now);
+    whistle.stop(now + 0.28);
+
+    // Sharp metallic knife glint (pling!)
+    [3400, 4800].forEach((freq) => {
+      const ping = this.ctx.createOscillator();
+      const pGain = this.ctx.createGain();
+      ping.type = 'sine';
+      ping.frequency.setValueAtTime(freq, now + 0.2);
+      pGain.gain.setValueAtTime(0.055, now + 0.2);
+      pGain.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+      ping.connect(pGain);
+      pGain.connect(this.ctx.destination);
+      ping.start(now + 0.2);
+      ping.stop(now + 0.52);
+    });
+  },
+
+  // 12. Yakuza 0 Bubble Economy / Cash Fountain Explosion
+  playYakuzaMoney() {
+    if (!this.enabled) return;
+    this.init();
+    if (!this.ctx) return;
+    const now = this.ctx.currentTime;
+
+    // Fast cascade of bright metallic bell strikes (coins flying everywhere)
+    const coinPitches = [1975, 2349, 2793, 3135, 3520, 3951, 4186];
+    coinPitches.forEach((freq, idx) => {
+      const bell = this.ctx.createOscillator();
+      const bGain = this.ctx.createGain();
+      bell.type = 'sine';
+      bell.frequency.setValueAtTime(freq, now + idx * 0.022);
+      bGain.gain.setValueAtTime(0.05, now + idx * 0.022);
+      bGain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.022 + 0.18);
+      bell.connect(bGain);
+      bGain.connect(this.ctx.destination);
+      bell.start(now + idx * 0.022);
+      bell.stop(now + idx * 0.022 + 0.2);
+    });
+
+    // Cash register double bell
+    [1350, 2700].forEach(freq => {
+      const reg = this.ctx.createOscillator();
+      const rGain = this.ctx.createGain();
+      reg.type = 'sine';
+      reg.frequency.setValueAtTime(freq, now + 0.12);
+      rGain.gain.setValueAtTime(0.06, now + 0.12);
+      rGain.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
+      reg.connect(rGain);
+      rGain.connect(this.ctx.destination);
+      reg.start(now + 0.12);
+      reg.stop(now + 0.48);
+    });
+  },
+
+  // 13. Yakuza Arcade Menu Selection Strike
+  playYakuzaSelect() {
+    if (!this.enabled) return;
+    this.init();
+    if (!this.ctx) return;
+    const now = this.ctx.currentTime;
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(290, now);
+    osc.frequency.exponentialRampToValueAtTime(80, now + 0.045);
+    gain.gain.setValueAtTime(0.09, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+    osc.connect(gain);
+    gain.connect(this.ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.055);
+  },
+
+  // 14. Yakuza 0 Dramatic Chapter Title Stamp
   playYakuzaStamp() {
     if (!this.enabled) return;
     this.init();
+    if (!this.ctx) return;
     const now = this.ctx.currentTime;
-    [110, 146.83, 220].forEach((freq) => {
+    [95, 140, 210].forEach((freq) => {
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
       osc.type = 'sawtooth';
       osc.frequency.setValueAtTime(freq, now);
-      osc.frequency.exponentialRampToValueAtTime(freq * 0.65, now + 0.32);
-      gain.gain.setValueAtTime(0.09, now);
+      osc.frequency.exponentialRampToValueAtTime(freq * 0.55, now + 0.32);
+      gain.gain.setValueAtTime(0.08, now);
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
       osc.connect(gain);
       gain.connect(this.ctx.destination);
@@ -422,6 +874,8 @@ const SFX = {
     });
   }
 };
+
+window.SFX = SFX;
 
 /* ============================================================================
    GLOBAL APPLICATION STATE
@@ -522,9 +976,12 @@ window.PortfolioApp = {
     localStorage.setItem(THEME_KEY, themeName);
     if (playSound) {
       if (themeName === 'yakuza') {
-        SFX.playYakuzaStamp();
+        SFX.playYakuzaSubstory();
+        setTimeout(() => SFX.playYakuzaStamp(), 240);
+      } else if (themeName === 'classic') {
+        SFX.playSelect();
       } else {
-        SFX.playCursor();
+        SFX.playMateriaEquip();
       }
     }
 
@@ -687,11 +1144,12 @@ window.PortfolioApp = {
   },
 
   selectMateria(materiaId) {
-    SFX.playSelect();
     if (this.activeMateriaId === materiaId) {
       this.activeMateriaId = null; // Toggle off if already selected
+      SFX.playCancel();
     } else {
       this.activeMateriaId = materiaId;
+      SFX.playMateriaEquip();
     }
     this.renderMateriaLoadout();
     this.renderActiveMateriaInspector();
@@ -978,7 +1436,12 @@ window.PortfolioApp = {
     const content = document.getElementById('assess-modal-content');
     if (!work || !dialog || !content) return;
 
-    SFX.playAssess();
+    const theme = document.documentElement.getAttribute('data-theme') || 'mako';
+    if (theme === 'yakuza') {
+      SFX.playYakuzaSubstory();
+    } else {
+      SFX.playAssess();
+    }
 
     const gauges = work.tacticalGauges || { design: 85, engineering: 80, documentation: 85, leadership: 85 };
     const linkedMats = (work.linkedMateria || [])
@@ -1112,8 +1575,12 @@ window.PortfolioApp = {
 
     dialog.showModal();
 
-    document.getElementById('close-assess-modal-btn')?.addEventListener('click', () => dialog.close());
-    document.getElementById('cancel-assess-modal-btn')?.addEventListener('click', () => dialog.close());
+    const handleClose = () => {
+      SFX.playCancel();
+      dialog.close();
+    };
+    document.getElementById('close-assess-modal-btn')?.addEventListener('click', handleClose);
+    document.getElementById('cancel-assess-modal-btn')?.addEventListener('click', handleClose);
   },
 
   /* --------------------------------------------------------------------------
@@ -1233,6 +1700,12 @@ window.PortfolioApp = {
     const sfxLabel = document.getElementById('sfx-toggle-label');
     const sfxIcon = document.getElementById('sfx-toggle-icon');
     if (sfxBtn) {
+      // Sync initial state if previously enabled
+      if (SFX.enabled) {
+        if (sfxLabel) sfxLabel.textContent = 'SFX: ON';
+        if (sfxIcon) sfxIcon.className = 'fa-solid fa-volume-high text-emerald-400';
+      }
+
       sfxBtn.addEventListener('click', () => {
         const isOn = SFX.toggle();
         if (sfxLabel) sfxLabel.textContent = isOn ? 'SFX: ON' : 'SFX: OFF';
@@ -1241,6 +1714,60 @@ window.PortfolioApp = {
         }
       });
     }
+
+    // Soundboard Jukebox Modal (Test & Play FF7 & Yakuza 0 SFX)
+    const soundboardBtn = document.getElementById('sfx-soundboard-btn');
+    const soundboardModal = document.getElementById('soundboard-modal');
+    const soundboardClose = document.getElementById('soundboard-close-btn');
+
+    const openSoundboard = () => {
+      SFX.enableAndPlay(() => {
+        const theme = document.documentElement.getAttribute('data-theme') || 'mako';
+        if (theme === 'yakuza') {
+          SFX.playYakuzaSelect();
+        } else {
+          SFX.playSelect();
+        }
+      });
+      soundboardModal?.showModal();
+    };
+
+    soundboardBtn?.addEventListener('click', openSoundboard);
+    document.getElementById('mobile-soundboard-btn')?.addEventListener('click', () => {
+      mobileMenu?.classList.add('hidden');
+      openSoundboard();
+    });
+
+    soundboardClose?.addEventListener('click', () => {
+      SFX.playCancel();
+      soundboardModal?.close();
+    });
+
+    // Soundboard Jukebox Interactive Buttons
+    document.querySelectorAll('[data-sfx-play]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const soundKey = btn.getAttribute('data-sfx-play');
+        SFX.enableAndPlay(() => {
+          switch (soundKey) {
+            case 'cursor': SFX.playCursor(); break;
+            case 'select': SFX.playSelect(); break;
+            case 'cancel': SFX.playCancel(); break;
+            case 'materia': SFX.playMateriaEquip(); break;
+            case 'cloudFanfare': SFX.playCloudCheer(); break;
+            case 'swordSlash': SFX.playSwordSlash(); break;
+            case 'limitBreak': SFX.playLimitBreak(); break;
+            case 'assess': SFX.playAssess(); break;
+            case 'substory': SFX.playYakuzaSubstory(); break;
+            case 'kiryuHeat': SFX.playKiryuHeat(); break;
+            case 'majimaSting': SFX.playMajimaSting(); break;
+            case 'money': SFX.playYakuzaMoney(); break;
+            case 'stamp': SFX.playYakuzaStamp(); break;
+            case 'yakuzaSelect': SFX.playYakuzaSelect(); break;
+            default: SFX.playSelect();
+          }
+        });
+      });
+    });
 
     // Mobile Menu Drawer
     const mobileMenuBtn = document.getElementById('mobile-menu-btn');
@@ -1416,9 +1943,17 @@ window.PortfolioApp = {
 
     if (!actorCloud || !actorKiryu || !actorMajima) return;
 
-    // Click Cloud Strife
+    // Click Cloud Strife (Rotates through Cloud's victory fanfare, Buster Sword slash, and Materia chime)
+    let cloudSoundIdx = 0;
     actorCloud.addEventListener('click', () => {
-      SFX.playSelect();
+      const sounds = [
+        () => SFX.playCloudCheer(),
+        () => SFX.playSwordSlash(),
+        () => SFX.playMateriaEquip()
+      ];
+      sounds[cloudSoundIdx % sounds.length]();
+      cloudSoundIdx++;
+
       if (spriteCloud) {
         spriteCloud.classList.add('cheer');
         setTimeout(() => spriteCloud.classList.remove('cheer'), 1400);
@@ -1426,25 +1961,47 @@ window.PortfolioApp = {
       this.showCompanionBubble('cloud');
     });
 
-    // Click Kazuma Kiryu
+    // Click Kazuma Kiryu (Rotates through Dragon Heat punch, Substory intro, and Title Stamp)
+    let kiryuSoundIdx = 0;
     actorKiryu.addEventListener('click', () => {
-      SFX.playYakuzaStamp();
+      const sounds = [
+        () => SFX.playKiryuHeat(),
+        () => SFX.playYakuzaSubstory(),
+        () => SFX.playYakuzaStamp()
+      ];
+      sounds[kiryuSoundIdx % sounds.length]();
+      kiryuSoundIdx++;
       this.showCompanionBubble('kiryu');
     });
 
-    // Click Goro Majima
+    // Click Goro Majima (Rotates through Mad Dog whistle & knife gleam, Cash fountain, and Arcade hit)
+    let majimaSoundIdx = 0;
     actorMajima.addEventListener('click', () => {
-      SFX.playYakuzaStamp();
+      const sounds = [
+        () => SFX.playMajimaSting(),
+        () => SFX.playYakuzaMoney(),
+        () => SFX.playYakuzaSelect()
+      ];
+      sounds[majimaSoundIdx % sounds.length]();
+      majimaSoundIdx++;
       this.showCompanionBubble('majima');
     });
 
     closeBtn?.addEventListener('click', () => {
+      SFX.playCancel();
       document.getElementById('companion-dialogue')?.classList.add('hidden-bubble');
     });
 
     nextQuoteBtn?.addEventListener('click', () => {
-      SFX.playCursor();
-      this.showCompanionBubble(this.companionState.activeSpeaker, true);
+      const speaker = this.companionState.activeSpeaker;
+      if (speaker === 'kiryu') {
+        SFX.playKiryuHeat();
+      } else if (speaker === 'majima') {
+        SFX.playMajimaSting();
+      } else {
+        SFX.playSwordSlash();
+      }
+      this.showCompanionBubble(speaker, true);
     });
 
     patrolBtn?.addEventListener('click', () => {
