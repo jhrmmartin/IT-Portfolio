@@ -1,544 +1,544 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en" class="scroll-smooth" data-theme="mako">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jehrome Martin | Portfolio</title>
-    
+    <!-- MANDATORY per modern-web-guidance (dark-mode): Declare support for both light and dark themes -->
+    <meta name="color-scheme" content="light dark">
+    <title>Jehrome Martin | Game Designer & IT Specialist Portfolio</title>
+
+    <!-- Cloud Strife Favicon -->
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="apple-touch-icon" href="favicon.png">
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <!-- FontAwesome for Icons -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
-    <!-- Custom Tailwind Configuration -->
-    <script>
-        tailwind.config = {
-            darkMode: 'class', // Enables dark mode toggling via a CSS class
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#0f172a', // slate-900
-                        accent: '#3b82f6',  // blue-500
-                    }
-                }
-            }
-        }
-    </script>
-
-    <!-- Custom CSS for Animations -->
-    <style>
-        /* Scroll Reveal Animation Classes */
-        .fade-in-up {
-            opacity: 0;
-            transform: translateY(40px);
-            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-        }
-        .fade-in-up.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Continuous Floating Animation */
-        .float {
-            animation: floating 3.5s ease-in-out infinite;
-        }
-        @keyframes floating {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-15px); }
-            100% { transform: translateY(0px); }
-        }
-
-        /* Typing Effect Cursor */
-        .typing-cursor::after {
-            content: '|';
-            animation: blink 1s step-start infinite;
-            color: #3b82f6;
-        }
-        @keyframes blink { 50% { opacity: 0; } }
-
-        /* Card Hover Effects */
-        .work-card {
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .work-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        }
-        .dark .work-card:hover {
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
-        }
-        .work-card img {
-            transition: transform 0.6s ease;
-        }
-        .work-card:hover img {
-            transform: scale(1.05);
-        }
-
-        /* Skill Tags */
-        .skill-tag {
-            transition: all 0.3s ease;
-        }
-        .skill-tag:hover {
-            transform: translateY(-3px) scale(1.05);
-            background-color: #3b82f6;
-            color: white;
-            border-color: #3b82f6;
-        }
-    </style>
+    <!-- Custom FF7 (Remake + Classic 1997) & Yakuza 0 Theme Styles -->
+    <link rel="stylesheet" href="css/styles.css">
 </head>
-<body class="bg-gray-50 text-gray-800 dark:bg-slate-900 dark:text-slate-200 font-sans antialiased selection:bg-blue-200 selection:text-blue-900 transition-colors duration-300">
+<body class="bg-tactical-grid antialiased selection:bg-emerald-500/30 selection:text-emerald-200 relative min-h-screen">
 
-    <!-- Navigation -->
-    <nav class="fixed w-full z-50 top-0 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-gray-100 dark:border-slate-800 transition-colors duration-300">
+    <!-- Background Lifestream / Mako Particle Canvas -->
+    <canvas id="mako-canvas" class="fixed inset-0 pointer-events-none z-0 opacity-65" aria-hidden="true"></canvas>
+
+    <!-- ======================================================================
+         NAVIGATION BAR (TACTICAL COMMAND BAR + 3-MODE THEME + SFX + CMS)
+         ====================================================================== -->
+    <nav class="fixed w-full z-40 top-0 backdrop-blur-md border-b border-emerald-500/20 bg-slate-950/80 transition-colors duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <!-- Logo/Name -->
-                <a href="#home" class="font-bold text-xl tracking-tight text-primary dark:text-white hover:text-accent dark:hover:text-accent transition">
-                    Jehrome Martin
-                </a>
-                
-                <div class="flex items-center gap-4 md:gap-6">
-                    <!-- Desktop Menu (Hidden on mobile) -->
-                    <div class="hidden md:flex space-x-8">
-                        <a href="#home" class="text-sm font-medium hover:text-accent dark:hover:text-accent transition">Home</a>
-                        <a href="#about" class="text-sm font-medium hover:text-accent dark:hover:text-accent transition">About</a>
-                        <a href="#works" class="text-sm font-medium hover:text-accent dark:hover:text-accent transition">Works</a>
-                        <a href="#contact" class="text-sm font-medium hover:text-accent dark:hover:text-accent transition">Contact</a>
+            <div class="flex justify-between items-center h-16 gap-4">
+                <!-- Logo / Character ID -->
+                <a href="#home" class="flex items-center gap-3 group">
+                    <span class="w-9 h-9 rounded bg-emerald-500/15 border border-emerald-400/50 flex items-center justify-center overflow-hidden p-0.5 group-hover:scale-105 transition">
+                        <img src="favicon.png" alt="Cloud Strife Icon" class="w-full h-full object-contain">
+                    </span>
+                    <div>
+                        <span id="nav-name" class="font-bold text-base tracking-tight block leading-none">Jehrome Martin</span>
+                        <span class="text-[10px] font-mono-hud text-emerald-400 tracking-widest uppercase">SOLDIER // DEV LOG</span>
                     </div>
-                    
-                    <!-- Theme Toggle Button -->
-                    <button id="theme-toggle" class="p-2 rounded-full bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-700 transition flex items-center justify-center w-10 h-10" aria-label="Toggle Dark Mode">
-                        <i id="theme-icon" class="fa-solid fa-moon"></i>
+                </a>
+
+                <!-- Desktop Menu Links -->
+                <div class="hidden lg:flex items-center space-x-7 text-sm font-mono-hud">
+                    <a href="#home" class="ff-cursor-item hover:text-emerald-400 transition">01. STATUS</a>
+                    <a href="#about" class="ff-cursor-item hover:text-emerald-400 transition">02. MATERIA & CERT</a>
+                    <a href="#works" class="ff-cursor-item hover:text-emerald-400 transition">03. QUEST LOG</a>
+                    <a href="#contact" class="ff-cursor-item hover:text-emerald-400 transition">04. COMMS</a>
+                </div>
+
+                <!-- Tactical Controls: 3-Way Theme Switcher, Retro SFX, & No-Code Editor -->
+                <div class="flex items-center gap-2 sm:gap-3">
+                    <!-- 3-Way Theme Selector -->
+                    <div class="hidden sm:flex items-center bg-slate-900/90 border border-slate-700/80 rounded-lg p-1 gap-1" role="group" aria-label="Visual Theme Selector">
+                        <button
+                            type="button"
+                            data-theme-btn="mako"
+                            class="px-2.5 py-1 rounded text-[11px] font-mono-hud text-emerald-300 hover:bg-emerald-500/15 transition"
+                            title="FF7 Remake Mako Tactical Dark Theme"
+                        >
+                            MAKO
+                        </button>
+                        <button
+                            type="button"
+                            data-theme-btn="classic"
+                            class="px-2.5 py-1 rounded text-[11px] font-mono-hud text-blue-300 hover:bg-blue-500/20 transition"
+                            title="Classic 1997 Final Fantasy VII Blue Window Theme"
+                        >
+                            1997
+                        </button>
+                        <button
+                            type="button"
+                            data-theme-btn="yakuza"
+                            class="px-2.5 py-1 rounded text-[11px] font-mono-hud text-amber-400 hover:bg-amber-500/20 transition"
+                            title="Yakuza 0 (1988 Kamurocho Dragon Gold & Crimson Theme)"
+                        >
+                            YAKUZA
+                        </button>
+                    </div>
+
+                    <!-- Retro SFX Toggle (Muted by default for office safety) -->
+                    <button
+                        type="button"
+                        id="sfx-toggle-btn"
+                        class="px-2.5 py-1.5 rounded-lg bg-slate-900/90 border border-slate-700/80 hover:border-emerald-400/60 text-xs font-mono-hud flex items-center gap-1.5 transition"
+                        title="Toggle Classic FF7 Menu Sound Effects"
+                        aria-label="Toggle Menu Sound Effects"
+                    >
+                        <i id="sfx-toggle-icon" class="fa-solid fa-volume-xmark opacity-60"></i>
+                        <span id="sfx-toggle-label" class="hidden md:inline">SFX: OFF</span>
                     </button>
 
-                    <!-- Hamburger Button (Mobile Only) -->
-                    <button id="mobile-menu-btn" class="md:hidden p-2 text-gray-600 dark:text-gray-300 hover:text-accent dark:hover:text-accent transition flex items-center justify-center w-10 h-10" aria-label="Toggle Menu">
-                        <i id="mobile-menu-icon" class="fa-solid fa-bars text-xl"></i>
+                    <!-- Mobile Hamburger Button -->
+                    <button
+                        type="button"
+                        id="mobile-menu-btn"
+                        class="lg:hidden p-2 rounded-lg border border-slate-700 text-slate-300 hover:text-emerald-400 transition"
+                        aria-label="Toggle Mobile Navigation"
+                    >
+                        <i id="mobile-menu-icon" class="fa-solid fa-bars text-lg"></i>
                     </button>
                 </div>
             </div>
         </div>
 
         <!-- Mobile Menu Dropdown -->
-        <div id="mobile-menu" class="hidden md:hidden absolute w-full bg-white dark:bg-slate-900 border-b border-gray-100 dark:border-slate-800 shadow-lg transition-colors duration-300">
-            <div class="px-4 pt-2 pb-6 space-y-2 flex flex-col">
-                <a href="#home" class="mobile-link block px-4 py-3 rounded-lg text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-slate-800 hover:text-accent dark:hover:text-accent transition">Home</a>
-                <a href="#about" class="mobile-link block px-4 py-3 rounded-lg text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-slate-800 hover:text-accent dark:hover:text-accent transition">About</a>
-                <a href="#works" class="mobile-link block px-4 py-3 rounded-lg text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-slate-800 hover:text-accent dark:hover:text-accent transition">Works</a>
-                <a href="#contact" class="mobile-link block px-4 py-3 rounded-lg text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-slate-800 hover:text-accent dark:hover:text-accent transition">Contact</a>
+        <div id="mobile-menu" class="hidden lg:hidden bg-slate-950/95 border-b border-emerald-500/20 px-4 pt-3 pb-6 space-y-3">
+            <div class="flex flex-col space-y-2 font-mono-hud text-sm">
+                <a href="#home" class="mobile-link px-3 py-2 rounded hover:bg-emerald-500/10">01. STATUS (Home)</a>
+                <a href="#about" class="mobile-link px-3 py-2 rounded hover:bg-emerald-500/10">02. MATERIA & CERT (About & Skills)</a>
+                <a href="#works" class="mobile-link px-3 py-2 rounded hover:bg-emerald-500/10">03. QUEST LOG (Featured Works)</a>
+                <a href="#contact" class="mobile-link px-3 py-2 rounded hover:bg-emerald-500/10">04. COMMS (Contact & Resume)</a>
+            </div>
+            <div class="pt-2 border-t border-slate-800 flex items-center justify-between">
+                <span class="text-xs font-mono-hud opacity-70">UI Mode:</span>
+                <div class="flex gap-1.5">
+                    <button type="button" data-theme-btn="mako" class="px-2.5 py-1 rounded text-xs font-mono-hud bg-slate-900 border border-slate-700">MAKO</button>
+                    <button type="button" data-theme-btn="classic" class="px-2.5 py-1 rounded text-xs font-mono-hud bg-slate-900 border border-slate-700">1997</button>
+                    <button type="button" data-theme-btn="yakuza" class="px-2.5 py-1 rounded text-xs font-mono-hud bg-slate-900 border border-slate-700 text-amber-400">YAKUZA</button>
+                </div>
             </div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section id="home" class="pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+    <!-- ======================================================================
+         01. HERO & CHARACTER STATUS HUD SECTION
+         ====================================================================== -->
+    <section id="home" class="relative z-10 pt-28 pb-20 lg:pt-40 lg:pb-28 overflow-hidden">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col-reverse lg:flex-row items-center justify-between gap-12">
-                <!-- Text Content -->
-                <div class="lg:w-1/2 fade-in-up">
-                    <p class="text-accent font-semibold tracking-wide uppercase mb-2">Hello, I'm</p>
-                    <h1 class="text-5xl lg:text-7xl font-extrabold text-primary dark:text-white mb-4 tracking-tight transition-colors">
-                        Jehrome <br/> Martin
-                    </h1>
-                    <h2 class="text-xl lg:text-2xl font-medium text-gray-600 dark:text-slate-400 mb-6 h-8 typing-cursor" id="typing-text"></h2>
-                    <p class="text-lg text-gray-600 dark:text-slate-400 mb-8 max-w-lg leading-relaxed">
-                        A 4th Year BSIT Student at Pamantasan Ng Lungsod Ng Valenzuela, passionate about blending technical expertise with creative game design to craft meaningful digital experiences.
-                    </p>
-                    <div class="flex flex-wrap gap-4">
-                        <a href="#works" class="px-6 py-3 bg-primary dark:bg-accent text-white font-medium rounded-full hover:bg-gray-800 dark:hover:bg-blue-600 transition transform hover:-translate-y-1 hover:shadow-lg">
-                            View My Work
-                        </a>
-                        <a href="#contact" class="px-6 py-3 bg-white dark:bg-slate-800 text-primary dark:text-white border border-gray-200 dark:border-slate-700 font-medium rounded-full hover:bg-gray-50 dark:hover:bg-slate-700 transition transform hover:-translate-y-1 hover:shadow-lg">
-                            Get In Touch
-                        </a>
-                    </div>
-                </div>
-                
-                <!-- Profile Image -->
-                <div class="lg:w-1/2 flex justify-center fade-in-up" style="transition-delay: 200ms;">
-                    <div class="relative w-72 h-72 lg:w-96 lg:h-96 float">
-                        <!-- Decorative background blob -->
-                        <div class="absolute inset-0 bg-blue-200 dark:bg-blue-600 rounded-full mix-blend-multiply dark:mix-blend-soft-light filter blur-2xl opacity-70 dark:opacity-30 transform -translate-x-4 translate-y-4 transition-all duration-300"></div>
-                        <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Profile%20Picture-CXzJFdP48c1peUFMtOS2rL481xFrEn.png" 
-                             alt="Jehrome Martin" 
-                             class="relative w-full h-full object-cover rounded-full border-4 border-white dark:border-slate-800 shadow-2xl transition-colors duration-300">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- About Section -->
-    <section id="about" class="py-20 bg-white dark:bg-slate-800 transition-colors duration-300">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-3xl font-bold text-primary dark:text-white mb-8 fade-in-up transition-colors">About Me</h2>
-            <p class="text-lg text-gray-600 dark:text-slate-300 mb-12 max-w-3xl fade-in-up transition-colors">
-                I'm a 4th Year BSIT student at Pamantasan Ng Lungsod Ng Valenzuela with a deep passion for game design and development. I believe in the power of games to educate, entertain, and create meaningful experiences that connect people.
-            </p>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-                <!-- Left Column -->
-                <div class="space-y-10 fade-in-up">
-                    <div>
-                        <h3 class="text-xl font-bold text-primary dark:text-white border-b-2 border-accent inline-block pb-1 mb-4 transition-colors">Career Goals</h3>
-                        <p class="text-gray-600 dark:text-slate-300 leading-relaxed transition-colors">
-                            Aspiring to become an Indie Game Designer, creating meaningful, entertaining, and immersive games to contribute not just in the Technology Industry but also in the Game Industry. I also aim to expand my knowledge in Technical Support to provide comprehensive solutions and assistance in IT environments.
+                <!-- Left Column: Hero Briefing & Yakuza 0 Dynamic Title Stamp -->
+                <div class="lg:w-7/12 fade-in-up">
+                    <!-- Yakuza 0 Style Introduction Stamp -->
+                    <div class="yakuza-banner mb-5 inline-block rounded-r">
+                        <p id="hero-yakuza-title" class="text-xs font-mono-hud text-amber-400 font-bold tracking-widest uppercase">
+                            CREATIVE SYSTEMS ARCHITECT • BAKUNAWA STUDIOS COLLABORATOR
                         </p>
                     </div>
 
-                    <div>
-                        <h3 class="text-xl font-bold text-primary dark:text-white border-b-2 border-accent inline-block pb-1 mb-4 transition-colors">Interests & Passions</h3>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="skill-tag px-4 py-2 bg-gray-100 dark:bg-slate-700 text-sm font-medium rounded-full cursor-default border border-transparent dark:border-slate-600">Gaming</span>
-                            <span class="skill-tag px-4 py-2 bg-gray-100 dark:bg-slate-700 text-sm font-medium rounded-full cursor-default border border-transparent dark:border-slate-600">Film & Media</span>
-                            <span class="skill-tag px-4 py-2 bg-gray-100 dark:bg-slate-700 text-sm font-medium rounded-full cursor-default border border-transparent dark:border-slate-600">Storytelling</span>
-                            <span class="skill-tag px-4 py-2 bg-gray-100 dark:bg-slate-700 text-sm font-medium rounded-full cursor-default border border-transparent dark:border-slate-600">Tech & Coding</span>
-                            <span class="skill-tag px-4 py-2 bg-gray-100 dark:bg-slate-700 text-sm font-medium rounded-full cursor-default border border-transparent dark:border-slate-600">Technical Support</span>
-                        </div>
+                    <p class="text-xs font-mono-hud text-emerald-400 tracking-widest uppercase mb-1">
+                        // RECORD INITIALIZED • PAMANTASAN NG LUNGSOD NG VALENZUELA
+                    </p>
+
+                    <h1 class="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight mb-3 leading-[1.05]">
+                        <span id="hero-first-name">Jehrome</span>
+                        <span id="hero-last-name" class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">Martin</span>
+                    </h1>
+
+                    <h2 class="text-lg sm:text-xl font-mono-hud text-cyan-300 mb-6 min-h-[2rem] typing-cursor" id="typing-text"></h2>
+
+                    <p id="hero-intro" class="text-base sm:text-lg opacity-85 mb-8 max-w-2xl leading-relaxed">
+                        A 4th Year BSIT Student at Pamantasan Ng Lungsod Ng Valenzuela, passionate about blending technical expertise with creative game design to craft meaningful digital experiences.
+                    </p>
+
+                    <!-- Tactical Command Buttons -->
+                    <div class="flex flex-wrap gap-4">
+                        <a href="#works" class="ff-cursor-item px-6 py-3.5 rounded bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-mono-hud font-bold text-xs uppercase tracking-wider shadow-lg shadow-emerald-500/20 transition transform hover:-translate-y-0.5 flex items-center gap-2">
+                            <i class="fa-solid fa-gamepad"></i> Inspect Quest Log (Works)
+                        </a>
+                        <a href="#about" class="ff-cursor-item px-6 py-3.5 rounded ff-panel hover:border-emerald-400 font-mono-hud font-semibold text-xs uppercase tracking-wider transition transform hover:-translate-y-0.5 flex items-center gap-2">
+                            <i class="fa-solid fa-circle-dot text-emerald-400"></i> Materia Loadout (Skills)
+                        </a>
+                        <a href="#contact" class="ff-cursor-item px-5 py-3.5 rounded ff-panel hover:border-cyan-400 font-mono-hud font-semibold text-xs uppercase tracking-wider transition transform hover:-translate-y-0.5 flex items-center gap-2">
+                            <i class="fa-solid fa-file-pdf text-cyan-400"></i> Resume & Comms
+                        </a>
                     </div>
                 </div>
 
-                <!-- Right Column -->
-                <div class="space-y-10 fade-in-up" style="transition-delay: 200ms;">
-                    <div>
-                        <h3 class="text-xl font-bold text-primary dark:text-white border-b-2 border-accent inline-block pb-1 mb-4 transition-colors">Skills</h3>
-                        <div class="mb-4">
-                            <p class="text-sm font-semibold text-gray-500 dark:text-slate-400 mb-2 uppercase transition-colors">Technical</p>
-                            <div class="flex flex-wrap gap-2">
-                                <span class="skill-tag px-4 py-2 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-sm font-semibold rounded-lg cursor-default border border-blue-100 dark:border-blue-800">HTML</span>
-                                <span class="skill-tag px-4 py-2 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-sm font-semibold rounded-lg cursor-default border border-blue-100 dark:border-blue-800">CSS</span>
-                                <span class="skill-tag px-4 py-2 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-sm font-semibold rounded-lg cursor-default border border-blue-100 dark:border-blue-800">JavaScript</span>
-                                <span class="skill-tag px-4 py-2 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-sm font-semibold rounded-lg cursor-default border border-blue-100 dark:border-blue-800">Figma</span>
-                                <span class="skill-tag px-4 py-2 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-sm font-semibold rounded-lg cursor-default border border-blue-100 dark:border-blue-800">Unity</span>
-                                <span class="skill-tag px-4 py-2 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-sm font-semibold rounded-lg cursor-default border border-blue-100 dark:border-blue-800">Python</span>
-                                <span class="skill-tag px-4 py-2 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-sm font-semibold rounded-lg cursor-default border border-blue-100 dark:border-blue-800">C</span>
+                <!-- Right Column: FF7 Remake + Classic Character Status HUD Card -->
+                <div class="lg:w-5/12 w-full flex justify-center fade-in-up" style="transition-delay: 150ms;">
+                    <div class="ff-panel p-6 w-full max-w-md relative">
+                        <!-- Top HUD Header -->
+                        <div class="flex items-center justify-between border-b border-emerald-500/25 pb-3 mb-5">
+                            <div>
+                                <span class="text-[10px] font-mono-hud uppercase tracking-widest text-emerald-400 block">ACTIVE PARTY LEADER</span>
+                                <span id="hud-class" class="text-xs font-mono-hud font-bold">SOLDIER 1st Class / Game Designer</span>
+                            </div>
+                            <div class="text-right font-mono-hud">
+                                <span class="text-xs opacity-70">LV</span>
+                                <span id="hud-level" class="text-2xl font-bold text-emerald-400 ml-1">04</span>
                             </div>
                         </div>
-                        <div>
-                            <p class="text-sm font-semibold text-gray-500 dark:text-slate-400 mb-2 uppercase transition-colors">Soft Skills</p>
-                            <p class="text-gray-600 dark:text-slate-300 transition-colors">Communication • Public Speaking • Interpersonal Skills</p>
+
+                        <!-- Avatar + Status Bars -->
+                        <div class="flex flex-col sm:flex-row items-center gap-5">
+                            <div class="relative w-32 h-32 sm:w-36 sm:h-36 shrink-0 float-slow">
+                                <div class="absolute inset-0 rounded-full bg-emerald-400/25 blur-xl"></div>
+                                <img
+                                    id="hero-avatar"
+                                    src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Profile%20Picture-CXzJFdP48c1peUFMtOS2rL481xFrEn.png"
+                                    alt="Jehrome Martin Portrait"
+                                    class="relative w-full h-full object-cover rounded-full border-2 border-emerald-400/70 shadow-xl"
+                                >
+                            </div>
+
+                            <!-- Classic FF7 HP / MP / LIMIT Gauges -->
+                            <div class="w-full space-y-3 font-mono-hud text-xs">
+                                <!-- HP Bar -->
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-emerald-400 font-bold">HP <span class="text-[10px] opacity-70 font-normal">(DRIVE)</span></span>
+                                        <span id="hud-hp">4,200 / 4,200</span>
+                                    </div>
+                                    <div class="h-2 w-full bg-slate-800 rounded-full overflow-hidden">
+                                        <div class="h-full bg-gradient-to-r from-emerald-500 to-teal-300 w-full"></div>
+                                    </div>
+                                </div>
+
+                                <!-- MP Bar -->
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-cyan-400 font-bold">MP <span class="text-[10px] opacity-70 font-normal">(CREATIVITY)</span></span>
+                                        <span id="hud-mp">999 / 999</span>
+                                    </div>
+                                    <div class="h-2 w-full bg-slate-800 rounded-full overflow-hidden">
+                                        <div class="h-full bg-gradient-to-r from-cyan-500 to-blue-400 w-full"></div>
+                                    </div>
+                                </div>
+
+                                <!-- LIMIT Bar -->
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-amber-400 font-bold">LIMIT <span class="text-[10px] opacity-70 font-normal">(PASSION)</span></span>
+                                        <span id="hud-limit-pct" class="text-amber-300">88%</span>
+                                    </div>
+                                    <div class="h-2 w-full bg-slate-800 rounded-full overflow-hidden">
+                                        <div class="h-full bg-gradient-to-r from-amber-500 via-pink-500 to-cyan-400 w-[88%] animate-pulse"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Equipped Weapon Materia Sockets Preview -->
+                        <div class="mt-5 pt-4 border-t border-emerald-500/20 flex items-center justify-between gap-2">
+                            <span class="text-[11px] font-mono-hud uppercase opacity-75">EQUIPPED SLOTS:</span>
+                            <div id="weapon-materia-rack" class="flex items-center"></div>
                         </div>
                     </div>
+                </div>
 
+            </div>
+        </div>
+    </section>
+
+    <!-- ======================================================================
+         02. ABOUT, INTERACTIVE MATERIA LOADOUT (SKILLS) & CISCO CERTIFICATIONS
+         ====================================================================== -->
+    <section id="about" class="relative z-10 py-20 border-t border-emerald-500/15">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-14">
+
+            <!-- Bio & Career Goals Row -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 fade-in-up">
+                <div class="lg:col-span-7 ff-panel p-7">
+                    <p class="text-xs font-mono-hud text-emerald-400 uppercase tracking-widest mb-1">
+                        // CHARACTER DOSSIER
+                    </p>
+                    <h2 class="text-3xl font-bold mb-4">About Me</h2>
+                    <p id="about-bio" class="text-base leading-relaxed opacity-90 mb-6">
+                        I'm a 4th Year BSIT student at Pamantasan Ng Lungsod Ng Valenzuela with a deep passion for game design and development. I believe in the power of games to educate, entertain, and create meaningful experiences that connect people.
+                    </p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1 rounded-full text-xs font-mono-hud bg-emerald-500/15 border border-emerald-500/30 text-emerald-300">
+                            <i class="fa-solid fa-gamepad mr-1"></i> Game Design
+                        </span>
+                        <span class="px-3 py-1 rounded-full text-xs font-mono-hud bg-cyan-500/15 border border-cyan-500/30 text-cyan-300">
+                            <i class="fa-solid fa-film mr-1"></i> Film & Media
+                        </span>
+                        <span class="px-3 py-1 rounded-full text-xs font-mono-hud bg-amber-500/15 border border-amber-500/30 text-amber-300">
+                            <i class="fa-solid fa-book-open mr-1"></i> Interactive Storytelling
+                        </span>
+                        <span class="px-3 py-1 rounded-full text-xs font-mono-hud bg-purple-500/15 border border-purple-500/30 text-purple-300">
+                            <i class="fa-solid fa-network-wired mr-1"></i> Technical & Network Support
+                        </span>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-5 ff-panel p-7 flex flex-col justify-between">
                     <div>
-                        <h3 class="text-xl font-bold text-primary dark:text-white border-b-2 border-accent inline-block pb-1 mb-4 transition-colors">Cisco Netacad Certifications</h3>
-                        <ul class="space-y-3">
-                            <li class="flex items-center group">
-                                <i class="fa-solid fa-certificate text-accent mr-3 group-hover:scale-125 transition"></i>
-                                <a href="https://blobs.vusercontent.net/blob/Cisco%20Networking%20Basics-ZQf1deEpcABQqvOUxFMZnA0HrzXAUZ.pdf" target="_blank" class="text-gray-600 dark:text-slate-300 hover:text-accent dark:hover:text-accent transition flex-1">Networking Basics <span class="text-xs text-gray-400 dark:text-slate-500 ml-2">May 2025</span></a>
-                            </li>
-                            <li class="flex items-center group">
-                                <i class="fa-solid fa-certificate text-accent mr-3 group-hover:scale-125 transition"></i>
-                                <a href="https://blobs.vusercontent.net/blob/Cisco%20Network%20Addressing%20and%20Basic%20Troubleshooting-Wbo9ccMz6OPiW1zYyipg98v11Ys9dy.pdf" target="_blank" class="text-gray-600 dark:text-slate-300 hover:text-accent dark:hover:text-accent transition flex-1">Network Addressing & Troubleshooting <span class="text-xs text-gray-400 dark:text-slate-500 ml-2">May 2025</span></a>
-                            </li>
-                            <li class="flex items-center group">
-                                <i class="fa-solid fa-certificate text-accent mr-3 group-hover:scale-125 transition"></i>
-                                <a href="https://blobs.vusercontent.net/blob/CIsco%20Network%20Devices%20and%20Configuration-e0ZqXuP3VZTfNSeh3QIvi4pXOcNoIS.pdf" target="_blank" class="text-gray-600 dark:text-slate-300 hover:text-accent dark:hover:text-accent transition flex-1">Networking Devices & Configuration <span class="text-xs text-gray-400 dark:text-slate-500 ml-2">May 2025</span></a>
-                            </li>
-                            <li class="flex items-center group">
-                                <i class="fa-solid fa-certificate text-accent mr-3 group-hover:scale-125 transition"></i>
-                                <a href="https://blobs.vusercontent.net/blob/Cisco%20Network%20Support%20and%20Security-4B0BB5L7E2fDJLMs0SjXdmDaf0zKlm.pdf" target="_blank" class="text-gray-600 dark:text-slate-300 hover:text-accent dark:hover:text-accent transition flex-1">Network Support & Security <span class="text-xs text-gray-400 dark:text-slate-500 ml-2">May 2025</span></a>
-                            </li>
-                        </ul>
+                        <p class="text-xs font-mono-hud text-amber-400 uppercase tracking-widest mb-1">
+                            // MAIN OBJECTIVE
+                        </p>
+                        <h3 class="text-2xl font-bold mb-3">Career Goals</h3>
+                        <p id="about-career-goals" class="text-sm leading-relaxed opacity-90">
+                            Aspiring to become an Indie Game Designer, creating meaningful, entertaining, and immersive games to contribute not just in the Technology Industry but also in the Game Industry. I also aim to expand my knowledge in Technical Support to provide comprehensive solutions and assistance in IT environments.
+                        </p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-emerald-500/20 flex items-center justify-between text-xs font-mono-hud opacity-75">
+                        <span>INSPIRATIONS: FFVII • YAKUZA 0</span>
+                        <span class="text-emerald-400">READY FOR DEPLOYMENT</span>
                     </div>
                 </div>
             </div>
+
+            <!-- Interactive FF7 Materia Loadout (Skills) & Cisco Certifications -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 fade-in-up">
+
+                <!-- Left 7 Cols: Interactive Materia Equipment System -->
+                <div class="lg:col-span-7 ff-panel p-7 space-y-6">
+                    <div class="flex flex-wrap items-center justify-between gap-4">
+                        <div>
+                            <p class="text-xs font-mono-hud text-emerald-400 uppercase tracking-widest mb-1">
+                                // INTERACTIVE FF7 MATERIA SYSTEM
+                            </p>
+                            <h3 class="text-2xl font-bold">Materia Loadout (Skills & Tech Stack)</h3>
+                            <p class="text-xs opacity-75 mt-1">
+                                Click any Materia orb below to inspect mastery details and highlight which projects used that skill.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Materia Type Filter Pills -->
+                    <div class="flex flex-wrap gap-2 text-xs font-mono-hud">
+                        <button type="button" data-materia-filter="all" class="px-3 py-1.5 rounded border border-emerald-400 bg-emerald-500/20 text-emerald-300 transition">
+                            All Materia
+                        </button>
+                        <button type="button" data-materia-filter="magic" class="px-3 py-1.5 rounded border border-slate-700 hover:border-emerald-400 transition flex items-center gap-1.5">
+                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span> Creative / Design
+                        </button>
+                        <button type="button" data-materia-filter="command" class="px-3 py-1.5 rounded border border-slate-700 hover:border-amber-400 transition flex items-center gap-1.5">
+                            <span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span> Code / Engine
+                        </button>
+                        <button type="button" data-materia-filter="support" class="px-3 py-1.5 rounded border border-slate-700 hover:border-cyan-400 transition flex items-center gap-1.5">
+                            <span class="w-2.5 h-2.5 rounded-full bg-cyan-400"></span> IT / Docs
+                        </button>
+                        <button type="button" data-materia-filter="independent" class="px-3 py-1.5 rounded border border-slate-700 hover:border-purple-400 transition flex items-center gap-1.5">
+                            <span class="w-2.5 h-2.5 rounded-full bg-purple-400"></span> Leadership
+                        </button>
+                    </div>
+
+                    <!-- Materia Orbs Grid -->
+                    <div id="materia-slots-container" class="flex flex-wrap gap-2.5"></div>
+
+                    <!-- Active Materia Inspector Window -->
+                    <div id="materia-inspector-box" class="p-5 rounded-lg bg-slate-950/75 border border-emerald-500/30"></div>
+                </div>
+
+                <!-- Right 5 Cols: Cisco NetAcad Certifications ("Key Items / Accredited Licenses") -->
+                <div class="lg:col-span-5 ff-panel p-7 flex flex-col justify-between">
+                    <div>
+                        <p class="text-xs font-mono-hud text-cyan-400 uppercase tracking-widest mb-1">
+                            // ACCREDITED KEY ITEMS & CREDENTIALS
+                        </p>
+                        <h3 class="text-2xl font-bold mb-2">Cisco NetAcad Certifications</h3>
+                        <p class="text-xs opacity-75 mb-5">
+                            Verified networking, infrastructure configuration, and cybersecurity credentials.
+                        </p>
+                        <ul id="certifications-list" class="space-y-3"></ul>
+                    </div>
+
+                    <div class="mt-6 p-4 rounded-lg bg-cyan-500/10 border border-cyan-500/25 flex items-center justify-between gap-3">
+                        <div class="text-xs font-mono-hud">
+                            <span class="text-cyan-300 font-bold block">VERIFIED CISCO NETACAD CREDENTIALS</span>
+                            <span class="opacity-75">Click "VERIFY" on any license above to inspect the official certificate PDF.</span>
+                        </div>
+                        <i class="fa-solid fa-circle-check text-cyan-400 text-lg shrink-0"></i>
+                    </div>
+                </div>
+
+            </div>
         </div>
     </section>
 
-    <!-- Works Section -->
-    <section id="works" class="py-20 bg-gray-50 dark:bg-slate-900 transition-colors duration-300">
+    <!-- ======================================================================
+         03. FEATURED WORKS ("QUEST & SUBSTORY LOG" + TACTICAL ASSESS)
+         ====================================================================== -->
+    <section id="works" class="relative z-10 py-20 border-t border-emerald-500/15">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-3xl font-bold text-primary dark:text-white mb-12 text-center fade-in-up transition-colors">Featured Works</h2>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                
-                <!-- Project 1: ValYOU -->
-                <a href="https://app-dev-teal.vercel.app/" target="_blank" class="block work-card bg-white dark:bg-slate-800 rounded-2xl flex flex-col overflow-hidden shadow-md border border-gray-100 dark:border-slate-700 fade-in-up transition-colors duration-300">
-                    <div class="h-48 overflow-hidden relative group">
-                        <img src="valyou.png" alt="ValYOU" class="w-full h-full object-cover">
-                        <div class="absolute inset-0 bg-primary/70 dark:bg-slate-900/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                            <span class="text-white font-medium flex items-center gap-2"><i class="fa-solid fa-arrow-up-right-from-square"></i> Visit App</span>
-                        </div>
-                        <div class="absolute top-4 right-4 bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-green-600 dark:text-green-400">Completed</div>
-                    </div>
-                    <div class="p-6 flex-1 flex flex-col">
-                        <h3 class="text-xl font-bold text-primary dark:text-white mb-1 transition-colors">ValYOU</h3>
-                        <p class="text-sm text-accent font-medium mb-3">Documentation Lead</p>
-                        <p class="text-gray-600 dark:text-slate-300 mb-4 text-sm leading-relaxed line-clamp-4 transition-colors">A web application designed to automate an ARTA-compliant Customer Satisfaction Survey system. Managed the full documentation process including process flows, compliance records, and design assets using Google Docs, Excel, and Canva.</p>
-                        <div class="flex flex-wrap gap-2 mt-auto mb-4">
-                            <span class="text-xs font-medium bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-slate-300 px-2 py-1 rounded transition-colors">WebApp</span>
-                            <span class="text-xs font-medium bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-slate-300 px-2 py-1 rounded transition-colors">Documentation</span>
-                            <span class="text-xs font-medium bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-slate-300 px-2 py-1 rounded transition-colors">ARTA</span>
-                        </div>
-                        <div class="text-accent text-sm font-semibold flex items-center border-t border-gray-100 dark:border-slate-700 pt-4 mt-2 transition-colors">
-                            View Website <i class="fa-solid fa-arrow-right ml-2"></i>
-                        </div>
-                    </div>
-                </a>
 
-                <!-- Project 2: Shadow of the Past -->
-                <a href="https://bakunawa-studios.itch.io/shadow-of-the-past" target="_blank" class="block work-card bg-white dark:bg-slate-800 rounded-2xl flex flex-col overflow-hidden shadow-md border border-gray-100 dark:border-slate-700 fade-in-up transition-colors duration-300" style="transition-delay: 150ms;">
-                    <div class="h-48 overflow-hidden relative group">
-                        <img src="shadow.jpg" alt="Shadow of the Past" class="w-full h-full object-cover">
-                        <div class="absolute inset-0 bg-primary/70 dark:bg-slate-900/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                            <span class="text-white font-medium flex items-center gap-2"><i class="fa-solid fa-gamepad"></i> Play Game</span>
-                        </div>
-                        <div class="absolute top-4 right-4 bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-green-600 dark:text-green-400">Completed</div>
-                    </div>
-                    <div class="p-6 flex-1 flex flex-col">
-                        <h3 class="text-xl font-bold text-primary dark:text-white mb-1 transition-colors">Shadow of the Past</h3>
-                        <p class="text-sm text-accent font-medium mb-3">Lead Game Designer</p>
-                        <p class="text-gray-600 dark:text-slate-300 mb-4 text-sm leading-relaxed line-clamp-4 transition-colors">A slasher horror game built around an atmospheric, real-camera video experience. Developed the complete spatial map layout and game environmental layers to create an immersive, tension-filled cinematic atmosphere.</p>
-                        <div class="flex flex-wrap gap-2 mt-auto mb-4">
-                            <span class="text-xs font-medium bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-slate-300 px-2 py-1 rounded transition-colors">Horror Game</span>
-                            <span class="text-xs font-medium bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-slate-300 px-2 py-1 rounded transition-colors">Narrative</span>
-                            <span class="text-xs font-medium bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-slate-300 px-2 py-1 rounded transition-colors">Slasher Film</span>
-                        </div>
-                        <div class="text-accent text-sm font-semibold flex items-center border-t border-gray-100 dark:border-slate-700 pt-4 mt-2 transition-colors">
-                            View on Itch.io <i class="fa-solid fa-arrow-right ml-2"></i>
-                        </div>
-                    </div>
-                </a>
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 fade-in-up">
+                <div>
+                    <p class="text-xs font-mono-hud text-emerald-400 uppercase tracking-widest mb-1">
+                        // MISSION & SUBSTORY ARCHIVE
+                    </p>
+                    <h2 class="text-3xl sm:text-4xl font-bold tracking-tight">Featured Works</h2>
+                    <p class="text-sm opacity-80 mt-1">
+                        Click <strong>"ASSESS INTEL"</strong> on any project to inspect its tactical breakdown and behind-the-scenes development story.
+                    </p>
+                </div>
 
-                <!-- Project 3: Piso Politiko -->
-                <a href="https://www.youtube.com/watch?v=ww4mUkbBn_o" target="_blank" class="block work-card bg-white dark:bg-slate-800 rounded-2xl flex flex-col overflow-hidden shadow-md border border-gray-100 dark:border-slate-700 fade-in-up transition-colors duration-300" style="transition-delay: 300ms;">
-                    <div class="h-48 overflow-hidden relative group">
-                        <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Piso%20Politiko%20Gamecon-TC1ZV07pV1XXnAPVE4GKgJWC4JbpWg.jpg" alt="Piso Politiko" class="w-full h-full object-cover">
-                        <div class="absolute inset-0 bg-primary/70 dark:bg-slate-900/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                            <span class="text-white font-medium flex items-center gap-2"><i class="fa-solid fa-play"></i> Watch Video</span>
-                        </div>
-                        <div class="absolute top-4 right-4 bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-green-600 dark:text-green-400">Completed</div>
-                    </div>
-                    <div class="p-6 flex-1 flex flex-col">
-                        <h3 class="text-xl font-bold text-primary dark:text-white mb-1 transition-colors">Piso Politiko</h3>
-                        <p class="text-sm text-accent font-medium mb-3">Lead Game Designer</p>
-                        <p class="text-gray-600 dark:text-slate-300 mb-4 text-sm leading-relaxed line-clamp-4 transition-colors">A hybrid tabletop game that explores Philippine politics through strategic gameplay.</p>
-                        <div class="flex flex-wrap gap-2 mt-auto mb-4">
-                            <span class="text-xs font-medium bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-slate-300 px-2 py-1 rounded transition-colors">Tabletop Game</span>
-                            <span class="text-xs font-medium bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-slate-300 px-2 py-1 rounded transition-colors">Game Design</span>
-                            <span class="text-xs font-medium bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-slate-300 px-2 py-1 rounded transition-colors">Strategy</span>
-                        </div>
-                        <div class="text-accent text-sm font-semibold flex items-center border-t border-gray-100 dark:border-slate-700 pt-4 mt-2 transition-colors">
-                            Watch on YouTube <i class="fa-brands fa-youtube ml-2"></i>
-                        </div>
-                    </div>
-                </a>
-
-                <!-- Project 4: Buwaya Catch -->
-                <a href="https://bakunawa-studios.itch.io/buwaya-catch" target="_blank" class="block work-card bg-white dark:bg-slate-800 rounded-2xl flex flex-col overflow-hidden shadow-md border border-gray-100 dark:border-slate-700 fade-in-up transition-colors duration-300">
-                    <div class="h-48 overflow-hidden relative group">
-                        <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Buwaya%20Catch%20Banner-E0eYYOC22VZisFWvnWG4PC7SZZ8x0h.jpg" alt="Buwaya Catch" class="w-full h-full object-cover">
-                        <div class="absolute inset-0 bg-primary/70 dark:bg-slate-900/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                            <span class="text-white font-medium flex items-center gap-2"><i class="fa-solid fa-gamepad"></i> Play Game</span>
-                        </div>
-                        <div class="absolute top-4 right-4 bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-green-600 dark:text-green-400">Completed</div>
-                    </div>
-                    <div class="p-6 flex-1 flex flex-col">
-                        <h3 class="text-xl font-bold text-primary dark:text-white mb-1 transition-colors">Buwaya Catch</h3>
-                        <p class="text-sm text-accent font-medium mb-3">Game Designer</p>
-                        <p class="text-gray-600 dark:text-slate-300 mb-4 text-sm leading-relaxed line-clamp-4 transition-colors">A video game spin-off of Piso Politiko featuring the iconic crocodile character.</p>
-                        <div class="flex flex-wrap gap-2 mt-auto mb-4">
-                            <span class="text-xs font-medium bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-slate-300 px-2 py-1 rounded transition-colors">Video Game</span>
-                            <span class="text-xs font-medium bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-slate-300 px-2 py-1 rounded transition-colors">Arcade</span>
-                            <span class="text-xs font-medium bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-slate-300 px-2 py-1 rounded transition-colors">Unity</span>
-                        </div>
-                        <div class="text-accent text-sm font-semibold flex items-center border-t border-gray-100 dark:border-slate-700 pt-4 mt-2 transition-colors">
-                            View on Itch.io <i class="fa-solid fa-arrow-right ml-2"></i>
-                        </div>
-                    </div>
-                </a>
-
-                <!-- Project 5: Ready-Set-Bag! -->
-                <a href="https://readysetbag.website/landing.html" target="_blank" class="block work-card bg-white dark:bg-slate-800 rounded-2xl flex flex-col overflow-hidden shadow-md border border-gray-100 dark:border-slate-700 fade-in-up transition-colors duration-300" style="transition-delay: 150ms;">
-                    <div class="h-48 overflow-hidden relative group">
-                        <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/GAME%20DOCU-p4YiK612wV33KIrxwkXfOeZeJeTee2.png" alt="Ready-Set-Bag!" class="w-full h-full object-cover">
-                        <div class="absolute inset-0 bg-primary/70 dark:bg-slate-900/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                            <span class="text-white font-medium flex items-center gap-2"><i class="fa-solid fa-arrow-up-right-from-square"></i> Visit Website</span>
-                        </div>
-                        <div class="absolute top-4 right-4 bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-yellow-600 dark:text-yellow-400">In Progress</div>
-                    </div>
-                    <div class="p-6 flex-1 flex flex-col">
-                        <h3 class="text-xl font-bold text-primary dark:text-white mb-1 transition-colors">Ready-Set-Bag!</h3>
-                        <p class="text-sm text-accent font-medium mb-3">Project Manager & Game Designer</p>
-                        <p class="text-gray-600 dark:text-slate-300 mb-4 text-sm leading-relaxed line-clamp-4 transition-colors">An educational mobile game teaching disaster preparedness to Grade 6 students.</p>
-                        <div class="flex flex-wrap gap-2 mt-auto mb-4">
-                            <span class="text-xs font-medium bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-slate-300 px-2 py-1 rounded transition-colors">Educational</span>
-                            <span class="text-xs font-medium bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-slate-300 px-2 py-1 rounded transition-colors">Mobile Game</span>
-                            <span class="text-xs font-medium bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-slate-300 px-2 py-1 rounded transition-colors">Capstone</span>
-                        </div>
-                        <div class="text-accent text-sm font-semibold flex items-center border-t border-gray-100 dark:border-slate-700 pt-4 mt-2 transition-colors">
-                            View Website <i class="fa-solid fa-arrow-right ml-2"></i>
-                        </div>
-                    </div>
-                </a>
-
+                <!-- Category Filter Bar -->
+                <div class="flex flex-wrap gap-2 text-xs font-mono-hud">
+                    <button type="button" data-work-filter="all" class="px-3.5 py-1.5 rounded border border-emerald-400 bg-emerald-500/20 text-emerald-300 transition">
+                        All Quests
+                    </button>
+                    <button type="button" data-work-filter="games" class="px-3.5 py-1.5 rounded border border-slate-700 hover:border-emerald-400 transition">
+                        Games & Tabletop
+                    </button>
+                    <button type="button" data-work-filter="web-it" class="px-3.5 py-1.5 rounded border border-slate-700 hover:border-emerald-400 transition">
+                        Web & Documentation
+                    </button>
+                    <button type="button" data-work-filter="completed" class="px-3.5 py-1.5 rounded border border-slate-700 hover:border-emerald-400 transition">
+                        Completed
+                    </button>
+                    <button type="button" data-work-filter="in-progress" class="px-3.5 py-1.5 rounded border border-slate-700 hover:border-amber-400 transition">
+                        In Progress
+                    </button>
+                </div>
             </div>
+
+            <!-- Active Materia Filter Indicator -->
+            <div id="active-materia-work-banner" class="hidden mb-8 text-center"></div>
+
+            <!-- Dynamic Works Grid -->
+            <div id="works-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 fade-in-up"></div>
+
         </div>
     </section>
 
-    <!-- Contact Section -->
-    <section id="contact" class="py-20 bg-white dark:bg-slate-800 border-t border-gray-100 dark:border-slate-700 transition-colors duration-300">
+    <!-- ======================================================================
+         DYNAMIC CUSTOM FLEXIBLE MODULES MOUNT CONTAINER
+         ====================================================================== -->
+    <div id="custom-modules-container" class="relative z-10"></div>
+
+    <!-- ======================================================================
+         04. CONTACT & RESUME SECTION ("PARTY RECRUITMENT & COMMS")
+         ====================================================================== -->
+    <section id="contact" class="relative z-10 py-20 border-t border-emerald-500/15">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 class="text-3xl font-bold text-primary dark:text-white mb-6 fade-in-up transition-colors">Let's Connect</h2>
-            <p class="text-lg text-gray-600 dark:text-slate-300 mb-12 fade-in-up transition-colors">
-                Feel free to reach out if you'd like to discuss a project, collaboration, or just want to say hello. I'm always open to new opportunities and conversations.
+            <p class="text-xs font-mono-hud text-emerald-400 uppercase tracking-widest mb-2 fade-in-up">
+                // OPEN TRANSMISSION CHANNEL
             </p>
-            
-            <!-- Separated & Highlighted Resume Button -->
-            <div class="flex justify-center mb-12 fade-in-up" style="transition-delay: 100ms;">
-                <a href="resume.pdf" target="_blank" class="flex items-center gap-4 px-10 py-5 bg-accent text-white rounded-full shadow-[0_0_20px_rgba(59,130,246,0.4)] hover:shadow-[0_0_30px_rgba(59,130,246,0.6)] hover:bg-blue-600 hover:-translate-y-2 transition-all duration-300 group">
-                    <i class="fa-solid fa-file-pdf text-3xl"></i>
+            <h2 class="text-3xl sm:text-4xl font-bold mb-4 fade-in-up">Let's Connect</h2>
+            <p class="text-base sm:text-lg opacity-85 mb-10 max-w-2xl mx-auto fade-in-up">
+                Feel free to reach out if you'd like to discuss a game project, IT support role, collaboration, or just want to talk about Final Fantasy VII and Yakuza 0.
+            </p>
+
+            <!-- Highlighted Resume Dossier Button -->
+            <div class="flex justify-center mb-12 fade-in-up">
+                <a
+                    id="contact-resume-link"
+                    href="resume.pdf"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="ff-panel px-10 py-5 border-emerald-400/60 hover:border-emerald-300 shadow-[0_0_25px_rgba(0,229,176,0.25)] hover:shadow-[0_0_38px_rgba(0,229,176,0.45)] hover:-translate-y-1 transition-all duration-300 flex items-center gap-4 group"
+                >
+                    <div class="w-12 h-12 rounded-lg bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-400 text-2xl group-hover:scale-110 transition">
+                        <i class="fa-solid fa-file-pdf"></i>
+                    </div>
                     <div class="text-left">
-                        <p class="text-xs text-blue-100 font-medium uppercase tracking-wider mb-1"></p>
-                        <p class="text-lg font-bold leading-none">View My Resume</p>
+                        <span class="text-[11px] font-mono-hud text-emerald-400 uppercase tracking-widest block">OFFICIAL PERSONNEL FILE</span>
+                        <span class="text-lg font-bold leading-none">View My Resume (PDF)</span>
                     </div>
                 </a>
             </div>
 
-            <!-- Social/Contact Links -->
-            <div class="flex flex-col sm:flex-row justify-center items-center gap-6 fade-in-up" style="transition-delay: 200ms;">
-                
+            <!-- Direct Comms Channels -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-5 fade-in-up">
                 <!-- Gmail -->
-                <a href="mailto:martinjehrome72@gmail.com" class="flex items-center gap-3 px-6 py-4 bg-gray-50 dark:bg-slate-700/50 border border-gray-200 dark:border-slate-600 rounded-xl hover:bg-white dark:hover:bg-slate-700 hover:shadow-lg hover:border-blue-200 dark:hover:border-blue-500 transition-all w-full sm:w-auto">
-                    <i class="fa-solid fa-envelope text-red-500 text-xl"></i>
-                    <div class="text-left">
-                        <p class="text-xs text-gray-500 dark:text-slate-400 font-medium transition-colors">Gmail</p>
-                        <p class="text-primary dark:text-white font-semibold transition-colors">martinjehrome72@gmail.com</p>
+                <a
+                    id="contact-email-link"
+                    href="mailto:martinjehrome72@gmail.com"
+                    class="ff-panel ff-panel-interactive p-5 flex items-center gap-3.5 text-left"
+                >
+                    <div class="w-10 h-10 rounded-lg bg-red-500/15 border border-red-500/30 flex items-center justify-center text-red-400 text-lg shrink-0">
+                        <i class="fa-solid fa-envelope"></i>
+                    </div>
+                    <div class="min-w-0">
+                        <p class="text-xs font-mono-hud opacity-65">Gmail</p>
+                        <p id="contact-email-txt" class="font-semibold text-sm truncate">martinjehrome72@gmail.com</p>
                     </div>
                 </a>
-                
+
                 <!-- LinkedIn -->
-                <a href="https://www.linkedin.com/in/jehrome-martin-1662a4412" target="_blank" class="flex items-center gap-3 px-6 py-4 bg-gray-50 dark:bg-slate-700/50 border border-gray-200 dark:border-slate-600 rounded-xl hover:bg-white dark:hover:bg-slate-700 hover:shadow-lg hover:border-blue-200 dark:hover:border-blue-500 transition-all w-full sm:w-auto">
-                    <i class="fa-brands fa-linkedin text-blue-600 text-xl"></i>
-                    <div class="text-left">
-                        <p class="text-xs text-gray-500 dark:text-slate-400 font-medium transition-colors">LinkedIn</p>
-                        <p class="text-primary dark:text-white font-semibold transition-colors">Jehrome Martin</p>
+                <a
+                    id="contact-linkedin-link"
+                    href="https://www.linkedin.com/in/jehrome-martin-1662a4412"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="ff-panel ff-panel-interactive p-5 flex items-center gap-3.5 text-left"
+                >
+                    <div class="w-10 h-10 rounded-lg bg-blue-500/15 border border-blue-500/30 flex items-center justify-center text-blue-400 text-lg shrink-0">
+                        <i class="fa-brands fa-linkedin"></i>
+                    </div>
+                    <div class="min-w-0">
+                        <p class="text-xs font-mono-hud opacity-65">LinkedIn</p>
+                        <p id="contact-linkedin-txt" class="font-semibold text-sm truncate">Jehrome Martin</p>
                     </div>
                 </a>
 
                 <!-- Facebook -->
-                <a href="https://www.facebook.com/Rokuuu.ro" target="_blank" class="flex items-center gap-3 px-6 py-4 bg-gray-50 dark:bg-slate-700/50 border border-gray-200 dark:border-slate-600 rounded-xl hover:bg-white dark:hover:bg-slate-700 hover:shadow-lg hover:border-blue-200 dark:hover:border-blue-500 transition-all w-full sm:w-auto">
-                    <i class="fa-brands fa-facebook text-blue-500 text-xl"></i>
-                    <div class="text-left">
-                        <p class="text-xs text-gray-500 dark:text-slate-400 font-medium transition-colors">Facebook</p>
-                        <p class="text-primary dark:text-white font-semibold transition-colors">Rokuuu.ro</p>
+                <a
+                    id="contact-facebook-link"
+                    href="https://www.facebook.com/Rokuuu.ro"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="ff-panel ff-panel-interactive p-5 flex items-center gap-3.5 text-left"
+                >
+                    <div class="w-10 h-10 rounded-lg bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-400 text-lg shrink-0">
+                        <i class="fa-brands fa-facebook"></i>
+                    </div>
+                    <div class="min-w-0">
+                        <p class="text-xs font-mono-hud opacity-65">Facebook</p>
+                        <p id="contact-facebook-txt" class="font-semibold text-sm truncate">Rokuuu.ro</p>
                     </div>
                 </a>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="bg-primary dark:bg-slate-950 text-white py-8 transition-colors duration-300">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-400 dark:text-slate-500">
-            <p>&copy; 2026 Jehrome Martin. All rights reserved.</p>
-            <p class="mt-2 md:mt-0">BSIT Student at Pamantasan Ng Lungsod Ng Valenzuela</p>
+    <!-- ======================================================================
+         FOOTER (WITH QUICK ACCESS TO NO-CODE MODULE MANAGER)
+         ====================================================================== -->
+    <footer class="relative z-10 bg-slate-950/90 border-t border-emerald-500/20 py-8 text-xs font-mono-hud text-slate-400">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div>
+                <p>&copy; 2026 Jehrome Martin. All rights reserved.</p>
+                <p id="footer-university" class="opacity-70 mt-0.5">BSIT Student at Pamantasan Ng Lungsod Ng Valenzuela</p>
+            </div>
+            <div class="flex items-center gap-4">
+                <span
+                    id="secret-admin-trigger"
+                    class="opacity-40 select-none cursor-default"
+                    title="System Build 2026.7"
+                >
+                    SYS.BUILD // FF7-Y0
+                </span>
+            </div>
         </div>
     </footer>
 
-    <!-- Javascript for Interactions -->
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            
-            /* --- Mobile Menu Logic --- */
-            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-            const mobileMenu = document.getElementById('mobile-menu');
-            const mobileMenuIcon = document.getElementById('mobile-menu-icon');
-            const mobileLinks = document.querySelectorAll('.mobile-link');
+    <!-- ======================================================================
+         MODAL 1: FF7 REMAKE "TACTICAL ASSESS" & YAKUZA 0 "SUBSTORY" DIALOG
+         Uses declarative closedby="any" per modern-web-guidance
+         ====================================================================== -->
+    <dialog id="assess-modal" class="ff-dialog" closedby="any" aria-labelledby="assessModalTitle">
+        <div id="assess-modal-content" class="ff-panel p-6 sm:p-8 bg-slate-950/95 text-slate-100 border border-emerald-400/50"></div>
+    </dialog>
 
-            mobileMenuBtn.addEventListener('click', () => {
-                mobileMenu.classList.toggle('hidden');
-                
-                // Toggle between hamburger and close icon
-                if (mobileMenu.classList.contains('hidden')) {
-                    mobileMenuIcon.classList.remove('fa-xmark');
-                    mobileMenuIcon.classList.add('fa-bars');
-                } else {
-                    mobileMenuIcon.classList.remove('fa-bars');
-                    mobileMenuIcon.classList.add('fa-xmark');
-                }
-            });
+    <!-- ======================================================================
+         MODAL 2: NO-CODE "TACTICAL TERMINAL" MODULE EDITOR (CMS)
+         Uses declarative closedby="any" per modern-web-guidance
+         ====================================================================== -->
+    <dialog id="cms-modal" class="ff-dialog ff-dialog-wide" closedby="any" aria-labelledby="cmsModalTitle">
+        <div id="cms-modal-content" class="ff-panel p-6 sm:p-8 bg-slate-950/95 text-slate-100 border border-emerald-400/50"></div>
+    </dialog>
 
-            // Close mobile menu when clicking a link
-            mobileLinks.forEach(link => {
-                link.addEventListener('click', () => {
-                    mobileMenu.classList.add('hidden');
-                    mobileMenuIcon.classList.remove('fa-xmark');
-                    mobileMenuIcon.classList.add('fa-bars');
-                });
-            });
-
-
-            /* --- Theme Toggle Logic --- */
-            const themeToggleBtn = document.getElementById('theme-toggle');
-            const themeIcon = document.getElementById('theme-icon');
-            const htmlElement = document.documentElement;
-
-            // Check system preference or localStorage
-            if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                htmlElement.classList.add('dark');
-                themeIcon.classList.replace('fa-moon', 'fa-sun');
-            } else {
-                htmlElement.classList.remove('dark');
-                themeIcon.classList.replace('fa-sun', 'fa-moon');
-            }
-
-            // Listen for clicks on the toggle button
-            themeToggleBtn.addEventListener('click', () => {
-                htmlElement.classList.toggle('dark');
-                if (htmlElement.classList.contains('dark')) {
-                    localStorage.setItem('theme', 'dark');
-                    themeIcon.classList.replace('fa-moon', 'fa-sun');
-                } else {
-                    localStorage.setItem('theme', 'light');
-                    themeIcon.classList.replace('fa-sun', 'fa-moon');
-                }
-            });
-
-
-            /* --- Scroll Reveal Animations --- */
-            const observerOptions = {
-                root: null,
-                rootMargin: '0px',
-                threshold: 0.15
-            };
-
-            const observer = new IntersectionObserver((entries, observer) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                        observer.unobserve(entry.target); // Animate only once
-                    }
-                });
-            }, observerOptions);
-
-            document.querySelectorAll('.fade-in-up').forEach(element => {
-                observer.observe(element);
-            });
-
-
-            /* --- Typing Effect --- */
-            const textToType = "Aspiring IT Student and Game Designer";
-            const typingElement = document.getElementById('typing-text');
-            let i = 0;
-
-            function typeWriter() {
-                if (i < textToType.length) {
-                    typingElement.innerHTML += textToType.charAt(i);
-                    i++;
-                    setTimeout(typeWriter, 50); // Adjust typing speed here
-                } else {
-                    setTimeout(() => {
-                        typingElement.classList.remove('typing-cursor');
-                    }, 2000);
-                }
-            }
-
-            // Start typing effect slightly after page loads
-            setTimeout(typeWriter, 800);
-        });
-    </script>
+    <!-- Core Portfolio Application & No-Code Editor Scripts -->
+    <script src="js/app.js"></script>
+    <script src="js/editor.js"></script>
 </body>
 </html>

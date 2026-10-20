@@ -1,0 +1,311 @@
+{
+  "profile": {
+    "name": "Jehrome Martin",
+    "firstName": "Jehrome",
+    "lastName": "Martin",
+    "title": "Aspiring IT Specialist & Indie Game Designer",
+    "yakuzaTitle": "PATRIARCH OF CREATIVE SYSTEMS • BAKUNAWA STUDIOS COLLABORATOR",
+    "yakuzaSubtitle": "4th Year BSIT • Game Designer & Technical Support Specialist",
+    "level": 4,
+    "classTitle": "SOLDIER 1st Class / Game Designer",
+    "hp": 4200,
+    "mp": 999,
+    "limitGauge": 88,
+    "university": "Pamantasan Ng Lungsod Ng Valenzuela",
+    "heroIntro": "A 4th Year BSIT Student at Pamantasan Ng Lungsod Ng Valenzuela, passionate about blending technical expertise with creative game design to craft meaningful digital experiences.",
+    "aboutBio": "I'm a 4th Year BSIT student at Pamantasan Ng Lungsod Ng Valenzuela with a deep passion for game design and development. I believe in the power of games to educate, entertain, and create meaningful experiences that connect people.",
+    "careerGoals": "Aspiring to become an Indie Game Designer, creating meaningful, entertaining, and immersive games to contribute not just in the Technology Industry but also in the Game Industry. I also aim to expand my knowledge in Technical Support to provide comprehensive solutions and assistance in IT environments.",
+    "avatarUrl": "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Profile%20Picture-CXzJFdP48c1peUFMtOS2rL481xFrEn.png",
+    "resumeUrl": "resume.pdf",
+    "contact": {
+      "email": "martinjehrome72@gmail.com",
+      "linkedinName": "Jehrome Martin",
+      "linkedinUrl": "https://www.linkedin.com/in/jehrome-martin-1662a4412",
+      "facebookName": "Rokuuu.ro",
+      "facebookUrl": "https://www.facebook.com/Rokuuu.ro"
+    }
+  },
+  "materia": [
+    {
+      "id": "mat-gamedesign",
+      "name": "Game Design",
+      "type": "magic",
+      "categoryLabel": "Magic Materia • Creative & Design",
+      "level": 5,
+      "maxLevel": 5,
+      "ap": "MASTER",
+      "description": "Core mechanics design, spatial level layout, player psychology, and rule balancing across digital and tabletop mediums.",
+      "linkedEffects": ["Spatial Level Layout", "Core Loop Balancing", "Player Tension Pacing"]
+    },
+    {
+      "id": "mat-storytelling",
+      "name": "Storytelling & Narrative",
+      "type": "magic",
+      "categoryLabel": "Magic Materia • Creative & Design",
+      "level": 5,
+      "maxLevel": 5,
+      "ap": "MASTER",
+      "description": "Crafting atmospheric lore, environmental storytelling, and engaging scenarios inspired by classic JRPGs and cinema.",
+      "linkedEffects": ["Environmental Lore", "Cinematic Direction", "Dialogue & Pacing"]
+    },
+    {
+      "id": "mat-figma",
+      "name": "Figma & UI/UX",
+      "type": "magic",
+      "categoryLabel": "Magic Materia • Creative & Design",
+      "level": 4,
+      "maxLevel": 5,
+      "ap": "4,200 / 5,000 AP",
+      "description": "Wireframing, interactive HUD prototyping, and visual asset assembly for web apps and game interfaces.",
+      "linkedEffects": ["HUD Wireframing", "Interactive Prototypes", "Visual Systems"]
+    },
+    {
+      "id": "mat-unity",
+      "name": "Unity Engine",
+      "type": "command",
+      "categoryLabel": "Command Materia • Engineering & Dev",
+      "level": 4,
+      "maxLevel": 5,
+      "ap": "4,500 / 5,000 AP",
+      "description": "Building 2D/3D interactive gameplay systems, scene hierarchy management, and rapid game prototyping.",
+      "linkedEffects": ["2D/3D Scene Assembly", "Gameplay Scripting", "Asset Integration"]
+    },
+    {
+      "id": "mat-web",
+      "name": "HTML / CSS / JavaScript",
+      "type": "command",
+      "categoryLabel": "Command Materia • Engineering & Dev",
+      "level": 4,
+      "maxLevel": 5,
+      "ap": "4,400 / 5,000 AP",
+      "description": "Developing responsive modern web applications, interactive UIs, and DOM-driven frontend experiences.",
+      "linkedEffects": ["Responsive Layouts", "Interactive DOM Logic", "Modern CSS Styling"]
+    },
+    {
+      "id": "mat-python-c",
+      "name": "Python & C",
+      "type": "command",
+      "categoryLabel": "Command Materia • Engineering & Dev",
+      "level": 3,
+      "maxLevel": 5,
+      "ap": "3,100 / 5,000 AP",
+      "description": "Algorithmic problem solving, structured programming fundamentals, and automation scripting.",
+      "linkedEffects": ["Algorithmic Logic", "Memory & Structs", "Backend Scripting"]
+    },
+    {
+      "id": "mat-techsupport",
+      "name": "IT & Network Support",
+      "type": "support",
+      "categoryLabel": "Support Materia • IT & Infrastructure",
+      "level": 5,
+      "maxLevel": 5,
+      "ap": "MASTER",
+      "description": "Cisco-certified network addressing, device configuration, security hardening, and end-user troubleshooting.",
+      "linkedEffects": ["Network Diagnostics", "Cisco IOS Config", "Endpoint Security"]
+    },
+    {
+      "id": "mat-docs",
+      "name": "System Documentation",
+      "type": "support",
+      "categoryLabel": "Support Materia • IT & Infrastructure",
+      "level": 5,
+      "maxLevel": 5,
+      "ap": "MASTER",
+      "description": "Authoring Game Design Documents (GDD), ARTA compliance workflows, process flows, and technical specifications.",
+      "linkedEffects": ["Game Design Docs (GDD)", "ARTA Compliance", "Process Flowcharts"]
+    },
+    {
+      "id": "mat-leadership",
+      "name": "Project Management & Comms",
+      "type": "independent",
+      "categoryLabel": "Independent Materia • Leadership & Soft Skills",
+      "level": 5,
+      "maxLevel": 5,
+      "ap": "MASTER",
+      "description": "Leading multidisciplinary student and indie teams, public speaking, stakeholder pitching, and agile task coordination.",
+      "linkedEffects": ["Team Coordination", "Public Speaking", "Interpersonal Synergy"]
+    }
+  ],
+  "certifications": [
+    {
+      "id": "cert-1",
+      "title": "Cisco Networking Basics",
+      "issuer": "Cisco Networking Academy",
+      "date": "May 2025",
+      "url": "https://blobs.vusercontent.net/blob/Cisco%20Networking%20Basics-ZQf1deEpcABQqvOUxFMZnA0HrzXAUZ.pdf",
+      "code": "NET-101"
+    },
+    {
+      "id": "cert-2",
+      "title": "Network Addressing & Basic Troubleshooting",
+      "issuer": "Cisco Networking Academy",
+      "date": "May 2025",
+      "url": "https://blobs.vusercontent.net/blob/Cisco%20Network%20Addressing%20and%20Basic%20Troubleshooting-Wbo9ccMz6OPiW1zYyipg98v11Ys9dy.pdf",
+      "code": "NET-204"
+    },
+    {
+      "id": "cert-3",
+      "title": "Networking Devices & Configuration",
+      "issuer": "Cisco Networking Academy",
+      "date": "May 2025",
+      "url": "https://blobs.vusercontent.net/blob/CIsco%20Network%20Devices%20and%20Configuration-e0ZqXuP3VZTfNSeh3QIvi4pXOcNoIS.pdf",
+      "code": "NET-302"
+    },
+    {
+      "id": "cert-4",
+      "title": "Network Support & Security",
+      "issuer": "Cisco Networking Academy",
+      "date": "May 2025",
+      "url": "https://blobs.vusercontent.net/blob/Cisco%20Network%20Support%20and%20Security-4B0BB5L7E2fDJLMs0SjXdmDaf0zKlm.pdf",
+      "code": "SEC-401"
+    }
+  ],
+  "works": [
+    {
+      "id": "work-valyou",
+      "title": "ValYOU",
+      "role": "Documentation Lead",
+      "status": "Completed",
+      "image": "valyou.png",
+      "url": "https://app-dev-teal.vercel.app/",
+      "actionLabel": "Visit Web App",
+      "actionIcon": "fa-solid fa-arrow-up-right-from-square",
+      "description": "A web application designed to automate an ARTA-compliant Customer Satisfaction Survey system. Managed the full documentation process including process flows, compliance records, and design assets using Google Docs, Excel, and Canva.",
+      "tags": ["WebApp", "Documentation", "ARTA"],
+      "linkedMateria": ["mat-docs", "mat-web", "mat-figma", "mat-leadership"],
+      "substoryNumber": "SUBSTORY #01",
+      "substoryTitle": "The Paperwork Phantom of Valenzuela",
+      "substoryLore": "Faced with complex Anti-Red Tape Authority (ARTA) compliance requirements for citizen feedback, led the structured documentation architecture—translating regulatory mandates into clear process flows, data schemas, and accessible UI assets.",
+      "weakness": "Manual Survey Bottlenecks & Compliance Gaps",
+      "tacticalGauges": {
+        "design": 80,
+        "engineering": 70,
+        "documentation": 100,
+        "leadership": 90
+      }
+    },
+    {
+      "id": "work-shadow",
+      "title": "Shadow of the Past",
+      "role": "Lead Game Designer",
+      "status": "Completed",
+      "image": "shadow.jpg",
+      "url": "https://bakunawa-studios.itch.io/shadow-of-the-past",
+      "actionLabel": "View on Itch.io",
+      "actionIcon": "fa-solid fa-gamepad",
+      "description": "A slasher horror game built around an atmospheric, real-camera video experience. Developed the complete spatial map layout and game environmental layers to create an immersive, tension-filled cinematic atmosphere.",
+      "tags": ["Horror Game", "Narrative", "Slasher Film"],
+      "linkedMateria": ["mat-gamedesign", "mat-storytelling", "mat-unity"],
+      "substoryNumber": "SUBSTORY #02",
+      "substoryTitle": "Through the VHS Lens",
+      "substoryLore": "Designed the complete spatial map architecture and environmental layering for Bakunawa Studios' slasher horror title. Balanced sightlines, choke points, and found-footage camera framing to sustain dread from start to finish.",
+      "weakness": "Predictable Jump Scares (Solved via Spatial Tension)",
+      "tacticalGauges": {
+        "design": 100,
+        "engineering": 75,
+        "documentation": 85,
+        "leadership": 90
+      }
+    },
+    {
+      "id": "work-piso",
+      "title": "Piso Politiko",
+      "role": "Lead Game Designer",
+      "status": "Completed",
+      "image": "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Piso%20Politiko%20Gamecon-TC1ZV07pV1XXnAPVE4GKgJWC4JbpWg.jpg",
+      "url": "https://www.youtube.com/watch?v=ww4mUkbBn_o",
+      "actionLabel": "Watch on YouTube",
+      "actionIcon": "fa-brands fa-youtube",
+      "description": "A hybrid tabletop game that explores Philippine politics through strategic gameplay, social deduction, and resource control.",
+      "tags": ["Tabletop Game", "Game Design", "Strategy"],
+      "linkedMateria": ["mat-gamedesign", "mat-storytelling", "mat-leadership", "mat-docs"],
+      "substoryNumber": "SUBSTORY #03",
+      "substoryTitle": "The Campaign Trail Gambit",
+      "substoryLore": "Created a satirical yet deeply strategic hybrid tabletop experience mirroring local political dynamics. Iterated extensively on economy balancing, player negotiation loops, and rulebook clarity for GameCon showcase.",
+      "weakness": "Runaway Leader Problem (Solved via Dynamic Catch-up Mechanics)",
+      "tacticalGauges": {
+        "design": 100,
+        "engineering": 65,
+        "documentation": 95,
+        "leadership": 95
+      }
+    },
+    {
+      "id": "work-buwaya",
+      "title": "Buwaya Catch",
+      "role": "Game Designer",
+      "status": "Completed",
+      "image": "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Buwaya%20Catch%20Banner-E0eYYOC22VZisFWvnWG4PC7SZZ8x0h.jpg",
+      "url": "https://bakunawa-studios.itch.io/buwaya-catch",
+      "actionLabel": "View on Itch.io",
+      "actionIcon": "fa-solid fa-gamepad",
+      "description": "A fast-paced video game spin-off of Piso Politiko featuring the iconic crocodile character in an arcade progression loop.",
+      "tags": ["Video Game", "Arcade", "Unity"],
+      "linkedMateria": ["mat-gamedesign", "mat-unity", "mat-python-c"],
+      "substoryNumber": "SUBSTORY #04",
+      "substoryTitle": "Enter the Crocodile",
+      "substoryLore": "Expanded the Piso Politiko universe into digital arcade territory using Unity. Tuned spawn curves, arcade scoring feedback, and hazard escalation to make every 60-second session immediately replayable.",
+      "weakness": "Short Session Fatigue (Solved via Escalating Arcade Combos)",
+      "tacticalGauges": {
+        "design": 95,
+        "engineering": 85,
+        "documentation": 80,
+        "leadership": 80
+      }
+    },
+    {
+      "id": "work-readysetbag",
+      "title": "Ready-Set-Bag!",
+      "role": "Project Manager & Game Designer",
+      "status": "In Progress",
+      "image": "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/GAME%20DOCU-p4YiK612wV33KIrxwkXfOeZeJeTee2.png",
+      "url": "https://readysetbag.website/landing.html",
+      "actionLabel": "Visit Website",
+      "actionIcon": "fa-solid fa-arrow-up-right-from-square",
+      "description": "An educational mobile game teaching disaster preparedness and emergency go-bag readiness to Grade 6 students.",
+      "tags": ["Educational", "Mobile Game", "Capstone"],
+      "linkedMateria": ["mat-leadership", "mat-gamedesign", "mat-docs", "mat-unity"],
+      "substoryNumber": "SUBSTORY #05",
+      "substoryTitle": "Operation Go-Bag Readiness",
+      "substoryLore": "Spearheading both project management and game design for our BSIT Capstone project. Translating disaster risk reduction curricula for Grade 6 learners into engaging mobile gameplay mechanics with measurable educational retention.",
+      "weakness": "Dry Educational Content (Solved via Gamified Time-Trial Packing)",
+      "tacticalGauges": {
+        "design": 95,
+        "engineering": 80,
+        "documentation": 95,
+        "leadership": 100
+      }
+    }
+  ],
+  "customSections": [
+    {
+      "id": "sec-chronicle",
+      "title": "Career & Development Chronicle",
+      "subtitle": "KEY MILESTONES & QUEST LOG",
+      "layout": "timeline",
+      "items": [
+        {
+          "id": "item-1",
+          "title": "Capstone Project Manager & Game Designer — Ready-Set-Bag!",
+          "meta": "2025 – Present • Pamantasan Ng Lungsod Ng Valenzuela",
+          "badge": "Active Quest",
+          "description": "Leading the end-to-end development, documentation, and school testing of an educational mobile game for Grade 6 disaster preparedness."
+        },
+        {
+          "id": "item-2",
+          "title": "Cisco Networking Academy — 4x Certification Completion",
+          "meta": "May 2025 • IT Infrastructure & Security",
+          "badge": "Mastered",
+          "description": "Completed comprehensive coursework and lab simulations across Networking Basics, Addressing & Troubleshooting, Device Configuration, and Network Security."
+        },
+        {
+          "id": "item-3",
+          "title": "Lead Game Designer — Bakunawa Studios Collaborations",
+          "meta": "2024 – 2025 • Indie Game Development",
+          "badge": "Completed",
+          "description": "Designed core mechanics, spatial layouts, and tabletop-to-digital systems for Shadow of the Past, Piso Politiko, and Buwaya Catch."
+        }
+      ]
+    }
+  ]
+}
