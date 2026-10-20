@@ -35,7 +35,11 @@
       "maxLevel": 5,
       "ap": "MASTER",
       "description": "Core mechanics design, spatial level layout, player psychology, and rule balancing across digital and tabletop mediums.",
-      "linkedEffects": ["Spatial Level Layout", "Core Loop Balancing", "Player Tension Pacing"]
+      "linkedEffects": [
+        "Spatial Level Layout",
+        "Core Loop Balancing",
+        "Player Tension Pacing"
+      ]
     },
     {
       "id": "mat-storytelling",
@@ -46,7 +50,11 @@
       "maxLevel": 5,
       "ap": "MASTER",
       "description": "Crafting atmospheric lore, environmental storytelling, and engaging scenarios inspired by classic JRPGs and cinema.",
-      "linkedEffects": ["Environmental Lore", "Cinematic Direction", "Dialogue & Pacing"]
+      "linkedEffects": [
+        "Environmental Lore",
+        "Cinematic Direction",
+        "Dialogue & Pacing"
+      ]
     },
     {
       "id": "mat-figma",
@@ -57,7 +65,11 @@
       "maxLevel": 5,
       "ap": "4,200 / 5,000 AP",
       "description": "Wireframing, interactive HUD prototyping, and visual asset assembly for web apps and game interfaces.",
-      "linkedEffects": ["HUD Wireframing", "Interactive Prototypes", "Visual Systems"]
+      "linkedEffects": [
+        "HUD Wireframing",
+        "Interactive Prototypes",
+        "Visual Systems"
+      ]
     },
     {
       "id": "mat-unity",
@@ -68,7 +80,11 @@
       "maxLevel": 5,
       "ap": "4,500 / 5,000 AP",
       "description": "Building 2D/3D interactive gameplay systems, scene hierarchy management, and rapid game prototyping.",
-      "linkedEffects": ["2D/3D Scene Assembly", "Gameplay Scripting", "Asset Integration"]
+      "linkedEffects": [
+        "2D/3D Scene Assembly",
+        "Gameplay Scripting",
+        "Asset Integration"
+      ]
     },
     {
       "id": "mat-web",
@@ -79,7 +95,11 @@
       "maxLevel": 5,
       "ap": "4,400 / 5,000 AP",
       "description": "Developing responsive modern web applications, interactive UIs, and DOM-driven frontend experiences.",
-      "linkedEffects": ["Responsive Layouts", "Interactive DOM Logic", "Modern CSS Styling"]
+      "linkedEffects": [
+        "Responsive Layouts",
+        "Interactive DOM Logic",
+        "Modern CSS Styling"
+      ]
     },
     {
       "id": "mat-python-c",
@@ -90,7 +110,11 @@
       "maxLevel": 5,
       "ap": "3,100 / 5,000 AP",
       "description": "Algorithmic problem solving, structured programming fundamentals, and automation scripting.",
-      "linkedEffects": ["Algorithmic Logic", "Memory & Structs", "Backend Scripting"]
+      "linkedEffects": [
+        "Algorithmic Logic",
+        "Memory & Structs",
+        "Backend Scripting"
+      ]
     },
     {
       "id": "mat-techsupport",
@@ -101,7 +125,11 @@
       "maxLevel": 5,
       "ap": "MASTER",
       "description": "Cisco-certified network addressing, device configuration, security hardening, and end-user troubleshooting.",
-      "linkedEffects": ["Network Diagnostics", "Cisco IOS Config", "Endpoint Security"]
+      "linkedEffects": [
+        "Network Diagnostics",
+        "Cisco IOS Config",
+        "Endpoint Security"
+      ]
     },
     {
       "id": "mat-docs",
@@ -112,7 +140,11 @@
       "maxLevel": 5,
       "ap": "MASTER",
       "description": "Authoring Game Design Documents (GDD), ARTA compliance workflows, process flows, and technical specifications.",
-      "linkedEffects": ["Game Design Docs (GDD)", "ARTA Compliance", "Process Flowcharts"]
+      "linkedEffects": [
+        "Game Design Docs (GDD)",
+        "ARTA Compliance",
+        "Process Flowcharts"
+      ]
     },
     {
       "id": "mat-leadership",
@@ -123,7 +155,11 @@
       "maxLevel": 5,
       "ap": "MASTER",
       "description": "Leading multidisciplinary student and indie teams, public speaking, stakeholder pitching, and agile task coordination.",
-      "linkedEffects": ["Team Coordination", "Public Speaking", "Interpersonal Synergy"]
+      "linkedEffects": [
+        "Team Coordination",
+        "Public Speaking",
+        "Interpersonal Synergy"
+      ]
     }
   ],
   "certifications": [
@@ -171,8 +207,17 @@
       "actionLabel": "Visit Web App",
       "actionIcon": "fa-solid fa-arrow-up-right-from-square",
       "description": "A web application designed to automate an ARTA-compliant Customer Satisfaction Survey system. Managed the full documentation process including process flows, compliance records, and design assets using Google Docs, Excel, and Canva.",
-      "tags": ["WebApp", "Documentation", "ARTA"],
-      "linkedMateria": ["mat-docs", "mat-web", "mat-figma", "mat-leadership"],
+      "tags": [
+        "WebApp",
+        "Documentation",
+        "ARTA"
+      ],
+      "linkedMateria": [
+        "mat-docs",
+        "mat-web",
+        "mat-figma",
+        "mat-leadership"
+      ],
       "substoryNumber": "SUBSTORY #01",
       "substoryTitle": "The Paperwork Phantom of Valenzuela",
       "substoryLore": "Faced with complex Anti-Red Tape Authority (ARTA) compliance requirements for citizen feedback, led the structured documentation architecture—translating regulatory mandates into clear process flows, data schemas, and accessible UI assets.",
@@ -194,8 +239,16 @@
       "actionLabel": "View on Itch.io",
       "actionIcon": "fa-solid fa-gamepad",
       "description": "A slasher horror game built around an atmospheric, real-camera video experience. Developed the complete spatial map layout and game environmental layers to create an immersive, tension-filled cinematic atmosphere.",
-      "tags": ["Horror Game", "Narrative", "Slasher Film"],
-      "linkedMateria": ["mat-gamedesign", "mat-storytelling", "mat-unity"],
+      "tags": [
+        "Horror Game",
+        "Narrative",
+        "Slasher Film"
+      ],
+      "linkedMateria": [
+        "mat-gamedesign",
+        "mat-storytelling",
+        "mat-unity"
+      ],
       "substoryNumber": "SUBSTORY #02",
       "substoryTitle": "Through the VHS Lens",
       "substoryLore": "Designed the complete spatial map architecture and environmental layering for Bakunawa Studios' slasher horror title. Balanced sightlines, choke points, and found-footage camera framing to sustain dread from start to finish.",
@@ -217,8 +270,17 @@
       "actionLabel": "Watch on YouTube",
       "actionIcon": "fa-brands fa-youtube",
       "description": "A hybrid tabletop game that explores Philippine politics through strategic gameplay, social deduction, and resource control.",
-      "tags": ["Tabletop Game", "Game Design", "Strategy"],
-      "linkedMateria": ["mat-gamedesign", "mat-storytelling", "mat-leadership", "mat-docs"],
+      "tags": [
+        "Tabletop Game",
+        "Game Design",
+        "Strategy"
+      ],
+      "linkedMateria": [
+        "mat-gamedesign",
+        "mat-storytelling",
+        "mat-leadership",
+        "mat-docs"
+      ],
       "substoryNumber": "SUBSTORY #03",
       "substoryTitle": "The Campaign Trail Gambit",
       "substoryLore": "Created a satirical yet deeply strategic hybrid tabletop experience mirroring local political dynamics. Iterated extensively on economy balancing, player negotiation loops, and rulebook clarity for GameCon showcase.",
@@ -240,8 +302,16 @@
       "actionLabel": "View on Itch.io",
       "actionIcon": "fa-solid fa-gamepad",
       "description": "A fast-paced video game spin-off of Piso Politiko featuring the iconic crocodile character in an arcade progression loop.",
-      "tags": ["Video Game", "Arcade", "Unity"],
-      "linkedMateria": ["mat-gamedesign", "mat-unity", "mat-python-c"],
+      "tags": [
+        "Video Game",
+        "Arcade",
+        "Unity"
+      ],
+      "linkedMateria": [
+        "mat-gamedesign",
+        "mat-unity",
+        "mat-python-c"
+      ],
       "substoryNumber": "SUBSTORY #04",
       "substoryTitle": "Enter the Crocodile",
       "substoryLore": "Expanded the Piso Politiko universe into digital arcade territory using Unity. Tuned spawn curves, arcade scoring feedback, and hazard escalation to make every 60-second session immediately replayable.",
@@ -263,8 +333,17 @@
       "actionLabel": "Visit Website",
       "actionIcon": "fa-solid fa-arrow-up-right-from-square",
       "description": "An educational mobile game teaching disaster preparedness and emergency go-bag readiness to Grade 6 students.",
-      "tags": ["Educational", "Mobile Game", "Capstone"],
-      "linkedMateria": ["mat-leadership", "mat-gamedesign", "mat-docs", "mat-unity"],
+      "tags": [
+        "Educational",
+        "Mobile Game",
+        "Capstone"
+      ],
+      "linkedMateria": [
+        "mat-leadership",
+        "mat-gamedesign",
+        "mat-docs",
+        "mat-unity"
+      ],
       "substoryNumber": "SUBSTORY #05",
       "substoryTitle": "Operation Go-Bag Readiness",
       "substoryLore": "Spearheading both project management and game design for our BSIT Capstone project. Translating disaster risk reduction curricula for Grade 6 learners into engaging mobile gameplay mechanics with measurable educational retention.",
