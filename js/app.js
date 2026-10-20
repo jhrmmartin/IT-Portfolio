@@ -434,6 +434,7 @@ window.PortfolioApp = {
 
   async init() {
     await this.loadData();
+    this.initCharacterCompanions();
     this.initTheme();
     this.initDialogsFallback();
     this.renderAll();
@@ -534,6 +535,8 @@ window.PortfolioApp = {
       btn.classList.toggle('ring-amber-400', isMatch && themeName === 'yakuza');
       btn.setAttribute('aria-pressed', String(isMatch));
     });
+
+    this.updateCompanionForTheme(themeName, playSound);
   },
 
   /* --------------------------------------------------------------------------
@@ -1364,6 +1367,196 @@ window.PortfolioApp = {
     };
 
     renderFrame();
+  },
+
+  /* --------------------------------------------------------------------------
+     INTERACTIVE CHARACTER COMPANIONS (CLOUD STRIFE / KIRYU & MAJIMA)
+     -------------------------------------------------------------------------- */
+  companionState: {
+    patrolling: true,
+    activeSpeaker: 'cloud',
+    quoteIndex: 0,
+    cloudX: 56,
+    cloudDir: 1,
+    kiryuX: 160,
+    kiryuDir: 1,
+    majimaX: 56,
+    majimaDir: 1
+  },
+
+  companionQuotes: {
+    cloud: [
+      "Not interested... unless you're checking out Jehrome's Featured Works.",
+      "Click any glowing Materia orb in Section 02 to filter the projects that used that skill!",
+      "Mako levels are stable. Click 'ASSESS INTEL' on any project card for a full tactical breakdown.",
+      "SOLDIER 1st Class tip: Switch between MAKO and 1997 mode in the top bar anytime."
+    ],
+    kiryu: [
+      "That's rad! Jehrome's game design and IT documentation skills are built for the big leagues.",
+      "In Kamurocho, solid preparation wins every battle. Check out the Substory Intel on each project!",
+      "A real dragon backs up creativity with technical fundamentals—4x Cisco NetAcad certified."
+    ],
+    majima: [
+      "KIRYU-CHAN!! ...Oh! A visitor! Go hit 'ASSESS INTEL' on Jehrome's Featured Works right now!",
+      "Hehehe! From slasher horror to political tabletop strategy, Jehrome designs 'em all!",
+      "24-Hour Cinderella mode activated! Need an Indie Game Designer or IT Specialist? Hit Let's Connect!"
+    ]
+  },
+
+  initCharacterCompanions() {
+    const actorCloud = document.getElementById('actor-cloud');
+    const actorKiryu = document.getElementById('actor-kiryu');
+    const actorMajima = document.getElementById('actor-majima');
+    const spriteCloud = document.getElementById('sprite-cloud-el');
+    const spriteKiryu = document.getElementById('sprite-kiryu-el');
+    const spriteMajima = document.getElementById('sprite-majima-el');
+    const closeBtn = document.getElementById('companion-close-bubble');
+    const nextQuoteBtn = document.getElementById('companion-next-quote-btn');
+    const patrolBtn = document.getElementById('companion-patrol-toggle-btn');
+
+    if (!actorCloud || !actorKiryu || !actorMajima) return;
+
+    // Click Cloud Strife
+    actorCloud.addEventListener('click', () => {
+      SFX.playSelect();
+      if (spriteCloud) {
+        spriteCloud.classList.add('cheer');
+        setTimeout(() => spriteCloud.classList.remove('cheer'), 1400);
+      }
+      this.showCompanionBubble('cloud');
+    });
+
+    // Click Kazuma Kiryu
+    actorKiryu.addEventListener('click', () => {
+      SFX.playYakuzaStamp();
+      this.showCompanionBubble('kiryu');
+    });
+
+    // Click Goro Majima
+    actorMajima.addEventListener('click', () => {
+      SFX.playYakuzaStamp();
+      this.showCompanionBubble('majima');
+    });
+
+    closeBtn?.addEventListener('click', () => {
+      document.getElementById('companion-dialogue')?.classList.add('hidden-bubble');
+    });
+
+    nextQuoteBtn?.addEventListener('click', () => {
+      SFX.playCursor();
+      this.showCompanionBubble(this.companionState.activeSpeaker, true);
+    });
+
+    patrolBtn?.addEventListener('click', () => {
+      SFX.playCursor();
+      this.companionState.patrolling = !this.companionState.patrolling;
+      const label = document.getElementById('companion-patrol-label');
+      if (label) {
+        label.textContent = this.companionState.patrolling ? 'Pause Walk' : 'Resume Walk';
+      }
+    });
+
+    // Continuous smooth walking patrol across the bottom viewport track
+    const stepPatrol = () => {
+      if (this.companionState.patrolling) {
+        const theme = document.documentElement.getAttribute('data-theme') || 'mako';
+        const maxRight = Math.max(260, window.innerWidth - 110);
+
+        if (theme === 'yakuza') {
+          // Move Kiryu
+          this.companionState.kiryuX += this.companionState.kiryuDir * 0.85;
+          if (this.companionState.kiryuX >= maxRight) {
+            this.companionState.kiryuX = maxRight;
+            this.companionState.kiryuDir = -1;
+          } else if (this.companionState.kiryuX <= 110) {
+            this.companionState.kiryuX = 110;
+            this.companionState.kiryuDir = 1;
+          }
+          actorKiryu.style.left = `${this.companionState.kiryuX}px`;
+          // Kiryu's sprite naturally faces left; flip when walking right (dir === 1)
+          spriteKiryu?.classList.toggle('flipped', this.companionState.kiryuDir === 1);
+
+          // Move Majima ("Majima Everywhere" patrolling alongside Kiryu)
+          this.companionState.majimaX += this.companionState.majimaDir * 0.85;
+          if (this.companionState.majimaX >= maxRight - 85) {
+            this.companionState.majimaX = maxRight - 85;
+            this.companionState.majimaDir = -1;
+          } else if (this.companionState.majimaX <= 24) {
+            this.companionState.majimaX = 24;
+            this.companionState.majimaDir = 1;
+          }
+          actorMajima.style.left = `${this.companionState.majimaX}px`;
+          spriteMajima?.classList.toggle('flipped', this.companionState.majimaDir === 1);
+        } else {
+          // Move Cloud Strife in MAKO & 1997 themes
+          this.companionState.cloudX += this.companionState.cloudDir * 0.75;
+          if (this.companionState.cloudX >= maxRight) {
+            this.companionState.cloudX = maxRight;
+            this.companionState.cloudDir = -1;
+          } else if (this.companionState.cloudX <= 32) {
+            this.companionState.cloudX = 32;
+            this.companionState.cloudDir = 1;
+          }
+          actorCloud.style.left = `${this.companionState.cloudX}px`;
+          // Cloud's sprite naturally faces left; flip when walking right (dir === 1)
+          spriteCloud?.classList.toggle('flipped', this.companionState.cloudDir === 1);
+        }
+      }
+      requestAnimationFrame(stepPatrol);
+    };
+
+    requestAnimationFrame(stepPatrol);
+  },
+
+  updateCompanionForTheme(themeName, showGreeting = false) {
+    const actorCloud = document.getElementById('actor-cloud');
+    const actorKiryu = document.getElementById('actor-kiryu');
+    const actorMajima = document.getElementById('actor-majima');
+    if (!actorCloud || !actorKiryu || !actorMajima) return;
+
+    if (themeName === 'yakuza') {
+      actorCloud.classList.add('hidden');
+      actorKiryu.classList.remove('hidden');
+      actorMajima.classList.remove('hidden');
+      if (showGreeting) {
+        this.showCompanionBubble('kiryu');
+      }
+    } else {
+      actorKiryu.classList.add('hidden');
+      actorMajima.classList.add('hidden');
+      actorCloud.classList.remove('hidden');
+      if (showGreeting) {
+        const spriteCloud = document.getElementById('sprite-cloud-el');
+        if (spriteCloud) {
+          spriteCloud.classList.add('cheer');
+          setTimeout(() => spriteCloud.classList.remove('cheer'), 1200);
+        }
+        this.showCompanionBubble('cloud');
+      }
+    }
+  },
+
+  showCompanionBubble(speaker, advance = true) {
+    const bubble = document.getElementById('companion-dialogue');
+    const speakerEl = document.getElementById('companion-speaker');
+    const textEl = document.getElementById('companion-text');
+    if (!bubble || !speakerEl || !textEl) return;
+
+    this.companionState.activeSpeaker = speaker;
+    const list = this.companionQuotes[speaker] || this.companionQuotes.cloud;
+    if (advance) {
+      this.companionState.quoteIndex = (this.companionState.quoteIndex + 1) % list.length;
+    }
+
+    const titles = {
+      cloud: 'CLOUD STRIFE // SOLDIER 1ST CLASS',
+      kiryu: 'KAZUMA KIRYU // DRAGON OF DOJIMA',
+      majima: 'GORO MAJIMA // MAD DOG OF SHIMANO'
+    };
+
+    speakerEl.textContent = titles[speaker] || titles.cloud;
+    textEl.textContent = `"${list[this.companionState.quoteIndex]}"`;
+    bubble.classList.remove('hidden-bubble');
   },
 
   escapeHtml(str) {

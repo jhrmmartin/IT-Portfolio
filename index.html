@@ -501,9 +501,9 @@
     </section>
 
     <!-- ======================================================================
-         FOOTER (WITH QUICK ACCESS TO NO-CODE MODULE MANAGER)
+         FOOTER
          ====================================================================== -->
-    <footer class="relative z-10 bg-slate-950/90 border-t border-emerald-500/20 py-8 text-xs font-mono-hud text-slate-400">
+    <footer class="relative z-10 bg-slate-950/90 border-t border-emerald-500/20 pt-8 pb-24 text-xs font-mono-hud text-slate-400">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-4">
             <div>
                 <p>&copy; 2026 Jehrome Martin. All rights reserved.</p>
@@ -520,6 +520,62 @@
             </div>
         </div>
     </footer>
+
+    <!-- ======================================================================
+         INTERACTIVE CHARACTER SPRITE COMPANION STAGE
+         - MAKO / 1997 Theme: Cloud Strife (Interactive Walk + Cheer/Jump)
+         - YAKUZA Theme: Kazuma Kiryu & Goro Majima (Walking Animation + Substory Chat)
+         ====================================================================== -->
+    <div id="companion-dialogue" class="companion-dialogue hidden-bubble ff-panel p-4 shadow-2xl" role="status" aria-live="polite">
+        <div class="flex items-center justify-between gap-3 border-b border-emerald-500/25 pb-2 mb-2">
+            <span id="companion-speaker" class="text-xs font-mono-hud font-bold uppercase tracking-wider text-emerald-400">
+                CLOUD STRIFE // SOLDIER 1ST CLASS
+            </span>
+            <button type="button" id="companion-close-bubble" class="text-xs opacity-60 hover:opacity-100" aria-label="Dismiss dialogue">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <p id="companion-text" class="text-xs sm:text-sm leading-relaxed mb-3">
+            "Not interested... unless you're checking out Jehrome's Featured Works."
+        </p>
+        <div class="flex flex-wrap items-center gap-2 text-[11px] font-mono-hud">
+            <button type="button" id="companion-next-quote-btn" class="px-2.5 py-1 rounded bg-emerald-500/20 hover:bg-emerald-500/35 border border-emerald-400/40 text-emerald-300 transition">
+                <i class="fa-solid fa-comment-dots mr-1"></i> Talk Again
+            </button>
+            <button type="button" id="companion-patrol-toggle-btn" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 border border-slate-600 text-slate-200 transition">
+                <i class="fa-solid fa-person-walking mr-1"></i> <span id="companion-patrol-label">Pause Walk</span>
+            </button>
+            <a href="#works" class="px-2.5 py-1 rounded bg-cyan-500/15 hover:bg-cyan-500/30 border border-cyan-400/40 text-cyan-300 transition">
+                Quest Log →
+            </a>
+        </div>
+    </div>
+
+    <div id="companion-stage" class="companion-stage" aria-label="Interactive Character Companion Stage">
+        <!-- Cloud Strife Actor (Shown in MAKO & 1997 modes) -->
+        <div id="actor-cloud" class="companion-actor group" style="left: 48px;" title="Click to interact with Cloud Strife!">
+            <span class="px-2 py-0.5 rounded bg-slate-950/90 border border-emerald-400/50 text-[10px] font-mono-hud text-emerald-300 mb-3 opacity-85 group-hover:opacity-100 transition whitespace-nowrap shadow">
+                <i class="fa-solid fa-hand-pointer mr-1 text-[9px]"></i>CLOUD
+            </span>
+            <div id="sprite-cloud-el" class="pixel-sprite sprite-cloud"></div>
+        </div>
+
+        <!-- Kazuma Kiryu Actor (Shown in YAKUZA mode) -->
+        <div id="actor-kiryu" class="companion-actor group hidden" style="left: 140px;" title="Click to talk to Kazuma Kiryu!">
+            <span class="px-2 py-0.5 rounded bg-slate-950/90 border border-red-500/60 text-[10px] font-mono-hud text-amber-300 mb-1 opacity-85 group-hover:opacity-100 transition whitespace-nowrap shadow">
+                <i class="fa-solid fa-dragon mr-1 text-red-400 text-[9px]"></i>KIRYU
+            </span>
+            <div id="sprite-kiryu-el" class="pixel-sprite sprite-kiryu"></div>
+        </div>
+
+        <!-- Goro Majima Actor (Shown in YAKUZA mode) -->
+        <div id="actor-majima" class="companion-actor group hidden" style="left: 48px;" title="Click to talk to Goro Majima!">
+            <span class="px-2 py-0.5 rounded bg-slate-950/90 border border-amber-400/60 text-[10px] font-mono-hud text-amber-300 mb-1 opacity-85 group-hover:opacity-100 transition whitespace-nowrap shadow">
+                <i class="fa-solid fa-eye-slash mr-1 text-amber-400 text-[9px]"></i>MAJIMA
+            </span>
+            <div id="sprite-majima-el" class="pixel-sprite sprite-majima"></div>
+        </div>
+    </div>
 
     <!-- ======================================================================
          MODAL 1: FF7 REMAKE "TACTICAL ASSESS" & YAKUZA 0 "SUBSTORY" DIALOG

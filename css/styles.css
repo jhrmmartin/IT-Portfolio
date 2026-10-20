@@ -431,3 +431,130 @@ dialog.ff-dialog::backdrop {
 @keyframes blinkCursor {
   50% { opacity: 0; }
 }
+
+/* --------------------------------------------------------------------------
+   INTERACTIVE CHARACTER SPRITE COMPANION SYSTEM (CLOUD / KIRYU & MAJIMA)
+   -------------------------------------------------------------------------- */
+.pixel-sprite {
+  image-rendering: -moz-crisp-edges;
+  image-rendering: pixelated;
+  background-repeat: no-repeat;
+  user-select: none;
+}
+
+/* Cloud Strife Sprite (288x48 strip = 6 frames of 48x48, scaled 1.65x -> 79.2px) */
+.sprite-cloud {
+  width: 48px;
+  height: 48px;
+  background-image: url('../assets/cloud-sprites.png');
+  background-size: 288px 48px;
+  transform: scale(1.75);
+  transform-origin: bottom center;
+  animation: cloudWalkCycle 0.68s steps(4) infinite;
+  filter: drop-shadow(0 4px 10px rgba(0, 229, 176, 0.35));
+}
+
+.sprite-cloud.flipped {
+  transform: scale(-1.75, 1.75);
+}
+
+.sprite-cloud.cheer {
+  animation: cloudCheerCycle 0.45s steps(2) infinite;
+}
+
+.sprite-cloud.flipped.cheer {
+  animation: cloudCheerCycle 0.45s steps(2) infinite;
+}
+
+@keyframes cloudWalkCycle {
+  from { background-position: 0px 0px; }
+  to   { background-position: -192px 0px; } /* Frames 0..3 */
+}
+
+@keyframes cloudCheerCycle {
+  from { background-position: -192px 0px; }
+  to   { background-position: -288px 0px; } /* Frames 4..5 */
+}
+
+/* Kiryu & Majima Walking Sprites (384x112 strip = 6 frames of 64x112) */
+.sprite-kiryu,
+.sprite-majima {
+  width: 64px;
+  height: 112px;
+  background-size: 384px 112px;
+  transform: scale(0.92);
+  transform-origin: bottom center;
+  animation:
+    yakuzaWalkFrames 0.65s steps(6) infinite,
+    yakuzaWalkStride 0.325s ease-in-out infinite alternate;
+}
+
+.sprite-kiryu {
+  background-image: url('../assets/kiryu-sprites.png');
+  filter: drop-shadow(0 4px 12px rgba(239, 68, 68, 0.45));
+}
+
+.sprite-majima {
+  background-image: url('../assets/majima-sprites.png');
+  filter: drop-shadow(0 4px 12px rgba(245, 158, 11, 0.45));
+  animation-delay: -0.25s;
+}
+
+.sprite-kiryu.flipped,
+.sprite-majima.flipped {
+  transform: scale(-0.92, 0.92);
+}
+
+@keyframes yakuzaWalkFrames {
+  from { background-position: 0px 0px; }
+  to   { background-position: -384px 0px; }
+}
+
+@keyframes yakuzaWalkStride {
+  0%   { margin-bottom: 0px; }
+  100% { margin-bottom: 3px; }
+}
+
+/* Companion Stage & Speech Bubble */
+.companion-stage {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 110px;
+  pointer-events: none;
+  z-index: 35;
+  overflow: visible;
+}
+
+.companion-actor {
+  position: absolute;
+  bottom: 10px;
+  pointer-events: auto;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.15s ease;
+}
+
+.companion-actor:hover {
+  filter: brightness(1.12);
+}
+
+.companion-dialogue {
+  position: fixed;
+  bottom: 108px;
+  left: 1.25rem;
+  max-width: 22rem;
+  z-index: 36;
+  pointer-events: auto;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.companion-dialogue.hidden-bubble {
+  opacity: 0;
+  transform: translateY(10px);
+  pointer-events: none;
+}
+
