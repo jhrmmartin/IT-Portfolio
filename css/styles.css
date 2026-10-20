@@ -544,17 +544,41 @@ dialog.ff-dialog::backdrop {
 
 .companion-dialogue {
   position: fixed;
-  bottom: 108px;
+  bottom: 126px;
   left: 1.25rem;
-  max-width: 22rem;
-  z-index: 36;
+  width: max-content;
+  max-width: min(22rem, calc(100vw - 24px));
+  z-index: 45;
   pointer-events: auto;
-  transition: opacity 0.25s ease, transform 0.25s ease;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  overflow: visible;
 }
 
 .companion-dialogue.hidden-bubble {
   opacity: 0;
-  transform: translateY(10px);
+  transform: translateY(10px) scale(0.96);
   pointer-events: none;
+}
+
+/* Downward speech bubble tail pointing directly to character's head */
+.companion-bubble-tail {
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  width: 13px;
+  height: 13px;
+  transform: translateX(-50%) rotate(45deg);
+  background: var(--bg-surface);
+  border-right: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-subtle);
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.45);
+  pointer-events: none;
+  z-index: 10;
+}
+
+html[data-theme="classic"] .companion-bubble-tail {
+  background: var(--bg-surface);
+  border-right: 2px solid #e2e8f0;
+  border-bottom: 2px solid #e2e8f0;
 }
 

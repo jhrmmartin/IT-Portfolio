@@ -1456,6 +1456,10 @@ window.PortfolioApp = {
       }
     });
 
+    window.addEventListener('resize', () => {
+      this.updateBubblePosition();
+    });
+
     // Continuous smooth walking patrol across the bottom viewport track
     const stepPatrol = () => {
       if (this.companionState.patrolling) {
@@ -1501,11 +1505,60 @@ window.PortfolioApp = {
           // Cloud's sprite naturally faces left; flip when walking right (dir === 1)
           spriteCloud?.classList.toggle('flipped', this.companionState.cloudDir === 1);
         }
+
+        // Keep speech bubble synchronized over the walking speaker's head
+        const bubble = document.getElementById('companion-dialogue');
+        if (bubble && !bubble.classList.contains('hidden-bubble')) {
+          this.updateBubblePosition();
+        }
       }
       requestAnimationFrame(stepPatrol);
     };
 
     requestAnimationFrame(stepPatrol);
+  },
+
+  getSpeakerCenter(speaker) {
+    if (speaker === 'kiryu') {
+      return (this.companionState.kiryuX || 160) + 32;
+    }
+    if (speaker === 'majima') {
+      return (this.companionState.majimaX || 56) + 32;
+    }
+    return (this.companionState.cloudX || 56) + 24;
+  },
+
+  updateBubblePosition() {
+    const bubble = document.getElementById('companion-dialogue');
+    const tail = document.getElementById('companion-bubble-tail');
+    if (!bubble || bubble.classList.contains('hidden-bubble')) return;
+
+    const speaker = this.companionState.activeSpeaker || 'cloud';
+    const speakerCenterX = this.getSpeakerCenter(speaker);
+
+    // Height offset: Cloud is ~126px, Kiryu/Majima are taller sprites ~148px
+    const bottomY = (speaker === 'cloud') ? 126 : 148;
+    bubble.style.bottom = `${bottomY}px`;
+
+    const bubbleWidth = bubble.offsetWidth || 300;
+    const viewportWidth = window.innerWidth;
+    const margin = 12;
+
+    // Calculate centered X position above speaker's head
+    let bubbleLeft = speakerCenterX - (bubbleWidth / 2);
+
+    // Clamp within viewport to prevent overflowing offscreen on mobile/edges
+    const maxLeft = Math.max(margin, viewportWidth - bubbleWidth - margin);
+    bubbleLeft = Math.max(margin, Math.min(maxLeft, bubbleLeft));
+    bubble.style.left = `${bubbleLeft}px`;
+
+    // Position the tail to point directly towards the character's head
+    if (tail) {
+      let tailOffset = speakerCenterX - bubbleLeft;
+      // Keep tail inset from corners to stay attached cleanly to the rounded panel
+      tailOffset = Math.max(20, Math.min(bubbleWidth - 20, tailOffset));
+      tail.style.left = `${tailOffset}px`;
+    }
   },
 
   updateCompanionForTheme(themeName, showGreeting = false) {
@@ -1539,7 +1592,9 @@ window.PortfolioApp = {
   showCompanionBubble(speaker, advance = true) {
     const bubble = document.getElementById('companion-dialogue');
     const speakerEl = document.getElementById('companion-speaker');
+    const headerEl = document.getElementById('companion-header');
     const textEl = document.getElementById('companion-text');
+    const nextBtn = document.getElementById('companion-next-quote-btn');
     if (!bubble || !speakerEl || !textEl) return;
 
     this.companionState.activeSpeaker = speaker;
@@ -1548,15 +1603,40 @@ window.PortfolioApp = {
       this.companionState.quoteIndex = (this.companionState.quoteIndex + 1) % list.length;
     }
 
-    const titles = {
-      cloud: 'CLOUD STRIFE // SOLDIER 1ST CLASS',
-      kiryu: 'KAZUMA KIRYU // DRAGON OF DOJIMA',
-      majima: 'GORO MAJIMA // MAD DOG OF SHIMANO'
+    const configs = {
+      cloud: {
+        title: 'CLOUD STRIFE // SOLDIER 1ST CLASS',
+        badgeClass: 'text-xs font-mono-hud font-bold uppercase tracking-wider text-emerald-400',
+        headerBorder: 'border-emerald-500/25',
+        btnClass: 'px-2.5 py-1 rounded bg-emerald-500/20 hover:bg-emerald-500/35 border border-emerald-400/40 text-emerald-300 transition'
+      },
+      kiryu: {
+        title: 'KAZUMA KIRYU // DRAGON OF DOJIMA',
+        badgeClass: 'text-xs font-mono-hud font-bold uppercase tracking-wider text-red-400',
+        headerBorder: 'border-red-500/30',
+        btnClass: 'px-2.5 py-1 rounded bg-red-500/20 hover:bg-red-500/35 border border-red-500/40 text-red-300 transition'
+      },
+      majima: {
+        title: 'GORO MAJIMA // MAD DOG OF SHIMANO',
+        badgeClass: 'text-xs font-mono-hud font-bold uppercase tracking-wider text-amber-400',
+        headerBorder: 'border-amber-500/30',
+        btnClass: 'px-2.5 py-1 rounded bg-amber-500/20 hover:bg-amber-500/35 border border-amber-400/40 text-amber-300 transition'
+      }
     };
 
-    speakerEl.textContent = titles[speaker] || titles.cloud;
+    const cfg = configs[speaker] || configs.cloud;
+    speakerEl.textContent = cfg.title;
+    speakerEl.className = cfg.badgeClass;
+    if (headerEl) {
+      headerEl.className = `flex items-center justify-between gap-3 border-b ${cfg.headerBorder} pb-2 mb-2`;
+    }
+    if (nextBtn) {
+      nextBtn.className = cfg.btnClass;
+    }
+
     textEl.textContent = `"${list[this.companionState.quoteIndex]}"`;
     bubble.classList.remove('hidden-bubble');
+    this.updateBubblePosition();
   },
 
   escapeHtml(str) {
