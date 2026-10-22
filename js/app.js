@@ -1959,6 +1959,17 @@ window.PortfolioApp = {
       });
     }
 
+    // Mission Briefing Guided Tour Triggers
+    const triggerTour = () => {
+      this.startTour();
+    };
+    document.getElementById('start-tour-hero-btn')?.addEventListener('click', triggerTour);
+    document.getElementById('start-tour-nav-btn')?.addEventListener('click', triggerTour);
+    document.getElementById('mobile-tour-btn')?.addEventListener('click', () => {
+      mobileMenu?.classList.add('hidden');
+      triggerTour();
+    });
+
     // Typing Effect for Hero Subtitle
     const typingElement = document.getElementById('typing-text');
     if (typingElement) {
@@ -2234,6 +2245,70 @@ window.PortfolioApp = {
     majimaDir: 1
   },
 
+  tourState: {
+    active: false,
+    currentStep: 0,
+    savedPatrol: true
+  },
+
+  tourSteps: [
+    {
+      targetId: 'hero-status-card',
+      scrollTarget: 'home',
+      title: 'BRIEFING 1/5 // TACTICAL STATUS',
+      dialogue: {
+        cloud: "Listen up. This is Jehrome's Tactical Status Card. Level 4 Indie Game Designer & Cisco-certified IT Specialist. You can inspect his HP/MP drive meters and grab his full Resume Dossier right here.",
+        kiryu: "Alright, look closely. This is Jehrome's Status Card. Level 4 Game Designer & Cisco NetAcad certified. You can grab his full resume dossier right from this card.",
+        majima: "YOO-HOO! Check out the boss's status card! Level 4 Game Designer with maxed-out creativity and drive! Hit that Resume Dossier button to see his full stats!"
+      },
+      sound: 'select'
+    },
+    {
+      targetId: 'materia-inspector-box',
+      scrollTarget: 'about',
+      title: 'BRIEFING 2/5 // MATERIA LOADOUT',
+      dialogue: {
+        cloud: "Here's the Materia Loadout. Magic, Command, Support, and Independent skills. Click any glowing orb to inspect its mastery level and automatically filter the projects below that used it.",
+        kiryu: "Materia skills. In Kamurocho, preparation is everything. Click any glowing orb to filter out projects built with Unity, C#, Networking, or Game Design.",
+        majima: "Look at these shiny Materia orbs! Green for design, yellow for coding, blue for IT networking! Click any orb to filter the quest log below!"
+      },
+      sound: 'materia'
+    },
+    {
+      targetId: 'works',
+      scrollTarget: 'works',
+      title: 'BRIEFING 3/5 // QUEST LOG & ASSESS',
+      dialogue: {
+        cloud: "Section 03: Quest Log. Don't just click the launch links—hit 'ASSESS INTEL' on any project card for a full tactical radar breakdown of Jehrome's design, code, and documentation.",
+        kiryu: "Jehrome's Featured Works. From horror to tabletop political strategy! Hit 'ASSESS INTEL' on any card to view the Substory and technical architecture behind each game.",
+        majima: "HYAHAHA! 5 killer projects! Slasher horror, political bribery satire, crocodile catching! Hit 'ASSESS INTEL' on any card for the full substory scoop!"
+      },
+      sound: 'assess'
+    },
+    {
+      targetId: 'nav-theme-controls',
+      scrollTarget: 'home',
+      title: 'BRIEFING 4/5 // THEMES & SFX JUKEBOX',
+      dialogue: {
+        cloud: "Check the top navigation bar. You can switch between modern MAKO tactical mode, retro 1997 Final Fantasy VII blue window mode, and Yakuza 0 mode anytime—plus a full retro SFX Jukebox!",
+        kiryu: "Look at the top bar. You can switch to our YAKUZA theme anytime, or retro 1997 FF7 mode. Try the JUKEBOX button to test all 14 synthesized retro sounds!",
+        majima: "Hit the YAKUZA button up top for gold and dragon fire! Or hit that JUKEBOX button to hear my crazy whistle and money explosions!"
+      },
+      sound: 'limitBreak'
+    },
+    {
+      targetId: 'contact-form',
+      scrollTarget: 'contact',
+      title: 'BRIEFING 5/5 // DIRECT TRANSMISSION',
+      dialogue: {
+        cloud: "Ready to collaborate or hire? Use this Direct Transmission composer to send Jehrome a message straight to his inbox with <24h reply. That's the briefing. Dismissed!",
+        kiryu: "Got an indie game project or IT role? Send a message directly through this Transmission form. It goes straight to Jehrome's inbox. Time to get to work!",
+        majima: "Need an elite Game Designer or IT Specialist? Fire off a transmission right here! Fast replies guaranteed! That's the tour, folks!"
+      },
+      sound: 'fanfare'
+    }
+  ],
+
   companionQuotes: {
     cloud: [
       "Not interested... unless you're checking out Jehrome's Featured Works.",
@@ -2311,8 +2386,35 @@ window.PortfolioApp = {
     });
 
     closeBtn?.addEventListener('click', () => {
-      SFX.playCancel();
+      if (this.tourState?.active) {
+        this.endTour();
+      } else {
+        SFX.playCancel();
+      }
       document.getElementById('companion-dialogue')?.classList.add('hidden-bubble');
+    });
+
+    // Tour Controls inside companion dialogue
+    const tourPrevBtn = document.getElementById('tour-prev-btn');
+    const tourNextBtn = document.getElementById('tour-next-btn');
+    const tourExitBtn = document.getElementById('tour-exit-btn');
+    const tourStartCompanionBtn = document.getElementById('companion-start-tour-btn');
+
+    tourPrevBtn?.addEventListener('click', () => this.prevTourStep());
+    tourNextBtn?.addEventListener('click', () => this.nextTourStep());
+    tourExitBtn?.addEventListener('click', () => this.endTour());
+    tourStartCompanionBtn?.addEventListener('click', () => this.startTour());
+
+    // Keyboard navigation during active tour
+    window.addEventListener('keydown', (e) => {
+      if (!this.tourState?.active) return;
+      if (e.key === 'Escape') {
+        this.endTour();
+      } else if (e.key === 'ArrowRight' || e.key === 'Enter') {
+        this.nextTourStep();
+      } else if (e.key === 'ArrowLeft') {
+        this.prevTourStep();
+      }
     });
 
     nextQuoteBtn?.addEventListener('click', () => {
@@ -2396,6 +2498,133 @@ window.PortfolioApp = {
     };
 
     requestAnimationFrame(stepPatrol);
+  },
+
+  /* --------------------------------------------------------------------------
+     CHARACTER-LED MISSION BRIEFING ONBOARDING TOUR
+     Guided walkthrough of key portfolio systems with live companion commentary
+     -------------------------------------------------------------------------- */
+  startTour() {
+    this.tourState.active = true;
+    this.tourState.savedPatrol = this.companionState.patrolling;
+    this.companionState.patrolling = false;
+
+    // Toggle speech bubble controls
+    document.getElementById('companion-normal-controls')?.classList.add('hidden');
+    document.getElementById('companion-tour-controls')?.classList.remove('hidden');
+
+    this.renderTourStep(0);
+  },
+
+  renderTourStep(stepIdx) {
+    if (stepIdx < 0 || stepIdx >= this.tourSteps.length) return;
+    this.tourState.currentStep = stepIdx;
+    const step = this.tourSteps[stepIdx];
+
+    // Clear previous spotlights
+    document.querySelectorAll('.tour-spotlight-active').forEach(el => el.classList.remove('tour-spotlight-active'));
+
+    // Highlight target element
+    const targetEl = document.getElementById(step.targetId);
+    if (targetEl) {
+      targetEl.classList.add('tour-spotlight-active');
+    }
+
+    // Scroll smoothly to target section
+    const scrollEl = document.getElementById(step.scrollTarget);
+    if (scrollEl) {
+      scrollEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // Determine active speaker & themes
+    const theme = document.documentElement.getAttribute('data-theme') || 'mako';
+    let speaker = 'cloud';
+    if (theme === 'yakuza') {
+      speaker = this.companionState.activeSpeaker === 'majima' ? 'majima' : 'kiryu';
+    }
+
+    const bubble = document.getElementById('companion-dialogue');
+    const speakerEl = document.getElementById('companion-speaker');
+    const textEl = document.getElementById('companion-text');
+    const stepBadge = document.getElementById('tour-step-badge');
+    const prevBtn = document.getElementById('tour-prev-btn');
+    const nextBtn = document.getElementById('tour-next-btn');
+
+    if (speakerEl) speakerEl.textContent = step.title;
+    if (textEl) textEl.textContent = `"${step.dialogue[speaker] || step.dialogue.cloud}"`;
+    if (stepBadge) stepBadge.textContent = `STEP ${stepIdx + 1}/${this.tourSteps.length}`;
+
+    if (prevBtn) {
+      prevBtn.disabled = stepIdx === 0;
+    }
+    if (nextBtn) {
+      const isLast = stepIdx === this.tourSteps.length - 1;
+      nextBtn.innerHTML = isLast
+        ? '<span>Finish</span> <i class="fa-solid fa-flag-checkered text-[9px]"></i>'
+        : '<span>Next</span> <i class="fa-solid fa-chevron-right text-[9px]"></i>';
+    }
+
+    // Trigger step SFX
+    if (step.sound === 'materia') SFX.playMateriaEquip();
+    else if (step.sound === 'assess') SFX.playAssess();
+    else if (step.sound === 'limitBreak') SFX.playLimitBreak();
+    else if (step.sound === 'fanfare') {
+      if (speaker === 'cloud') SFX.playCloudCheer();
+      else SFX.playYakuzaMoney();
+    } else {
+      SFX.playSelect();
+    }
+
+    // Anchor speech bubble directly over companion head
+    bubble?.classList.remove('hidden-bubble');
+    this.updateBubblePosition();
+  },
+
+  nextTourStep() {
+    if (this.tourState.currentStep < this.tourSteps.length - 1) {
+      this.renderTourStep(this.tourState.currentStep + 1);
+    } else {
+      this.endTour(true);
+    }
+  },
+
+  prevTourStep() {
+    if (this.tourState.currentStep > 0) {
+      this.renderTourStep(this.tourState.currentStep - 1);
+    }
+  },
+
+  endTour(completed = false) {
+    this.tourState.active = false;
+    this.companionState.patrolling = this.tourState.savedPatrol;
+
+    // Clear spotlight
+    document.querySelectorAll('.tour-spotlight-active').forEach(el => el.classList.remove('tour-spotlight-active'));
+
+    // Restore normal conversation controls
+    document.getElementById('companion-tour-controls')?.classList.add('hidden');
+    document.getElementById('companion-normal-controls')?.classList.remove('hidden');
+
+    // Restore normal speaker title
+    const speaker = this.companionState.activeSpeaker || 'cloud';
+    const titles = {
+      cloud: 'CLOUD STRIFE // SOLDIER 1ST CLASS',
+      kiryu: 'KAZUMA KIRYU // DRAGON OF DOJIMA',
+      majima: 'GORO MAJIMA // MAD DOG OF SHIMANO'
+    };
+    const speakerEl = document.getElementById('companion-speaker');
+    if (speakerEl) speakerEl.textContent = titles[speaker] || titles.cloud;
+
+    if (completed) {
+      const theme = document.documentElement.getAttribute('data-theme') || 'mako';
+      if (theme === 'yakuza') {
+        SFX.playYakuzaMoney();
+      } else {
+        SFX.playCloudCheer();
+      }
+    } else {
+      SFX.playCancel();
+    }
   },
 
   getSpeakerCenter(speaker) {

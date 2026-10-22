@@ -67,7 +67,7 @@
                 <!-- Tactical Controls: 3-Way Theme Switcher, Retro SFX, & No-Code Editor -->
                 <div class="flex items-center gap-2 sm:gap-3">
                     <!-- 3-Way Theme Selector -->
-                    <div class="hidden sm:flex items-center bg-slate-900/90 border border-slate-700/80 rounded-lg p-1 gap-1" role="group" aria-label="Visual Theme Selector">
+                    <div id="nav-theme-controls" class="hidden sm:flex items-center bg-slate-900/90 border border-slate-700/80 rounded-lg p-1 gap-1" role="group" aria-label="Visual Theme Selector">
                         <button
                             type="button"
                             data-theme-btn="mako"
@@ -118,6 +118,18 @@
                         <span class="hidden xl:inline text-cyan-300">JUKEBOX</span>
                     </button>
 
+                    <!-- Guided Mission Briefing Tour Trigger -->
+                    <button
+                        type="button"
+                        id="start-tour-nav-btn"
+                        class="px-2.5 py-1.5 rounded-lg bg-slate-900/90 border border-slate-700/80 hover:border-emerald-400/60 text-xs font-mono-hud flex items-center gap-1.5 transition"
+                        title="Start Interactive Guided Tour (Mission Briefing)"
+                        aria-label="Start Tour"
+                    >
+                        <i class="fa-solid fa-compass text-emerald-400"></i>
+                        <span class="hidden xl:inline text-emerald-300">TOUR</span>
+                    </button>
+
                     <!-- Mobile Hamburger Button -->
                     <button
                         type="button"
@@ -147,13 +159,20 @@
                     <button type="button" data-theme-btn="yakuza" class="px-2.5 py-1 rounded text-xs font-mono-hud bg-slate-900 border border-slate-700 text-amber-400">YAKUZA</button>
                 </div>
             </div>
-            <div class="pt-2 border-t border-slate-800">
+            <div class="pt-2 border-t border-slate-800 flex gap-2">
+                <button
+                    type="button"
+                    id="mobile-tour-btn"
+                    class="flex-1 py-2 rounded bg-emerald-950/40 border border-emerald-500/40 text-emerald-300 text-xs font-mono-hud flex items-center justify-center gap-2 hover:bg-emerald-900/40 transition"
+                >
+                    <i class="fa-solid fa-compass"></i> Tour
+                </button>
                 <button
                     type="button"
                     id="mobile-soundboard-btn"
-                    class="w-full py-2 rounded bg-cyan-950/40 border border-cyan-500/40 text-cyan-300 text-xs font-mono-hud flex items-center justify-center gap-2 hover:bg-cyan-900/40 transition"
+                    class="flex-1 py-2 rounded bg-cyan-950/40 border border-cyan-500/40 text-cyan-300 text-xs font-mono-hud flex items-center justify-center gap-2 hover:bg-cyan-900/40 transition"
                 >
-                    <i class="fa-solid fa-music"></i> Open SFX Jukebox & Soundboard
+                    <i class="fa-solid fa-music"></i> Jukebox
                 </button>
             </div>
         </div>
@@ -191,22 +210,26 @@
                     </p>
 
                     <!-- Tactical Command Buttons -->
-                    <div class="flex flex-wrap gap-4">
+                    <div class="flex flex-wrap gap-3.5">
                         <a href="#works" class="ff-cursor-item px-6 py-3.5 rounded bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-mono-hud font-bold text-xs uppercase tracking-wider shadow-lg shadow-emerald-500/20 transition transform hover:-translate-y-0.5 flex items-center gap-2">
                             <i class="fa-solid fa-gamepad"></i> Inspect Quest Log (Works)
                         </a>
-                        <a href="#about" class="ff-cursor-item px-6 py-3.5 rounded ff-panel hover:border-emerald-400 font-mono-hud font-semibold text-xs uppercase tracking-wider transition transform hover:-translate-y-0.5 flex items-center gap-2">
-                            <i class="fa-solid fa-circle-dot text-emerald-400"></i> Materia Loadout (Skills)
+                        <a href="#about" class="ff-cursor-item px-5 py-3.5 rounded ff-panel hover:border-emerald-400 font-mono-hud font-semibold text-xs uppercase tracking-wider transition transform hover:-translate-y-0.5 flex items-center gap-2">
+                            <i class="fa-solid fa-circle-dot text-emerald-400"></i> Materia Loadout
                         </a>
-                        <a href="#contact" class="ff-cursor-item px-5 py-3.5 rounded ff-panel hover:border-cyan-400 font-mono-hud font-semibold text-xs uppercase tracking-wider transition transform hover:-translate-y-0.5 flex items-center gap-2">
-                            <i class="fa-solid fa-file-pdf text-cyan-400"></i> Resume & Comms
-                        </a>
+                        <button
+                            type="button"
+                            id="start-tour-hero-btn"
+                            class="ff-cursor-item px-5 py-3.5 rounded ff-panel border-cyan-500/40 hover:border-cyan-400 bg-cyan-950/30 text-cyan-300 font-mono-hud font-semibold text-xs uppercase tracking-wider transition transform hover:-translate-y-0.5 flex items-center gap-2 shadow-lg shadow-cyan-500/10"
+                        >
+                            <i class="fa-solid fa-compass text-cyan-400"></i> Mission Briefing (Tour)
+                        </button>
                     </div>
                 </div>
 
                 <!-- Right Column: FF7 Remake + Classic Character Status HUD Card -->
                 <div class="lg:w-5/12 w-full flex justify-center fade-in-up" style="transition-delay: 150ms;">
-                    <div class="ff-panel p-6 w-full max-w-md relative">
+                    <div id="hero-status-card" class="ff-panel p-6 w-full max-w-md relative">
                         <!-- Top HUD Header -->
                         <div class="flex items-center justify-between border-b border-emerald-500/25 pb-3 mb-5">
                             <div>
@@ -691,16 +714,35 @@
         <p id="companion-text" class="text-xs sm:text-sm leading-relaxed mb-3">
             "Not interested... unless you're checking out Jehrome's Featured Works."
         </p>
-        <div class="flex flex-wrap items-center gap-2 text-[11px] font-mono-hud">
+        <!-- Normal Conversation Controls -->
+        <div id="companion-normal-controls" class="flex flex-wrap items-center gap-2 text-[11px] font-mono-hud">
             <button type="button" id="companion-next-quote-btn" class="px-2.5 py-1 rounded bg-emerald-500/20 hover:bg-emerald-500/35 border border-emerald-400/40 text-emerald-300 transition">
                 <i class="fa-solid fa-comment-dots mr-1"></i> Talk Again
             </button>
             <button type="button" id="companion-patrol-toggle-btn" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 border border-slate-600 text-slate-200 transition">
                 <i class="fa-solid fa-person-walking mr-1"></i> <span id="companion-patrol-label">Pause Walk</span>
             </button>
-            <a href="#works" class="px-2.5 py-1 rounded bg-cyan-500/15 hover:bg-cyan-500/30 border border-cyan-400/40 text-cyan-300 transition">
-                Quest Log →
-            </a>
+            <button type="button" id="companion-start-tour-btn" class="px-2.5 py-1 rounded bg-cyan-500/15 hover:bg-cyan-500/30 border border-cyan-400/40 text-cyan-300 transition" title="Start Guided Tour">
+                <i class="fa-solid fa-compass mr-1"></i> Tour
+            </button>
+        </div>
+
+        <!-- Mission Briefing / Tour Controls -->
+        <div id="companion-tour-controls" class="hidden flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono-hud pt-2 border-t border-slate-700/60">
+            <div class="flex items-center gap-1.5">
+                <span id="tour-step-badge" class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 text-[10px] font-bold">
+                    STEP 1/5
+                </span>
+                <button type="button" id="tour-prev-btn" class="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 transition disabled:opacity-40 disabled:pointer-events-none" disabled aria-label="Previous step">
+                    <i class="fa-solid fa-chevron-left text-[9px]"></i>
+                </button>
+                <button type="button" id="tour-next-btn" class="px-3 py-1 rounded bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold transition flex items-center gap-1" aria-label="Next step">
+                    <span>Next</span> <i class="fa-solid fa-chevron-right text-[9px]"></i>
+                </button>
+            </div>
+            <button type="button" id="tour-exit-btn" class="text-[10px] opacity-70 hover:opacity-100 hover:text-red-400 transition" title="Exit Tour (Esc)">
+                Exit [Esc]
+            </button>
         </div>
     </div>
 

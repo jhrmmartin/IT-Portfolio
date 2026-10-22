@@ -641,6 +641,30 @@ section[id] {
   scroll-margin-top: 5rem;
 }
 
+/* Guided Mission Briefing Tour Spotlight */
+.tour-spotlight-active {
+  position: relative;
+  z-index: 30;
+  outline: 2px solid var(--accent-primary) !important;
+  outline-offset: 6px;
+  border-color: var(--accent-primary) !important;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent-primary) 25%, transparent),
+              0 0 35px color-mix(in srgb, var(--accent-primary) 40%, transparent) !important;
+  transition: outline 0.3s ease, box-shadow 0.3s ease;
+  animation: tourPulse 2s ease-in-out infinite;
+}
+
+@keyframes tourPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent-primary) 25%, transparent),
+                0 0 25px color-mix(in srgb, var(--accent-primary) 30%, transparent);
+  }
+  50% {
+    box-shadow: 0 0 0 7px color-mix(in srgb, var(--accent-primary) 45%, transparent),
+                0 0 45px color-mix(in srgb, var(--accent-primary) 50%, transparent);
+  }
+}
+
 /* Accessibility: Respect visitor's reduced motion preferences */
 @media (prefers-reduced-motion: reduce) {
   *, ::before, ::after {
@@ -651,5 +675,8 @@ section[id] {
   }
   #mako-canvas {
     display: none !important;
+  }
+  .tour-spotlight-active {
+    animation: none !important;
   }
 }
