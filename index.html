@@ -364,7 +364,24 @@
                             </p>
                             <h3 class="text-2xl font-bold">Materia Loadout (Skills & Tech Stack)</h3>
                             <p class="text-xs opacity-75 mt-1">
-                                Click any Materia orb below to inspect mastery details and highlight which projects used that skill.
+                                Click any Materia orb below to inspect mastery details and view linked projects.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Recruiter & Visitor Guide: How Materia Works -->
+                    <div class="p-4 rounded-lg bg-emerald-950/40 border border-emerald-500/30 flex items-start gap-3.5">
+                        <div class="w-8 h-8 rounded-full bg-emerald-500/20 border border-emerald-400/50 flex items-center justify-center shrink-0 mt-0.5">
+                            <i class="fa-solid fa-lightbulb text-emerald-400 text-sm"></i>
+                        </div>
+                        <div class="space-y-1 text-xs">
+                            <div class="flex items-center gap-2 flex-wrap">
+                                <span class="font-mono-hud font-bold text-emerald-300 uppercase tracking-wider">HOW THE MATERIA MATRIX WORKS</span>
+                                <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] font-mono-hud font-semibold">MATERIA = SKILLS & TECH</span>
+                            </div>
+                            <p class="leading-relaxed opacity-90 text-slate-300">
+                                In Final Fantasy VII, Materia represents equipped skills. In this portfolio, each glowing orb represents one of Jehrome's core technical proficiencies.
+                                <strong>Click any orb below</strong> to inspect proficiency, abilities, and immediately view the real-world games, applications, and IT systems built with that skill.
                             </p>
                         </div>
                     </div>
@@ -771,6 +788,19 @@
             <div id="sprite-majima-el" class="pixel-sprite sprite-majima"></div>
         </div>
     </div>
+
+    <!-- Floating Companion Dock / Minimize Control -->
+    <button
+        type="button"
+        id="companion-dock-btn"
+        class="companion-dock-btn ff-cursor-item"
+        title="Dock / Undock character companions"
+        aria-label="Toggle character companions visibility"
+    >
+        <i class="fa-solid fa-user-group text-xs text-emerald-400" id="companion-dock-icon"></i>
+        <span id="companion-dock-label" class="text-[11px] font-mono-hud font-semibold">Companions</span>
+        <span id="companion-dock-indicator" class="w-2 h-2 rounded-full bg-emerald-400"></span>
+    </button>
 
     <!-- ======================================================================
          MODAL 1: FF7 REMAKE "TACTICAL ASSESS" & YAKUZA 0 "SUBSTORY" DIALOG

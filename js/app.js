@@ -1209,7 +1209,7 @@ window.PortfolioApp = {
 
       <p class="text-sm leading-relaxed opacity-90 mb-4">${this.escapeHtml(mat.description)}</p>
 
-      <div class="flex flex-wrap items-center justify-between gap-4 text-xs">
+      <div class="flex flex-wrap items-center justify-between gap-4 text-xs mb-4">
         <div class="flex flex-wrap items-center gap-2">
           <span class="font-mono-hud uppercase opacity-60">Equipped Abilities:</span>
           ${(mat.linkedEffects || []).map(eff => `
@@ -1219,10 +1219,74 @@ window.PortfolioApp = {
           `).join('')}
         </div>
         <div class="font-mono-hud opacity-75">
-          Used in <strong class="text-emerald-400">${linkedProjects.length}</strong> Featured Quest(s)
+          Equipped in <strong class="text-emerald-400">${linkedProjects.length}</strong> Featured Project(s)
         </div>
       </div>
+
+      <!-- Direct Real-World Projects Embedded Inside Inspector -->
+      <div class="mt-4 pt-4 border-t border-emerald-500/20">
+        <div class="flex items-center justify-between gap-2 mb-3">
+          <span class="text-xs font-mono-hud font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
+            <i class="fa-solid fa-folder-open text-[11px]"></i> Real-World Projects Built With This Skill (${linkedProjects.length})
+          </span>
+          ${linkedProjects.length > 0 ? `
+            <a href="#works" class="text-[11px] font-mono-hud text-slate-400 hover:text-emerald-300 transition flex items-center gap-1">
+              <span>View in Quest Log</span> <i class="fa-solid fa-arrow-down text-[10px]"></i>
+            </a>
+          ` : ''}
+        </div>
+
+        ${linkedProjects.length > 0 ? `
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            ${linkedProjects.map(p => `
+              <div class="p-2.5 rounded-lg bg-slate-900/90 border border-slate-700/80 hover:border-emerald-400/50 transition flex items-center justify-between gap-2 group">
+                <div class="min-w-0 flex-1">
+                  <h5 class="text-xs font-bold text-slate-100 truncate group-hover:text-emerald-300 transition">${this.escapeHtml(p.title)}</h5>
+                  <p class="text-[10px] font-mono-hud text-slate-400 truncate">
+                    ${this.escapeHtml(p.role)} • <span class="${p.status.toLowerCase() === 'completed' ? 'text-emerald-400' : 'text-amber-400'}">${this.escapeHtml(p.status)}</span>
+                  </p>
+                </div>
+                <div class="flex items-center gap-1.5 shrink-0">
+                  <button
+                    type="button"
+                    class="inspector-assess-btn px-2 py-1 rounded bg-emerald-500/15 hover:bg-emerald-500/30 border border-emerald-400/40 text-emerald-300 text-[10px] font-mono-hud transition flex items-center gap-1"
+                    data-work-id="${p.id}"
+                    title="Assess Intel for ${this.escapeHtml(p.title)}"
+                  >
+                    <i class="fa-solid fa-magnifying-glass text-[9px]"></i>
+                    <span>Assess</span>
+                  </button>
+                  ${p.url && p.url !== '#' ? `
+                    <a
+                      href="${this.escapeHtml(p.url)}"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-white text-[10px] font-mono-hud transition"
+                      title="Launch ${this.escapeHtml(p.title)}"
+                      aria-label="Launch ${this.escapeHtml(p.title)}"
+                    >
+                      <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
+                    </a>
+                  ` : ''}
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        ` : `
+          <p class="text-xs font-mono-hud text-slate-400 italic">
+            Foundational engineering competency applied across all development, documentation, and technical support deliverables.
+          </p>
+        `}
+      </div>
     `;
+
+    box.querySelectorAll('.inspector-assess-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const workId = btn.getAttribute('data-work-id');
+        this.openAssessModal(workId);
+      });
+    });
 
     const clearBtn = document.getElementById('clear-materia-filter-btn');
     if (clearBtn) {
@@ -1293,18 +1357,22 @@ window.PortfolioApp = {
     if (filterBanner) {
       if (this.activeMateriaId) {
         const mat = this.data.materia.find(m => m.id === this.activeMateriaId);
+        const linkedCount = this.data.works.filter(w => (w.linkedMateria || []).includes(this.activeMateriaId)).length;
         filterBanner.classList.remove('hidden');
         filterBanner.innerHTML = `
-          <div class="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-emerald-500/15 border border-emerald-400/50 text-sm">
-            <span class="materia-orb materia-${mat?.type || 'magic'}"></span>
-            <span>Highlighting projects linked with <strong>${this.escapeHtml(mat?.name || '')}</strong> Materia</span>
-            <button type="button" id="banner-clear-materia" class="ml-2 text-xs font-mono-hud underline hover:text-emerald-300">
-              Show All
+          <div class="inline-flex flex-wrap items-center gap-2.5 px-4 py-2 rounded-full bg-emerald-500/15 border border-emerald-400/50 text-xs sm:text-sm font-mono-hud shadow-lg">
+            <span class="materia-orb materia-${mat?.type || 'magic'} scale-90"></span>
+            <span class="text-emerald-300 font-bold uppercase tracking-wider">ACTIVE SKILL FILTER:</span>
+            <span class="text-white font-semibold">${this.escapeHtml(mat?.name || '')}</span>
+            <span class="opacity-75">(${linkedCount} Project${linkedCount === 1 ? '' : 's'} Found)</span>
+            <button type="button" id="banner-clear-materia" class="ml-2 px-2.5 py-0.5 rounded bg-slate-800 hover:bg-slate-700 border border-slate-600 text-xs text-amber-300 hover:text-white transition flex items-center gap-1">
+              <i class="fa-solid fa-xmark text-[10px]"></i> Clear Filter
             </button>
           </div>
         `;
         document.getElementById('banner-clear-materia')?.addEventListener('click', () => {
           this.activeMateriaId = null;
+          SFX.playCursor();
           this.renderMateriaLoadout();
           this.renderActiveMateriaInspector();
           this.renderWorks();
@@ -1443,6 +1511,10 @@ window.PortfolioApp = {
     if (!work || !dialog || !content) return;
 
     this.activeWorkModalId = workId;
+
+    // Yield screen space: hide companion bubble and dim stage so dialogue never blocks modal
+    document.getElementById('companion-stage')?.classList.add('dimmed');
+    document.getElementById('companion-dialogue')?.classList.add('hidden-bubble');
 
     const theme = document.documentElement.getAttribute('data-theme') || 'mako';
     if (theme === 'yakuza') {
@@ -1669,6 +1741,9 @@ window.PortfolioApp = {
     this.activeWorkModalId = null;
     this.assessHistoryPushed = false;
     SFX.playCancel();
+
+    // Restore companion stage visibility
+    document.getElementById('companion-stage')?.classList.remove('dimmed');
 
     // If the hash already moved elsewhere (Back/Forward), nothing to clean up
     const route = this.getRoute();
@@ -2234,6 +2309,7 @@ window.PortfolioApp = {
      INTERACTIVE CHARACTER COMPANIONS (CLOUD STRIFE / KIRYU & MAJIMA)
      -------------------------------------------------------------------------- */
   companionState: {
+    docked: false,
     patrolling: true,
     activeSpeaker: 'cloud',
     quoteIndex: 0,
@@ -2394,6 +2470,96 @@ window.PortfolioApp = {
       document.getElementById('companion-dialogue')?.classList.add('hidden-bubble');
     });
 
+    // Companion Dock / Minimize Controller
+    const dockBtn = document.getElementById('companion-dock-btn');
+    const stage = document.getElementById('companion-stage');
+    const bubble = document.getElementById('companion-dialogue');
+    const dockLabel = document.getElementById('companion-dock-label');
+    const dockIndicator = document.getElementById('companion-dock-indicator');
+    const dockIcon = document.getElementById('companion-dock-icon');
+
+    const updateDockUI = (isDocked) => {
+      this.companionState.docked = isDocked;
+      if (stage) stage.classList.toggle('docked', isDocked);
+      if (dockBtn) dockBtn.classList.toggle('is-docked', isDocked);
+
+      if (isDocked) {
+        if (bubble) bubble.classList.add('hidden-bubble');
+        if (dockLabel) dockLabel.textContent = 'Companions: Off';
+        if (dockIndicator) dockIndicator.className = 'w-2 h-2 rounded-full bg-slate-500';
+        if (dockIcon) dockIcon.className = 'fa-solid fa-eye-slash text-xs text-slate-400';
+      } else {
+        const theme = document.documentElement.getAttribute('data-theme') || 'mako';
+        const isYakuza = theme === 'yakuza';
+        if (dockLabel) dockLabel.textContent = 'Companions';
+        if (dockIndicator) {
+          dockIndicator.className = `w-2 h-2 rounded-full ${isYakuza ? 'bg-amber-400' : 'bg-emerald-400'}`;
+        }
+        if (dockIcon) {
+          dockIcon.className = `fa-solid fa-user-group text-xs ${isYakuza ? 'text-amber-400' : 'text-emerald-400'}`;
+        }
+      }
+    };
+
+    const setDocked = (isDocked, playSfx = true) => {
+      updateDockUI(isDocked);
+      try {
+        localStorage.setItem('jehrome_companions_docked', isDocked ? 'true' : 'false');
+      } catch (err) {}
+      if (playSfx) {
+        if (isDocked) SFX.playCancel();
+        else SFX.playSelect();
+      }
+    };
+
+    // Load saved dock preference
+    const savedDocked = localStorage.getItem('jehrome_companions_docked') === 'true';
+    if (savedDocked) {
+      updateDockUI(true);
+    }
+
+    dockBtn?.addEventListener('click', () => {
+      setDocked(!this.companionState.docked, true);
+    });
+
+    // Light-dismiss: Clicking outside dismisses companion speech bubble (unless in active tour)
+    document.addEventListener('click', (e) => {
+      const bubbleEl = document.getElementById('companion-dialogue');
+      if (!bubbleEl || bubbleEl.classList.contains('hidden-bubble')) return;
+      if (this.tourState?.active) return;
+
+      const target = e.target;
+      const isBubble = bubbleEl.contains(target);
+      const isActor = !!target.closest('.companion-actor');
+      const isDock = !!target.closest('#companion-dock-btn');
+      const isTourTrigger = !!target.closest('#companion-start-tour-btn, #nav-tour-btn, #mobile-tour-btn, #hero-tour-btn');
+
+      if (!isBubble && !isActor && !isDock && !isTourTrigger) {
+        bubbleEl.classList.add('hidden-bubble');
+      }
+    });
+
+    // Auto-dim companion stage and dismiss bubble when focusing Contact form inputs
+    const contactSection = document.getElementById('contact');
+    if (contactSection && stage) {
+      contactSection.querySelectorAll('input, textarea, select').forEach(input => {
+        input.addEventListener('focus', () => {
+          stage.classList.add('dimmed');
+          document.getElementById('companion-dialogue')?.classList.add('hidden-bubble');
+        });
+        input.addEventListener('blur', () => {
+          stage.classList.remove('dimmed');
+        });
+      });
+    }
+
+    // Auto-restore companion stage whenever any native dialog closes
+    document.querySelectorAll('dialog').forEach(dlg => {
+      dlg.addEventListener('close', () => {
+        stage?.classList.remove('dimmed');
+      });
+    });
+
     // Tour Controls inside companion dialogue
     const tourPrevBtn = document.getElementById('tour-prev-btn');
     const tourNextBtn = document.getElementById('tour-next-btn');
@@ -2446,7 +2612,7 @@ window.PortfolioApp = {
     const stepPatrol = () => {
       if (this.companionState.patrolling) {
         const theme = document.documentElement.getAttribute('data-theme') || 'mako';
-        const maxRight = Math.max(260, window.innerWidth - 110);
+        const maxRight = Math.max(220, window.innerWidth - 160);
 
         if (theme === 'yakuza') {
           // Move Kiryu
@@ -2505,6 +2671,18 @@ window.PortfolioApp = {
      Guided walkthrough of key portfolio systems with live companion commentary
      -------------------------------------------------------------------------- */
   startTour() {
+    // If companions were docked, undock them so the tour guide is visible
+    if (this.companionState.docked) {
+      this.companionState.docked = false;
+      document.getElementById('companion-stage')?.classList.remove('docked');
+      document.getElementById('companion-dock-btn')?.classList.remove('is-docked');
+      const dockLabel = document.getElementById('companion-dock-label');
+      if (dockLabel) dockLabel.textContent = 'Companions';
+      try {
+        localStorage.setItem('jehrome_companions_docked', 'false');
+      } catch (err) {}
+    }
+
     this.tourState.active = true;
     this.tourState.savedPatrol = this.companionState.patrolling;
     this.companionState.patrolling = false;
@@ -2676,6 +2854,19 @@ window.PortfolioApp = {
     const actorMajima = document.getElementById('actor-majima');
     if (!actorCloud || !actorKiryu || !actorMajima) return;
 
+    // Update dock button theme accent when active
+    const dockIndicator = document.getElementById('companion-dock-indicator');
+    const dockIcon = document.getElementById('companion-dock-icon');
+    if (!this.companionState.docked) {
+      const isYakuza = themeName === 'yakuza';
+      if (dockIndicator) {
+        dockIndicator.className = `w-2 h-2 rounded-full ${isYakuza ? 'bg-amber-400' : 'bg-emerald-400'}`;
+      }
+      if (dockIcon) {
+        dockIcon.className = `fa-solid fa-user-group text-xs ${isYakuza ? 'text-amber-400' : 'text-emerald-400'}`;
+      }
+    }
+
     if (themeName === 'yakuza') {
       actorCloud.classList.add('hidden');
       actorKiryu.classList.remove('hidden');
@@ -2705,6 +2896,18 @@ window.PortfolioApp = {
     const textEl = document.getElementById('companion-text');
     const nextBtn = document.getElementById('companion-next-quote-btn');
     if (!bubble || !speakerEl || !textEl) return;
+
+    // If companions were docked, undock them so the visitor sees the speaker
+    if (this.companionState.docked) {
+      this.companionState.docked = false;
+      document.getElementById('companion-stage')?.classList.remove('docked');
+      document.getElementById('companion-dock-btn')?.classList.remove('is-docked');
+      const dockLabel = document.getElementById('companion-dock-label');
+      if (dockLabel) dockLabel.textContent = 'Companions';
+      try {
+        localStorage.setItem('jehrome_companions_docked', 'false');
+      } catch (err) {}
+    }
 
     this.companionState.activeSpeaker = speaker;
     const list = this.companionQuotes[speaker] || this.companionQuotes.cloud;
