@@ -21,24 +21,14 @@
 | 9 | **2xx non-JSON response treated as success (Bug B)** | Captive portals / proxies returning 200 HTML could look like successful message delivery. | Strictened check to `!response.ok || result.success !== true`. |
 | 10 | **Contact form request had no deadline (Bug C)** | Submissions could hang on "TRANSMITTING..." indefinitely on dropped sockets. | Wrapped in `AbortController` with a 15-second timeout and clean `mailto:` fallback. |
 | 11 | **Route switch while modal was already open (Bug D)** | Switching project hash while open could trap back-navigation in a loop. | Disarmed `assessHistoryPushed` on intra-modal route transitions in `syncRoute()`. |
+| 12 | **Web3Forms access key installed (Item F)** | Relay was on fallback mode awaiting owner's Web3Forms key. | Live key installed in `index.html`. Direct transmissions are now fully active. |
 
 ---
 
-## 2. Open items & user action required
+## 2. Notes & Design Choices
 
 ### E. `#materia=` cold load auto-scrolls (Design Choice) 💡
 Opening a shared materia link smooth-scrolls straight to `#works` to immediately display the filtered project cards matching that skill. (Retained as intended behavior).
-
-### F. Access key is currently a placeholder (User Action Required) ⚠️
-`index.html` contains:
-```html
-<input type="hidden" name="access_key" value="YOUR_WEB3FORMS_ACCESS_KEY">
-```
-To receive contact messages directly to your inbox without having to open an email client:
-1. Visit [web3forms.com](https://web3forms.com) (free, no sign-up password required).
-2. Enter your email address (`martinjehrome72@gmail.com`) to generate a free public access key.
-3. Paste the key in `index.html` line 489.
-*(Until configured, the contact form automatically detects the placeholder and provides a one-click pre-filled `mailto:` channel so no inquiries are ever lost).*
 
 ---
 
