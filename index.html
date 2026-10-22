@@ -6,6 +6,20 @@
     <!-- MANDATORY per modern-web-guidance (dark-mode): Declare support for both light and dark themes -->
     <meta name="color-scheme" content="light dark">
     <title>Jehrome Martin | Game Designer & IT Specialist Portfolio</title>
+    <meta name="description" content="Portfolio of Jehrome Martin — Indie Game Designer and Cisco-Certified IT Specialist featuring Final Fantasy VII & Yakuza 0 tactical interactive themes.">
+
+    <!-- Open Graph / Discord / LinkedIn / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://martin-it-portfolio.vercel.app/">
+    <meta property="og:title" content="Jehrome Martin | Game Designer & IT Specialist Portfolio">
+    <meta property="og:description" content="Indie Game Designer and Cisco-Certified IT Specialist. Featuring interactive FF7 Materia loadouts, Tactical Assess modals, and Yakuza 0 themes.">
+    <meta property="og:image" content="https://martin-it-portfolio.vercel.app/favicon.png">
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Jehrome Martin | Game Designer & IT Specialist Portfolio">
+    <meta name="twitter:description" content="Indie Game Designer and Cisco-Certified IT Specialist. Featuring interactive FF7 Materia loadouts, Tactical Assess modals, and Yakuza 0 themes.">
+    <meta name="twitter:image" content="https://martin-it-portfolio.vercel.app/favicon.png">
 
     <!-- Cloud Strife Favicon -->
     <link rel="icon" type="image/png" href="favicon.png">
@@ -445,7 +459,7 @@
             </p>
             <h2 class="text-3xl sm:text-4xl font-bold mb-4 fade-in-up">Let's Connect</h2>
             <p class="text-base sm:text-lg opacity-85 mb-10 max-w-2xl mx-auto fade-in-up">
-                Feel free to reach out if you'd like to discuss a game project, IT support role, collaboration, or just want to talk about Final Fantasy VII and Yakuza 0.
+                Feel free to reach out if you'd like to discuss a game project, IT support role, collaboration, or just want to talk about Final Fantasy VII and Yakuza 0. Or send a direct transmission below.
             </p>
 
             <!-- Highlighted Resume Dossier Button -->
@@ -465,6 +479,123 @@
                         <span class="text-lg font-bold leading-none">View My Resume (PDF)</span>
                     </div>
                 </a>
+            </div>
+
+            <!-- Direct Transmission Composer (Web3Forms relay — no backend, no cookies) -->
+            <div class="ff-panel p-6 sm:p-7 mb-10 text-left fade-in-up">
+                <div class="flex flex-wrap items-start justify-between gap-3 mb-5">
+                    <div>
+                        <p class="text-xs font-mono-hud text-emerald-400 uppercase tracking-widest mb-1">
+                            // DIRECT TRANSMISSION COMPOSER
+                        </p>
+                        <h3 class="text-2xl font-bold">Send a Message</h3>
+                    </div>
+                    <span class="text-[11px] font-mono-hud px-2.5 py-1 rounded border border-emerald-500/30 bg-emerald-500/10 text-emerald-300 whitespace-nowrap">
+                        <i class="fa-solid fa-clock mr-1"></i> REPLIES &lt; 24H
+                    </span>
+                </div>
+                <p class="text-sm opacity-80 mb-5">
+                    Goes straight to my inbox — no account, no cookies, no newsletter.
+                </p>
+
+                <form id="contact-form" action="https://api.web3forms.com/submit" method="POST" novalidate>
+                    <!-- Get your free access key at https://web3forms.com and paste it below.
+                         This key is designed to be public: it only routes mail to the owner's inbox. -->
+                    <input type="hidden" name="access_key" value="YOUR_WEB3FORMS_ACCESS_KEY">
+                    <input type="hidden" name="subject" value="New portfolio transmission">
+                    <!-- Honeypot: bots tick this, humans never see it -->
+                    <input type="checkbox" name="botcheck" class="hidden" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label for="contact-name" class="block text-xs font-mono-hud uppercase tracking-wider opacity-75 mb-1.5">
+                                Your Name <span class="text-emerald-400" aria-hidden="true">*</span>
+                            </label>
+                            <input
+                                id="contact-name"
+                                name="name"
+                                type="text"
+                                required
+                                minlength="2"
+                                autocomplete="name"
+                                class="contact-input"
+                                placeholder="Cid Highwind"
+                                aria-describedby="contact-name-error"
+                            >
+                            <p id="contact-name-error" class="hidden text-xs text-red-400 mt-1"></p>
+                        </div>
+
+                        <div>
+                            <label for="contact-email" class="block text-xs font-mono-hud uppercase tracking-wider opacity-75 mb-1.5">
+                                Return Channel (Email) <span class="text-emerald-400" aria-hidden="true">*</span>
+                            </label>
+                            <input
+                                id="contact-email"
+                                name="email"
+                                type="email"
+                                required
+                                autocomplete="email"
+                                inputmode="email"
+                                class="contact-input"
+                                placeholder="you@company.com"
+                                aria-describedby="contact-email-error"
+                            >
+                            <p id="contact-email-error" class="hidden text-xs text-red-400 mt-1"></p>
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <label for="contact-topic" class="block text-xs font-mono-hud uppercase tracking-wider opacity-75 mb-1.5">
+                            Transmission Type
+                        </label>
+                        <select id="contact-topic" name="topic" class="contact-input">
+                            <option value="Job Opportunity">Job Opportunity</option>
+                            <option value="Collaboration">Collaboration</option>
+                            <option value="Project Inquiry">Project Inquiry</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="mt-4">
+                        <label for="contact-message" class="block text-xs font-mono-hud uppercase tracking-wider opacity-75 mb-1.5">
+                            Message <span class="text-emerald-400" aria-hidden="true">*</span>
+                        </label>
+                        <textarea
+                            id="contact-message"
+                            name="message"
+                            rows="5"
+                            required
+                            minlength="10"
+                            maxlength="2000"
+                            class="contact-input resize-y"
+                            placeholder="Tell me about the role, project, or idea..."
+                            aria-describedby="contact-message-error"
+                        ></textarea>
+                        <p id="contact-message-error" class="hidden text-xs text-red-400 mt-1"></p>
+                    </div>
+
+                    <div class="mt-5 flex flex-col sm:flex-row sm:items-center gap-3">
+                        <button
+                            type="submit"
+                            id="contact-submit-btn"
+                            class="ff-cursor-item px-6 py-3 rounded bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-mono-hud font-bold text-xs uppercase tracking-wider shadow-lg shadow-emerald-500/20 transition flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
+                        >
+                            <i class="fa-solid fa-paper-plane"></i> <span>Transmit Message</span>
+                        </button>
+                        <p class="text-[11px] font-mono-hud opacity-60">
+                            Your details are only used to reply to you.
+                        </p>
+                    </div>
+
+                    <div id="contact-form-status" role="status" aria-live="polite" class="mt-3 text-xs font-mono-hud"></div>
+
+                    <noscript>
+                        <p class="mt-3 text-xs text-amber-300">
+                            This form needs JavaScript. You can email me directly at
+                            <a href="mailto:martinjehrome72@gmail.com" class="underline">martinjehrome72@gmail.com</a>.
+                        </p>
+                    </noscript>
+                </form>
             </div>
 
             <!-- Direct Comms Channels -->

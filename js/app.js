@@ -885,6 +885,9 @@ window.PortfolioApp = {
   activeMateriaId: null,
   activeMateriaFilterType: 'all',
   activeWorkFilter: 'all',
+  activeWorkModalId: null,
+  assessHistoryPushed: false,
+  routingInitialized: false,
 
   async init() {
     await this.loadData();
@@ -894,6 +897,9 @@ window.PortfolioApp = {
     this.renderAll();
     this.bindGlobalEvents();
     this.initMakoCanvas();
+    this.initContactForm();
+    this.initRouting();
+    this.syncRoute();
   },
 
   async loadData() {
@@ -1430,11 +1436,13 @@ window.PortfolioApp = {
   /* --------------------------------------------------------------------------
      FF7 REMAKE "TACTICAL ASSESS" + YAKUZA 0 "SUBSTORY" MODAL
      -------------------------------------------------------------------------- */
-  openAssessModal(workId) {
+  openAssessModal(workId, opts = {}) {
     const work = this.data.works.find(w => w.id === workId);
     const dialog = document.getElementById('assess-modal');
     const content = document.getElementById('assess-modal-content');
     if (!work || !dialog || !content) return;
+
+    this.activeWorkModalId = workId;
 
     const theme = document.documentElement.getAttribute('data-theme') || 'mako';
     if (theme === 'yakuza') {
@@ -1554,6 +1562,14 @@ window.PortfolioApp = {
           <div class="pt-4 border-t border-slate-800 flex flex-wrap items-center justify-end gap-3">
             <button
               type="button"
+              id="copy-assess-link-btn"
+              class="px-4 py-2 rounded text-xs font-mono-hud border border-cyan-500/40 bg-cyan-500/10 hover:bg-cyan-500/25 text-cyan-300 transition inline-flex items-center gap-2"
+              title="Copy a direct link to this project"
+            >
+              <i class="fa-solid fa-link"></i> <span id="copy-assess-link-label">COPY LINK</span>
+            </button>
+            <button
+              type="button"
               id="cancel-assess-modal-btn"
               class="px-4 py-2 rounded text-xs font-mono-hud border border-slate-700 hover:bg-slate-800 transition"
             >
@@ -1573,14 +1589,168 @@ window.PortfolioApp = {
       </div>
     `;
 
-    dialog.showModal();
+    if (!dialog.open) dialog.showModal();
 
-    const handleClose = () => {
-      SFX.playCancel();
+    // Make the current project shareable / bookmarkable
+    if (!opts.fromRoute) {
+      history.pushState({ assess: true }, '', `#work=${encodeURIComponent(workId)}`);
+      this.assessHistoryPushed = true;
+    }
+  },
+
+  /* --------------------------------------------------------------------------
+     SHAREABLE DEEP LINKS (#work=<id> / #materia=<id>)
+     The hash is the single source of truth so Back/Forward, Esc, light-dismiss,
+     and pasted links all converge on the same UI state.
+     -------------------------------------------------------------------------- */
+  getRoute() {
+    const raw = (window.location.hash || '').replace(/^#/, '');
+    let hash = raw;
+    try {
+      hash = decodeURIComponent(raw);
+    } catch (_) {
+      // Malformed escape sequence — fall through with the raw fragment
+    }
+    const match = hash.match(/^(work|materia)=(.+)$/);
+    if (!match) return { type: null, id: null };
+    return { type: match[1], id: match[2] };
+  },
+
+  buildWorkUrl(workId) {
+    // location.origin is "null" under file://, so trim the hash off the full href instead
+    return `${window.location.href.split('#')[0]}#work=${encodeURIComponent(workId)}`;
+  },
+
+  initRouting() {
+    if (this.routingInitialized) return;
+    this.routingInitialized = true;
+
+    const dialog = document.getElementById('assess-modal');
+
+    const onRouteChange = () => this.syncRoute();
+    window.addEventListener('hashchange', onRouteChange);
+    window.addEventListener('popstate', onRouteChange);
+
+    // Fires for the close button, backdrop light-dismiss, and routing closes
+    dialog?.addEventListener('close', () => this.handleAssessClosed());
+
+    // Event delegation for modal buttons (close, cancel, copy link) to prevent listener accumulation
+    dialog?.addEventListener('click', (event) => {
+      if (event.target.closest('#close-assess-modal-btn, #cancel-assess-modal-btn')) {
+        dialog.close();
+      } else if (event.target.closest('#copy-assess-link-btn')) {
+        if (this.activeWorkModalId) {
+          this.copyWorkLink(this.activeWorkModalId);
+        }
+      }
+    });
+
+    // Take over Esc so dismissal is deterministic and cleanup always runs
+    dialog?.addEventListener('cancel', (event) => {
+      event.preventDefault();
+      if (dialog.open) dialog.close();
+      this.handleAssessClosed();
+    });
+
+    // Belt and braces: some engines drop a modal out of the top layer without
+    // dispatching `close` (observed on Esc in Edge). Watch the attribute instead.
+    if (dialog && window.MutationObserver) {
+      new MutationObserver(() => {
+        if (!dialog.open) this.handleAssessClosed();
+      }).observe(dialog, { attributes: true, attributeFilter: ['open'] });
+    }
+  },
+
+  handleAssessClosed() {
+    const closedId = this.activeWorkModalId;
+    if (!closedId) return; // Already handled (close event + observer can both fire)
+
+    const pushedByUs = this.assessHistoryPushed;
+    this.activeWorkModalId = null;
+    this.assessHistoryPushed = false;
+    SFX.playCancel();
+
+    // If the hash already moved elsewhere (Back/Forward), nothing to clean up
+    const route = this.getRoute();
+    if (route.type !== 'work' || route.id !== closedId) return;
+
+    if (pushedByUs) {
+      // Restore the exact pre-modal URL without leaving the site
+      history.back();
+    } else {
+      // Arrived via a deep link: stay on the page, just retire the modal hash
+      history.replaceState(null, '', `${window.location.pathname}${window.location.search}#works`);
+    }
+  },
+
+  syncRoute() {
+    const route = this.getRoute();
+    const dialog = document.getElementById('assess-modal');
+
+    if (route.type === 'work') {
+      const work = this.data?.works?.find(w => w.id === route.id);
+      if (!work) {
+        // Stale or mistyped link: fall back cleanly instead of opening an empty dialog
+        if (dialog?.open) dialog.close();
+        history.replaceState(null, '', `${window.location.pathname}${window.location.search}#works`);
+        return;
+      }
+      if (!dialog?.open || this.activeWorkModalId !== route.id) {
+        if (this.activeWorkModalId && this.activeWorkModalId !== route.id) {
+          // Route switched while modal was open: disarm history.back() to prevent cyclic reopening
+          this.assessHistoryPushed = false;
+        }
+        this.openAssessModal(route.id, { fromRoute: true });
+      }
+    } else if (dialog?.open) {
       dialog.close();
+    }
+
+    if (route.type === 'materia') {
+      const mat = this.data?.materia?.find(m => m.id === route.id);
+      if (!mat) return;
+      if (this.activeMateriaId !== route.id) {
+        this.selectMateria(route.id);
+        document.getElementById('works')?.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  },
+
+  async copyWorkLink(workId) {
+    const url = this.buildWorkUrl(workId);
+    const btn = document.getElementById('copy-assess-link-btn');
+    const label = document.getElementById('copy-assess-link-label');
+
+    const flash = (text) => {
+      if (label) label.textContent = text;
+      btn?.classList.add('ring-2', 'ring-cyan-400');
+      setTimeout(() => {
+        if (label) label.textContent = 'COPY LINK';
+        btn?.classList.remove('ring-2', 'ring-cyan-400');
+      }, 1800);
     };
-    document.getElementById('close-assess-modal-btn')?.addEventListener('click', handleClose);
-    document.getElementById('cancel-assess-modal-btn')?.addEventListener('click', handleClose);
+
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(url);
+      } else {
+        // Fallback for file:// and non-secure contexts
+        const ta = document.createElement('textarea');
+        ta.value = url;
+        ta.setAttribute('readonly', '');
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+      SFX.playSelect();
+      flash('COPIED!');
+    } catch (err) {
+      // Never dead-end: let the visitor copy it by hand
+      window.prompt('Copy this project link:', url);
+    }
   },
 
   /* --------------------------------------------------------------------------
@@ -1823,6 +1993,159 @@ window.PortfolioApp = {
       };
       setTimeout(tick, 500);
     }
+  },
+
+  /* --------------------------------------------------------------------------
+     CONTACT FORM (Web3Forms relay — no backend, no cookies, no tracking)
+     -------------------------------------------------------------------------- */
+  initContactForm() {
+    const form = document.getElementById('contact-form');
+    if (!form) return;
+
+    const statusEl = document.getElementById('contact-form-status');
+    const submitBtn = document.getElementById('contact-submit-btn');
+    const topicField = form.querySelector('[name="topic"]');
+    const fields = {
+      name: document.getElementById('contact-name'),
+      email: document.getElementById('contact-email'),
+      message: document.getElementById('contact-message')
+    };
+    const COOLDOWN_MS = 30000;
+    let lastSentAt = 0;
+
+    const setStatus = (kind, html) => {
+      if (!statusEl) return;
+      const palette = {
+        error: 'text-red-400',
+        success: 'text-emerald-300',
+        info: 'text-cyan-300'
+      };
+      statusEl.className = `mt-3 text-xs font-mono-hud ${palette[kind] || ''}`;
+      statusEl.innerHTML = html;
+    };
+
+    const setFieldError = (field, message) => {
+      if (!field) return;
+      const errorEl = document.getElementById(`${field.id}-error`);
+      if (message) {
+        field.setAttribute('aria-invalid', 'true');
+        if (errorEl) {
+          errorEl.textContent = message;
+          errorEl.classList.remove('hidden');
+        }
+      } else {
+        field.removeAttribute('aria-invalid');
+        if (errorEl) {
+          errorEl.textContent = '';
+          errorEl.classList.add('hidden');
+        }
+      }
+    };
+
+    const validate = () => {
+      const name = (fields.name?.value || '').trim();
+      const email = (fields.email?.value || '').trim();
+      const message = (fields.message?.value || '').trim();
+      let firstInvalid = null;
+
+      setFieldError(fields.name, name.length < 2 ? 'Please enter your name.' : '');
+      if (name.length < 2) firstInvalid = firstInvalid || fields.name;
+
+      const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
+      setFieldError(fields.email, emailOk ? '' : 'Please enter a valid email address.');
+      if (!emailOk) firstInvalid = firstInvalid || fields.email;
+
+      setFieldError(fields.message, message.length < 10 ? 'A few more words, please (10+ characters).' : '');
+      if (message.length < 10) firstInvalid = firstInvalid || fields.message;
+
+      if (firstInvalid) firstInvalid.focus();
+      return !firstInvalid;
+    };
+
+    // Clear an error as soon as the visitor starts fixing it
+    Object.values(fields).forEach(field => {
+      field?.addEventListener('input', () => {
+        if (field.getAttribute('aria-invalid') === 'true') setFieldError(field, '');
+      });
+    });
+
+    const buildMailto = () => {
+      const rawEmail = this.data?.profile?.contact?.email || 'martinjehrome72@gmail.com';
+      const email = String(rawEmail).replace(/[^a-zA-Z0-9@._+-]/g, '');
+      const topic = topicField?.value || 'Portfolio enquiry';
+      const body = [
+        `Name: ${(fields.name?.value || '').trim()}`,
+        `Email: ${(fields.email?.value || '').trim()}`,
+        '',
+        (fields.message?.value || '').trim()
+      ].join('\n');
+      return `mailto:${email}?subject=${encodeURIComponent(`[Portfolio] ${topic}`)}&body=${encodeURIComponent(body)}`;
+    };
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (form.dataset.sending === 'true') return;
+
+      if (!validate()) {
+        setStatus('error', '<i class="fa-solid fa-triangle-exclamation mr-1"></i> Please fix the highlighted fields.');
+        return;
+      }
+
+      if (Date.now() - lastSentAt < COOLDOWN_MS) {
+        setStatus('info', '<i class="fa-solid fa-hourglass-half mr-1"></i> Transmission already sent — give it a moment.');
+        return;
+      }
+
+      const accessKey = form.querySelector('[name="access_key"]')?.value || '';
+      if (!accessKey || accessKey === 'YOUR_WEB3FORMS_ACCESS_KEY') {
+        // Relay not configured yet: never lose the message, hand off to email instead
+        setStatus('info', `<i class="fa-solid fa-envelope mr-1"></i> Relay not configured yet. <a href="${buildMailto()}" class="underline hover:text-emerald-300">Email me directly instead &rarr;</a>`);
+        return;
+      }
+
+      form.dataset.sending = 'true';
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> <span>TRANSMITTING...</span>';
+      }
+      setStatus('info', '<i class="fa-solid fa-satellite-dish mr-1"></i> Opening channel...');
+
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 15000);
+
+      try {
+        const response = await fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { 'Accept': 'application/json' },
+          signal: controller.signal
+        });
+        const result = await response.json().catch(() => ({}));
+        if (!response.ok || result.success !== true) {
+          throw new Error(result.message || `HTTP ${response.status}`);
+        }
+
+        lastSentAt = Date.now();
+        form.reset();
+        Object.values(fields).forEach(field => setFieldError(field, ''));
+        setStatus('success', '<i class="fa-solid fa-circle-check mr-1"></i> Transmission received. I\'ll reply within 24 hours.');
+        SFX.playSelect();
+      } catch (err) {
+        console.error('Contact form submission failed:', err);
+        const isTimeout = err.name === 'AbortError';
+        const msg = isTimeout
+          ? 'Transmission timed out (15s deadline reached).'
+          : 'Transmission failed.';
+        setStatus('error', `<i class="fa-solid fa-triangle-exclamation mr-1"></i> ${msg} <a href="${buildMailto()}" class="underline hover:text-emerald-300">Email me directly instead &rarr;</a>`);
+      } finally {
+        clearTimeout(timer);
+        form.dataset.sending = 'false';
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> <span>Transmit Message</span>';
+        }
+      }
+    });
   },
 
   observeScrollAnimations() {
