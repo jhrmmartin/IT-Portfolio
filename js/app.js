@@ -980,6 +980,15 @@ window.PortfolioApp = {
   setTheme(themeName, playSound = true) {
     document.documentElement.setAttribute('data-theme', themeName);
     localStorage.setItem(THEME_KEY, themeName);
+
+    // Sync Android Chrome status bar / system theme color
+    const themeColors = {
+      mako: '#060b13',
+      classic: '#040614',
+      yakuza: '#140508'
+    };
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', themeColors[themeName] || '#060b13');
+
     if (playSound) {
       if (themeName === 'yakuza') {
         SFX.playYakuzaSubstory();
@@ -1006,8 +1015,9 @@ window.PortfolioApp = {
      DIALOG LIGHT-DISMISS FALLBACK (per modern-web-guidance: light-dismiss-a-dialog)
      -------------------------------------------------------------------------- */
   initDialogsFallback() {
-    if (!('closedBy' in HTMLDialogElement.prototype)) {
-      document.querySelectorAll('dialog.ff-dialog').forEach(dialog => {
+    // Observe all native <dialog> elements to handle mobile scroll-locking and light dismiss
+    document.querySelectorAll('dialog.ff-dialog').forEach(dialog => {
+      if (!('closedBy' in HTMLDialogElement.prototype)) {
         dialog.addEventListener('click', (event) => {
           if (event.target !== dialog) return;
           const rect = dialog.getBoundingClientRect();
@@ -1020,8 +1030,18 @@ window.PortfolioApp = {
           if (isDialogContent) return;
           dialog.close();
         });
-      });
-    }
+      }
+
+      // Background scroll locking on mobile touch drag
+      const syncModalOpenState = () => {
+        const anyOpen = Array.from(document.querySelectorAll('dialog')).some(d => d.open);
+        document.body.classList.toggle('modal-open', anyOpen);
+      };
+
+      const observer = new MutationObserver(() => syncModalOpenState());
+      observer.observe(dialog, { attributes: true, attributeFilter: ['open'] });
+      dialog.addEventListener('close', () => syncModalOpenState());
+    });
   },
 
   /* --------------------------------------------------------------------------
@@ -1427,6 +1447,7 @@ window.PortfolioApp = {
               alt="${this.escapeHtml(work.title)}"
               class="w-full h-full object-cover transition duration-500 group-hover:scale-105"
               loading="lazy"
+              decoding="async"
             >
             <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent"></div>
 
@@ -1446,7 +1467,7 @@ window.PortfolioApp = {
           </div>
 
           <!-- Card Body -->
-          <div class="p-6 flex-1 flex flex-col">
+          <div class="p-5 sm:p-6 flex-1 flex flex-col">
             <div class="mb-2">
               <h3 class="text-xl font-bold tracking-tight">${this.escapeHtml(work.title)}</h3>
               <p class="text-xs font-mono-hud text-emerald-400 font-semibold uppercase tracking-wider mt-0.5">
@@ -1468,10 +1489,10 @@ window.PortfolioApp = {
             </div>
 
             <!-- Dual Action Footer: Tactical Assess + Direct Launch -->
-            <div class="pt-4 border-t border-slate-700/40 flex items-center justify-between gap-3">
+            <div class="pt-4 border-t border-slate-700/40 flex items-center justify-between gap-2.5">
               <button
                 type="button"
-                class="assess-trigger-btn flex-1 py-2 px-3 rounded text-xs font-mono-hud font-semibold border border-cyan-500/40 bg-cyan-500/10 hover:bg-cyan-500/25 text-cyan-300 transition flex items-center justify-center gap-2"
+                class="assess-trigger-btn flex-1 min-h-[40px] py-2 px-3 rounded text-xs font-mono-hud font-semibold border border-cyan-500/40 bg-cyan-500/10 hover:bg-cyan-500/25 active:scale-95 text-cyan-300 transition flex items-center justify-center gap-2"
                 data-work-id="${work.id}"
               >
                 <i class="fa-solid fa-crosshairs"></i> ASSESS INTEL
@@ -1480,7 +1501,7 @@ window.PortfolioApp = {
                 href="${this.escapeHtml(work.url)}"
                 target="_blank"
                 rel="noopener noreferrer"
-                class="flex-1 py-2 px-3 rounded text-xs font-mono-hud font-semibold bg-emerald-500/20 hover:bg-emerald-500/35 text-emerald-300 border border-emerald-500/40 transition flex items-center justify-center gap-2"
+                class="flex-1 min-h-[40px] py-2 px-3 rounded text-xs font-mono-hud font-semibold bg-emerald-500/20 hover:bg-emerald-500/35 active:scale-95 text-emerald-300 border border-emerald-500/40 transition flex items-center justify-center gap-2"
               >
                 <span>${this.escapeHtml(work.actionLabel || 'Open')}</span>
                 <i class="${this.escapeHtml(work.actionIcon || 'fa-solid fa-arrow-right')}"></i>
@@ -1545,10 +1566,10 @@ window.PortfolioApp = {
         <button
           type="button"
           id="close-assess-modal-btn"
-          class="w-9 h-9 rounded-lg border border-slate-600 hover:border-emerald-400 flex items-center justify-center text-slate-300 hover:text-white transition"
+          class="w-11 h-11 rounded-lg border border-slate-600 hover:border-emerald-400 active:scale-95 flex items-center justify-center text-slate-300 hover:text-white transition"
           aria-label="Close Tactical Assess Modal"
         >
-          <i class="fa-solid fa-xmark"></i>
+          <i class="fa-solid fa-xmark text-base"></i>
         </button>
       </div>
 
@@ -1556,7 +1577,7 @@ window.PortfolioApp = {
         <!-- Left Column: Visual & Gauges -->
         <div class="md:col-span-5 space-y-4">
           <div class="rounded-lg overflow-hidden border border-slate-700 relative h-44 bg-slate-950">
-            <img src="${this.escapeHtml(work.image)}" alt="${this.escapeHtml(work.title)}" class="w-full h-full object-cover">
+            <img src="${this.escapeHtml(work.image)}" alt="${this.escapeHtml(work.title)}" class="w-full h-full object-cover" loading="lazy" decoding="async">
             <div class="absolute bottom-0 inset-x-0 bg-slate-950/85 px-3 py-1.5 text-xs font-mono-hud text-emerald-300 flex justify-between">
               <span>ROLE: ${this.escapeHtml(work.role)}</span>
               <span>${this.escapeHtml(work.status)}</span>
@@ -1630,12 +1651,12 @@ window.PortfolioApp = {
             </div>
           </div>
 
-          <!-- Modal Action Footer -->
-          <div class="pt-4 border-t border-slate-800 flex flex-wrap items-center justify-end gap-3">
+          <!-- Modal Action Footer (Mobile Responsive Full-Width Buttons) -->
+          <div class="pt-4 border-t border-slate-800 flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2.5">
             <button
               type="button"
               id="copy-assess-link-btn"
-              class="px-4 py-2 rounded text-xs font-mono-hud border border-cyan-500/40 bg-cyan-500/10 hover:bg-cyan-500/25 text-cyan-300 transition inline-flex items-center gap-2"
+              class="min-h-[40px] px-4 py-2 rounded text-xs font-mono-hud border border-cyan-500/40 bg-cyan-500/10 hover:bg-cyan-500/25 active:scale-95 text-cyan-300 transition inline-flex items-center justify-center gap-2"
               title="Copy a direct link to this project"
             >
               <i class="fa-solid fa-link"></i> <span id="copy-assess-link-label">COPY LINK</span>
@@ -1643,19 +1664,21 @@ window.PortfolioApp = {
             <button
               type="button"
               id="cancel-assess-modal-btn"
-              class="px-4 py-2 rounded text-xs font-mono-hud border border-slate-700 hover:bg-slate-800 transition"
+              class="min-h-[40px] px-4 py-2 rounded text-xs font-mono-hud border border-slate-700 hover:bg-slate-800 active:scale-95 text-slate-300 transition flex items-center justify-center"
             >
               Close Window
             </button>
-            <a
-              href="${this.escapeHtml(work.url)}"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="px-5 py-2 rounded text-xs font-mono-hud font-bold bg-emerald-500 hover:bg-emerald-400 text-slate-950 transition inline-flex items-center gap-2 shadow-lg shadow-emerald-500/20"
-            >
-              <span>${this.escapeHtml(work.actionLabel || 'Launch Project')}</span>
-              <i class="${this.escapeHtml(work.actionIcon || 'fa-solid fa-arrow-up-right-from-square')}"></i>
-            </a>
+            ${work.url && work.url !== '#' ? `
+              <a
+                href="${this.escapeHtml(work.url)}"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="min-h-[40px] px-5 py-2 rounded text-xs font-mono-hud font-bold bg-emerald-500 hover:bg-emerald-400 active:scale-95 text-slate-950 transition inline-flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20"
+              >
+                <span>${this.escapeHtml(work.actionLabel || 'Launch Project')}</span>
+                <i class="${this.escapeHtml(work.actionIcon || 'fa-solid fa-arrow-up-right-from-square')}"></i>
+              </a>
+            ` : ''}
           </div>
         </div>
       </div>
@@ -2254,27 +2277,49 @@ window.PortfolioApp = {
     const canvas = document.getElementById('mako-canvas');
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
-    let width = (canvas.width = window.innerWidth);
-    let height = (canvas.height = window.innerHeight);
+    
+    // Optimize resolution for high-DPI screens without GPU overhead on mobile
+    const getMobile = () => window.innerWidth < 768;
+    const getDpr = () => Math.min(window.devicePixelRatio || 1, getMobile() ? 1.5 : 2);
+    
+    let dpr = getDpr();
+    let width = (canvas.width = window.innerWidth * dpr);
+    let height = (canvas.height = window.innerHeight * dpr);
+    canvas.style.width = `${window.innerWidth}px`;
+    canvas.style.height = `${window.innerHeight}px`;
 
     window.addEventListener('resize', () => {
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
+      dpr = getDpr();
+      width = canvas.width = window.innerWidth * dpr;
+      height = canvas.height = window.innerHeight * dpr;
+      canvas.style.width = `${window.innerWidth}px`;
+      canvas.style.height = `${window.innerHeight}px`;
     });
 
-    const particles = Array.from({ length: 42 }, (_, idx) => ({
+    const isMobile = getMobile();
+    // 22 particles on mobile prevents thermal throttling; 42 on desktop PC
+    const particleCount = isMobile ? 22 : 42;
+    const particles = Array.from({ length: particleCount }, (_, idx) => ({
       x: Math.random() * width,
       y: Math.random() * height,
-      r: Math.random() * 2.2 + 0.6,
-      vx: (Math.random() - 0.5) * 0.35,
-      vy: -(Math.random() * 0.55 + 0.15),
+      r: (Math.random() * 2.2 + 0.6) * dpr,
+      vx: (Math.random() - 0.5) * 0.35 * dpr,
+      vy: -(Math.random() * 0.55 + 0.15) * dpr,
       alpha: Math.random() * 0.55 + 0.15,
       variant: idx % 2 // 0 = primary theme hue, 1 = secondary theme hue
     }));
 
+    let animId = null;
     const renderFrame = () => {
+      if (document.hidden) {
+        animId = null;
+        return; // Pause when tab is backgrounded / phone is locked (saves battery!)
+      }
+
       ctx.clearRect(0, 0, width, height);
       const currentTheme = document.documentElement.getAttribute('data-theme') || 'mako';
+      const useShadow = !getMobile(); // Avoid expensive multi-pass canvas shadows on mobile GPUs
+
       for (const p of particles) {
         p.x += p.vx;
         p.y += p.vy;
@@ -2295,14 +2340,23 @@ window.PortfolioApp = {
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
         ctx.fillStyle = `hsla(${hue}, 95%, 60%, ${p.alpha})`;
-        ctx.shadowBlur = 10;
-        ctx.shadowColor = `hsla(${hue}, 95%, 60%, 0.8)`;
+        if (useShadow) {
+          ctx.shadowBlur = 8;
+          ctx.shadowColor = `hsla(${hue}, 95%, 60%, 0.75)`;
+        }
         ctx.fill();
       }
-      requestAnimationFrame(renderFrame);
+      animId = requestAnimationFrame(renderFrame);
     };
 
-    renderFrame();
+    // Auto-resume when visitor returns to tab
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden && !animId) {
+        animId = requestAnimationFrame(renderFrame);
+      }
+    });
+
+    animId = requestAnimationFrame(renderFrame);
   },
 
   /* --------------------------------------------------------------------------

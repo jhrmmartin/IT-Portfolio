@@ -2,7 +2,9 @@
 <html lang="en" class="scroll-smooth" data-theme="mako">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <!-- Android & Chrome Status Bar Theming -->
+    <meta name="theme-color" content="#070b14">
     <!-- MANDATORY per modern-web-guidance (dark-mode): Declare support for both light and dark themes -->
     <meta name="color-scheme" content="light dark">
     <title>Jehrome Martin | Game Designer & IT Specialist Portfolio</title>
@@ -98,7 +100,7 @@
                     <button
                         type="button"
                         id="sfx-toggle-btn"
-                        class="px-2.5 py-1.5 rounded-lg bg-slate-900/90 border border-slate-700/80 hover:border-emerald-400/60 text-xs font-mono-hud flex items-center gap-1.5 transition"
+                        class="min-h-[40px] px-2.5 py-1.5 rounded-lg bg-slate-900/90 border border-slate-700/80 hover:border-emerald-400/60 active:scale-95 text-xs font-mono-hud flex items-center gap-1.5 transition"
                         title="Toggle Classic FF7 & Yakuza 0 Sound Effects"
                         aria-label="Toggle Sound Effects"
                     >
@@ -110,7 +112,7 @@
                     <button
                         type="button"
                         id="sfx-soundboard-btn"
-                        class="px-2.5 py-1.5 rounded-lg bg-slate-900/90 border border-slate-700/80 hover:border-cyan-400/60 text-xs font-mono-hud flex items-center gap-1.5 transition"
+                        class="min-h-[40px] px-2.5 py-1.5 rounded-lg bg-slate-900/90 border border-slate-700/80 hover:border-cyan-400/60 active:scale-95 text-xs font-mono-hud flex items-center gap-1.5 transition"
                         title="Open Retro SFX Jukebox (Sample FF7 & Yakuza 0 Sounds)"
                         aria-label="Open Retro Soundboard"
                     >
@@ -122,7 +124,7 @@
                     <button
                         type="button"
                         id="start-tour-nav-btn"
-                        class="px-2.5 py-1.5 rounded-lg bg-slate-900/90 border border-slate-700/80 hover:border-emerald-400/60 text-xs font-mono-hud flex items-center gap-1.5 transition"
+                        class="min-h-[40px] px-2.5 py-1.5 rounded-lg bg-slate-900/90 border border-slate-700/80 hover:border-emerald-400/60 active:scale-95 text-xs font-mono-hud flex items-center gap-1.5 transition"
                         title="Start Interactive Guided Tour (Mission Briefing)"
                         aria-label="Start Tour"
                     >
@@ -130,11 +132,11 @@
                         <span class="hidden xl:inline text-emerald-300">TOUR</span>
                     </button>
 
-                    <!-- Mobile Hamburger Button -->
+                    <!-- Mobile Hamburger Button (44x44px touch target) -->
                     <button
                         type="button"
                         id="mobile-menu-btn"
-                        class="lg:hidden p-2 rounded-lg border border-slate-700 text-slate-300 hover:text-emerald-400 transition"
+                        class="lg:hidden w-11 h-11 flex items-center justify-center rounded-lg border border-slate-700 text-slate-300 hover:text-emerald-400 active:scale-95 transition"
                         aria-label="Toggle Mobile Navigation"
                     >
                         <i id="mobile-menu-icon" class="fa-solid fa-bars text-lg"></i>
@@ -144,33 +146,33 @@
         </div>
 
         <!-- Mobile Menu Dropdown -->
-        <div id="mobile-menu" class="hidden lg:hidden bg-slate-950/95 border-b border-emerald-500/20 px-4 pt-3 pb-6 space-y-3">
-            <div class="flex flex-col space-y-2 font-mono-hud text-sm">
-                <a href="#home" class="mobile-link px-3 py-2 rounded hover:bg-emerald-500/10">01. STATUS (Home)</a>
-                <a href="#about" class="mobile-link px-3 py-2 rounded hover:bg-emerald-500/10">02. MATERIA & CERT (About & Skills)</a>
-                <a href="#works" class="mobile-link px-3 py-2 rounded hover:bg-emerald-500/10">03. QUEST LOG (Featured Works)</a>
-                <a href="#contact" class="mobile-link px-3 py-2 rounded hover:bg-emerald-500/10">04. COMMS (Contact & Resume)</a>
+        <div id="mobile-menu" class="hidden lg:hidden bg-slate-950/98 backdrop-blur-xl border-b border-emerald-500/20 px-4 pt-3 pb-6 space-y-3.5 shadow-2xl">
+            <div class="flex flex-col space-y-1 font-mono-hud text-sm">
+                <a href="#home" class="mobile-link min-h-[44px] flex items-center px-3.5 py-2.5 rounded-lg hover:bg-emerald-500/15 active:bg-emerald-500/25 transition">01. STATUS (Home)</a>
+                <a href="#about" class="mobile-link min-h-[44px] flex items-center px-3.5 py-2.5 rounded-lg hover:bg-emerald-500/15 active:bg-emerald-500/25 transition">02. MATERIA & CERT (About & Skills)</a>
+                <a href="#works" class="mobile-link min-h-[44px] flex items-center px-3.5 py-2.5 rounded-lg hover:bg-emerald-500/15 active:bg-emerald-500/25 transition">03. QUEST LOG (Featured Works)</a>
+                <a href="#contact" class="mobile-link min-h-[44px] flex items-center px-3.5 py-2.5 rounded-lg hover:bg-emerald-500/15 active:bg-emerald-500/25 transition">04. COMMS (Contact & Resume)</a>
             </div>
-            <div class="pt-2 border-t border-slate-800 flex items-center justify-between">
+            <div class="pt-3 border-t border-slate-800 flex items-center justify-between">
                 <span class="text-xs font-mono-hud opacity-70">UI Mode:</span>
-                <div class="flex gap-1.5">
-                    <button type="button" data-theme-btn="mako" class="px-2.5 py-1 rounded text-xs font-mono-hud bg-slate-900 border border-slate-700">MAKO</button>
-                    <button type="button" data-theme-btn="classic" class="px-2.5 py-1 rounded text-xs font-mono-hud bg-slate-900 border border-slate-700">1997</button>
-                    <button type="button" data-theme-btn="yakuza" class="px-2.5 py-1 rounded text-xs font-mono-hud bg-slate-900 border border-slate-700 text-amber-400">YAKUZA</button>
+                <div class="flex gap-2">
+                    <button type="button" data-theme-btn="mako" class="min-h-[40px] px-3 py-1.5 rounded-lg text-xs font-mono-hud bg-slate-900 border border-slate-700 active:scale-95">MAKO</button>
+                    <button type="button" data-theme-btn="classic" class="min-h-[40px] px-3 py-1.5 rounded-lg text-xs font-mono-hud bg-slate-900 border border-slate-700 active:scale-95">1997</button>
+                    <button type="button" data-theme-btn="yakuza" class="min-h-[40px] px-3 py-1.5 rounded-lg text-xs font-mono-hud bg-slate-900 border border-slate-700 text-amber-400 active:scale-95">YAKUZA</button>
                 </div>
             </div>
-            <div class="pt-2 border-t border-slate-800 flex gap-2">
+            <div class="pt-3 border-t border-slate-800 flex gap-2.5">
                 <button
                     type="button"
                     id="mobile-tour-btn"
-                    class="flex-1 py-2 rounded bg-emerald-950/40 border border-emerald-500/40 text-emerald-300 text-xs font-mono-hud flex items-center justify-center gap-2 hover:bg-emerald-900/40 transition"
+                    class="flex-1 min-h-[44px] py-2.5 rounded-lg bg-emerald-950/50 border border-emerald-500/50 text-emerald-300 text-xs font-mono-hud flex items-center justify-center gap-2 hover:bg-emerald-900/40 active:scale-95 transition"
                 >
                     <i class="fa-solid fa-compass"></i> Tour
                 </button>
                 <button
                     type="button"
                     id="mobile-soundboard-btn"
-                    class="flex-1 py-2 rounded bg-cyan-950/40 border border-cyan-500/40 text-cyan-300 text-xs font-mono-hud flex items-center justify-center gap-2 hover:bg-cyan-900/40 transition"
+                    class="flex-1 min-h-[44px] py-2.5 rounded-lg bg-cyan-950/50 border border-cyan-500/50 text-cyan-300 text-xs font-mono-hud flex items-center justify-center gap-2 hover:bg-cyan-900/40 active:scale-95 transition"
                 >
                     <i class="fa-solid fa-music"></i> Jukebox
                 </button>
@@ -210,17 +212,17 @@
                     </p>
 
                     <!-- Tactical Command Buttons -->
-                    <div class="flex flex-wrap gap-3.5">
-                        <a href="#works" class="ff-cursor-item px-6 py-3.5 rounded bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-mono-hud font-bold text-xs uppercase tracking-wider shadow-lg shadow-emerald-500/20 transition transform hover:-translate-y-0.5 flex items-center gap-2">
+                    <div class="flex flex-col sm:flex-row flex-wrap gap-3">
+                        <a href="#works" class="ff-cursor-item min-h-[44px] px-6 py-3.5 rounded bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-mono-hud font-bold text-xs uppercase tracking-wider shadow-lg shadow-emerald-500/20 transition transform hover:-translate-y-0.5 active:scale-95 flex items-center justify-center gap-2">
                             <i class="fa-solid fa-gamepad"></i> Inspect Quest Log (Works)
                         </a>
-                        <a href="#about" class="ff-cursor-item px-5 py-3.5 rounded ff-panel hover:border-emerald-400 font-mono-hud font-semibold text-xs uppercase tracking-wider transition transform hover:-translate-y-0.5 flex items-center gap-2">
+                        <a href="#about" class="ff-cursor-item min-h-[44px] px-5 py-3.5 rounded ff-panel hover:border-emerald-400 font-mono-hud font-semibold text-xs uppercase tracking-wider transition transform hover:-translate-y-0.5 active:scale-95 flex items-center justify-center gap-2">
                             <i class="fa-solid fa-circle-dot text-emerald-400"></i> Materia Loadout
                         </a>
                         <button
                             type="button"
                             id="start-tour-hero-btn"
-                            class="ff-cursor-item px-5 py-3.5 rounded ff-panel border-cyan-500/40 hover:border-cyan-400 bg-cyan-950/30 text-cyan-300 font-mono-hud font-semibold text-xs uppercase tracking-wider transition transform hover:-translate-y-0.5 flex items-center gap-2 shadow-lg shadow-cyan-500/10"
+                            class="ff-cursor-item min-h-[44px] px-5 py-3.5 rounded ff-panel border-cyan-500/40 hover:border-cyan-400 bg-cyan-950/30 text-cyan-300 font-mono-hud font-semibold text-xs uppercase tracking-wider transition transform hover:-translate-y-0.5 active:scale-95 flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/10"
                         >
                             <i class="fa-solid fa-compass text-cyan-400"></i> Mission Briefing (Tour)
                         </button>
@@ -618,7 +620,7 @@
                         <button
                             type="submit"
                             id="contact-submit-btn"
-                            class="ff-cursor-item px-6 py-3 rounded bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-mono-hud font-bold text-xs uppercase tracking-wider shadow-lg shadow-emerald-500/20 transition flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
+                            class="ff-cursor-item w-full sm:w-auto min-h-[46px] px-7 py-3 rounded bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-mono-hud font-bold text-xs uppercase tracking-wider shadow-lg shadow-emerald-500/20 active:scale-95 transition flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
                         >
                             <i class="fa-solid fa-paper-plane"></i> <span>Transmit Message</span>
                         </button>
@@ -832,8 +834,8 @@
                         RETRO SFX JUKEBOX // FF7 & YAKUZA 0 SOUNDBOARD
                     </h2>
                 </div>
-                <button type="button" id="soundboard-close-btn" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition font-mono-hud text-xs" aria-label="Close soundboard">
-                    <i class="fa-solid fa-xmark mr-1"></i> CLOSE
+                <button type="button" id="soundboard-close-btn" class="min-h-[38px] px-3.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 active:scale-95 text-slate-300 hover:text-white transition font-mono-hud text-xs flex items-center gap-1.5" aria-label="Close soundboard">
+                    <i class="fa-solid fa-xmark"></i> <span>CLOSE</span>
                 </button>
             </div>
 
