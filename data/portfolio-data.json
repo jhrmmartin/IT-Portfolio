@@ -4,10 +4,10 @@
     "firstName": "Jehrome",
     "lastName": "Martin",
     "title": "Aspiring IT Specialist & Indie Game Designer",
-    "yakuzaTitle": "PATRIARCH OF CREATIVE SYSTEMS • GAME IDEAS",
-    "yakuzaSubtitle": "4th Year BSIT • Game Designer & Technical Support Specialist",
+    "yakuzaTitle": "ARCHITECT OF INTERACTIVE WORLDS • BAKUNAWA STUDIOS COLLABORATOR",
+    "yakuzaSubtitle": "4th Year BSIT • Lead Game Designer & Cisco-Certified Network Specialist",
     "level": 4,
-    "classTitle": "SOLDIER 1st Class / Game Designer",
+    "classTitle": "Lead Game Designer & Technical Support Specialist",
     "hp": 4200,
     "mp": 999,
     "limitGauge": 88,
@@ -30,7 +30,7 @@
       "id": "mat-gamedesign",
       "name": "Game Design",
       "type": "magic",
-      "categoryLabel": "Magic Materia • Creative & Design",
+      "categoryLabel": "Pillar I • Creative & Narrative Design",
       "level": 5,
       "maxLevel": 5,
       "ap": "MASTER",
@@ -45,11 +45,11 @@
       "id": "mat-storytelling",
       "name": "Storytelling & Narrative",
       "type": "magic",
-      "categoryLabel": "Magic Materia • Creative & Design",
+      "categoryLabel": "Pillar I • Creative & Narrative Design",
       "level": 5,
       "maxLevel": 5,
       "ap": "MASTER",
-      "description": "Crafting atmospheric lore, environmental storytelling, and engaging scenarios inspired by classic JRPGs and cinema.",
+      "description": "Crafting atmospheric lore, environmental storytelling, and engaging scenarios inspired by cinema and interactive media.",
       "linkedEffects": [
         "Environmental Lore",
         "Cinematic Direction",
@@ -60,13 +60,13 @@
       "id": "mat-figma",
       "name": "Figma & UI/UX",
       "type": "magic",
-      "categoryLabel": "Magic Materia • Creative & Design",
+      "categoryLabel": "Pillar I • Creative & Narrative Design",
       "level": 4,
       "maxLevel": 5,
-      "ap": "4,200 / 5,000 AP",
-      "description": "Wireframing, interactive HUD prototyping, and visual asset assembly for web apps and game interfaces.",
+      "ap": "ADVANCED",
+      "description": "Wireframing, interactive interface prototyping, and visual asset assembly for web apps and game interfaces.",
       "linkedEffects": [
-        "HUD Wireframing",
+        "Interface Wireframing",
         "Interactive Prototypes",
         "Visual Systems"
       ]
@@ -75,10 +75,10 @@
       "id": "mat-unity",
       "name": "Unity Engine",
       "type": "command",
-      "categoryLabel": "Command Materia • Engineering & Dev",
+      "categoryLabel": "Pillar II • Software & Game Engineering",
       "level": 4,
       "maxLevel": 5,
-      "ap": "4,500 / 5,000 AP",
+      "ap": "ADVANCED",
       "description": "Building 2D/3D interactive gameplay systems, scene hierarchy management, and rapid game prototyping.",
       "linkedEffects": [
         "2D/3D Scene Assembly",
@@ -90,25 +90,25 @@
       "id": "mat-web",
       "name": "HTML / CSS / JavaScript",
       "type": "command",
-      "categoryLabel": "Command Materia • Engineering & Dev",
+      "categoryLabel": "Pillar II • Software & Game Engineering",
       "level": 4,
       "maxLevel": 5,
-      "ap": "4,400 / 5,000 AP",
+      "ap": "ADVANCED",
       "description": "Developing responsive modern web applications, interactive UIs, and DOM-driven frontend experiences.",
       "linkedEffects": [
         "Responsive Layouts",
         "Interactive DOM Logic",
-        "Modern CSS Styling"
+        "Modern CSS Architecture"
       ]
     },
     {
       "id": "mat-python-c",
       "name": "Python & C",
       "type": "command",
-      "categoryLabel": "Command Materia • Engineering & Dev",
+      "categoryLabel": "Pillar II • Software & Game Engineering",
       "level": 3,
       "maxLevel": 5,
-      "ap": "3,100 / 5,000 AP",
+      "ap": "PROFICIENT",
       "description": "Algorithmic problem solving, structured programming fundamentals, and automation scripting.",
       "linkedEffects": [
         "Algorithmic Logic",
@@ -120,7 +120,7 @@
       "id": "mat-techsupport",
       "name": "IT & Network Support",
       "type": "support",
-      "categoryLabel": "Support Materia • IT & Infrastructure",
+      "categoryLabel": "Pillar III • IT Infrastructure & Systems",
       "level": 5,
       "maxLevel": 5,
       "ap": "MASTER",
@@ -135,7 +135,7 @@
       "id": "mat-docs",
       "name": "System Documentation",
       "type": "support",
-      "categoryLabel": "Support Materia • IT & Infrastructure",
+      "categoryLabel": "Pillar III • IT Infrastructure & Systems",
       "level": 5,
       "maxLevel": 5,
       "ap": "MASTER",
@@ -150,7 +150,7 @@
       "id": "mat-leadership",
       "name": "Project Management & Comms",
       "type": "independent",
-      "categoryLabel": "Independent Materia • Leadership & Soft Skills",
+      "categoryLabel": "Pillar IV • Leadership & Direction",
       "level": 5,
       "maxLevel": 5,
       "ap": "MASTER",
@@ -218,8 +218,8 @@
         "mat-figma",
         "mat-leadership"
       ],
-      "substoryNumber": "SUBSTORY #01",
-      "substoryTitle": "The Paperwork Phantom of Valenzuela",
+      "substoryNumber": "CHRONICLE 01",
+      "substoryTitle": "Automating Citizen Feedback Workflows",
       "substoryLore": "Faced with complex Anti-Red Tape Authority (ARTA) compliance requirements for citizen feedback, led the structured documentation architecture—translating regulatory mandates into clear process flows, data schemas, and accessible UI assets.",
       "weakness": "Manual Survey Bottlenecks & Compliance Gaps",
       "tacticalGauges": {
@@ -249,7 +249,7 @@
         "mat-storytelling",
         "mat-unity"
       ],
-      "substoryNumber": "SUBSTORY #02",
+      "substoryNumber": "CHRONICLE 02",
       "substoryTitle": "Through the VHS Lens",
       "substoryLore": "Designed the complete spatial map architecture and environmental layering for Bakunawa Studios' slasher horror title. Balanced sightlines, choke points, and found-footage camera framing to sustain dread from start to finish.",
       "weakness": "Predictable Jump Scares (Solved via Spatial Tension)",
@@ -281,7 +281,7 @@
         "mat-leadership",
         "mat-docs"
       ],
-      "substoryNumber": "SUBSTORY #03",
+      "substoryNumber": "CHRONICLE 03",
       "substoryTitle": "The Campaign Trail Gambit",
       "substoryLore": "Created a satirical yet deeply strategic hybrid tabletop experience mirroring local political dynamics. Iterated extensively on economy balancing, player negotiation loops, and rulebook clarity for GameCon showcase.",
       "weakness": "Runaway Leader Problem (Solved via Dynamic Catch-up Mechanics)",
@@ -312,8 +312,8 @@
         "mat-unity",
         "mat-python-c"
       ],
-      "substoryNumber": "SUBSTORY #04",
-      "substoryTitle": "Enter the Crocodile",
+      "substoryNumber": "CHRONICLE 04",
+      "substoryTitle": "Arcade Velocity & Feedback Loops",
       "substoryLore": "Expanded the Piso Politiko universe into digital arcade territory using Unity. Tuned spawn curves, arcade scoring feedback, and hazard escalation to make every 60-second session immediately replayable.",
       "weakness": "Short Session Fatigue (Solved via Escalating Arcade Combos)",
       "tacticalGauges": {
@@ -343,7 +343,7 @@
         "mat-docs",
         "mat-leadership"
       ],
-      "substoryNumber": "SUBSTORY #05",
+      "substoryNumber": "CHRONICLE 05",
       "substoryTitle": "Operation Go-Bag Readiness",
       "substoryLore": "Spearheading both project management and game design for our BSIT Capstone project. Translating disaster risk reduction curricula for Grade 6 learners into engaging mobile gameplay mechanics with measurable educational retention.",
       "weakness": "Dry Educational Content (Solved via Gamified Time-Trial Packing)",
@@ -359,21 +359,21 @@
     {
       "id": "sec-chronicle",
       "title": "Career & Development Chronicle",
-      "subtitle": "KEY MILESTONES & QUEST LOG",
+      "subtitle": "KEY MILESTONES & ACADEMIC RECORD",
       "layout": "timeline",
       "items": [
         {
           "id": "item-1",
           "title": "Capstone Project Manager & Game Designer — Ready-Set-Bag!",
           "meta": "2025 – Present • Pamantasan Ng Lungsod Ng Valenzuela",
-          "badge": "Active Quest",
+          "badge": "In Progress",
           "description": "Leading the end-to-end development, documentation, and school testing of an educational mobile game for Grade 6 disaster preparedness."
         },
         {
           "id": "item-2",
           "title": "Cisco Networking Academy — 4x Certification Completion",
           "meta": "May 2025 • IT Infrastructure & Security",
-          "badge": "Mastered",
+          "badge": "Verified",
           "description": "Completed comprehensive coursework and lab simulations across Networking Basics, Addressing & Troubleshooting, Device Configuration, and Network Security."
         },
         {

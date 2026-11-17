@@ -177,11 +177,11 @@ window.PortfolioEditor = {
 
         <div>
           <p class="text-xs font-mono-hud text-emerald-400 uppercase tracking-widest mb-1">
-            // SHINRA RESTRICTED TERMINAL • LEVEL 1 CLEARANCE
+            // PORTFOLIO OWNER ACCESS • LEVEL 1 CLEARANCE
           </p>
-          <h3 id="cmsModalTitle" class="text-2xl font-bold">Owner Authentication Required</h3>
+          <h3 id="cmsModalTitle" class="text-2xl font-bold">Welcome back.</h3>
           <p class="text-xs opacity-75 mt-1">
-            Enter your security passcode to unlock the portfolio module manager.
+            Sign in to update your projects, profile, and credentials.
           </p>
         </div>
 
@@ -218,7 +218,7 @@ window.PortfolioEditor = {
               type="submit"
               class="px-5 py-2 rounded text-xs font-mono-hud font-bold bg-emerald-500 hover:bg-emerald-400 text-slate-950 transition shadow-lg shadow-emerald-500/20"
             >
-              <i class="fa-solid fa-key mr-1"></i> Verify Clearance
+              <i class="fa-solid fa-key mr-1"></i> Unlock editor
             </button>
           </div>
         </form>
@@ -228,7 +228,8 @@ window.PortfolioEditor = {
     setTimeout(() => document.getElementById('cms-passcode-input')?.focus(), 50);
 
     document.getElementById('cms-auth-cancel-btn')?.addEventListener('click', () => {
-      dialog?.close();
+      if (window.PortfolioApp?.closeTopLayer) window.PortfolioApp.closeTopLayer(dialog);
+      else dialog?.close();
     });
 
     document.getElementById('cms-auth-form')?.addEventListener('submit', async (e) => {
@@ -251,11 +252,11 @@ window.PortfolioEditor = {
     if (!container || !window.PortfolioApp?.data) return;
 
     const tabs = [
-      { id: 'works', label: 'Featured Works / Quests', icon: 'fa-solid fa-gamepad' },
-      { id: 'materia', label: 'Materia / Skills', icon: 'fa-solid fa-circle-dot' },
+      { id: 'works', label: 'Projects', icon: 'fa-solid fa-gamepad' },
+      { id: 'materia', label: 'Skills', icon: 'fa-solid fa-circle-dot' },
       { id: 'certs', label: 'Certifications', icon: 'fa-solid fa-certificate' },
       { id: 'custom', label: 'Custom Modules', icon: 'fa-solid fa-layer-group' },
-      { id: 'profile', label: 'Profile & HUD Stats', icon: 'fa-solid fa-user-astronaut' },
+      { id: 'profile', label: 'Profile', icon: 'fa-solid fa-user-astronaut' },
       { id: 'security', label: 'Live Cloud Sync & Security', icon: 'fa-solid fa-cloud-arrow-up' }
     ];
 
@@ -268,11 +269,11 @@ window.PortfolioEditor = {
           <div class="flex items-center gap-2">
             <span class="w-2.5 h-2.5 rounded-full ${hasDraft ? 'bg-amber-400' : 'bg-emerald-400'} animate-pulse"></span>
             <span class="text-xs font-mono-hud text-emerald-400 uppercase tracking-widest">
-              SHINRA / TACTICAL TERMINAL • ${hasDraft ? 'UNPUBLISHED DRAFT CHANGES' : 'SYNCED WITH LIVE SITE'}
+              PORTFOLIO EDITOR • ${hasDraft ? 'UNPUBLISHED DRAFT CHANGES' : 'SAVED CONTENT'}
             </span>
           </div>
           <h3 id="cmsModalTitle" class="text-xl font-bold mt-0.5">
-            Customize Portfolio Modules (Zero Source Code Needed)
+            Your portfolio studio
           </h3>
         </div>
 
@@ -324,7 +325,7 @@ window.PortfolioEditor = {
             class="w-8 h-8 rounded-lg border border-slate-600 hover:border-emerald-400 flex items-center justify-center text-slate-300 hover:text-white transition"
             aria-label="Close Module Editor"
           >
-            <i class="fa-solid fa-xmark"></i>
+            <span aria-hidden="true">&times;</span>
           </button>
         </div>
       </div>
@@ -334,7 +335,7 @@ window.PortfolioEditor = {
         ${tabs.map(t => `
           <button
             type="button"
-            data-cms-tab="${t.id}"
+            data-cms-tab="${t.id}" aria-pressed="${this.activeTab === t.id}"
             class="px-3.5 py-2 rounded-lg text-xs font-mono-hud font-semibold transition flex items-center gap-2 border ${
               this.activeTab === t.id
                 ? 'bg-emerald-500/20 border-emerald-400 text-emerald-300'
@@ -354,12 +355,24 @@ window.PortfolioEditor = {
 
       <!-- Status Footer -->
       <div class="mt-5 pt-3 border-t border-slate-800 flex flex-wrap items-center justify-between gap-2 text-xs font-mono-hud text-slate-400">
-        <span id="cms-status-msg">All changes save immediately to your browser. Use "Export JSON" to update data/portfolio-data.json for public visitors.</span>
+        <span id="cms-status-msg" role="status" aria-live="polite">Edits are saved as drafts in this browser. Publish Live shares them with visitors.</span>
         <span class="text-emerald-400">Owner Trigger: Ctrl + Shift + E</span>
       </div>
     `;
 
     this.bindEditorEvents();
+    container.querySelectorAll('form').forEach(form => {
+      form.addEventListener('input', () => {
+        const status = document.getElementById('cms-status-msg');
+        status.textContent = 'Form changes pending. Use the save button below this form to apply them.';
+        status.dataset.state = 'pending';
+      });
+    });
+    container.querySelectorAll('label').forEach((label, index) => {
+      const field = label.querySelector('input, select, textarea') || label.parentElement.querySelector('input, select, textarea');
+      if (field && !field.id) field.id = 'cms-field-' + index;
+      if (field) label.htmlFor = field.id;
+    });
   },
 
   renderActiveTabContent() {
@@ -376,7 +389,7 @@ window.PortfolioEditor = {
           <form id="cms-work-form" class="bg-slate-900/90 border border-emerald-500/30 rounded-lg p-5 space-y-4">
             <div class="flex items-center justify-between">
               <h4 class="text-sm font-mono-hud uppercase text-emerald-400 font-bold">
-                ${this.editingWorkIndex !== null ? 'Edit Project / Quest' : '+ Add New Project / Quest'}
+                ${this.editingWorkIndex !== null ? 'Edit project' : '+ Create a project'}
               </h4>
               ${this.editingWorkIndex !== null ? `
                 <button type="button" id="cms-cancel-edit-work" class="text-xs font-mono-hud text-amber-400 underline">
@@ -388,7 +401,7 @@ window.PortfolioEditor = {
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
                 <label class="block text-xs font-mono-hud mb-1 opacity-80">Project Title *</label>
-                <input type="text" name="title" required placeholder="e.g. Project Midgar" class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm">
+                <input type="text" name="title" required placeholder="e.g. Ready-Set-Bag!" class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm">
               </div>
               <div>
                 <label class="block text-xs font-mono-hud mb-1 opacity-80">Your Role *</label>
@@ -425,11 +438,11 @@ window.PortfolioEditor = {
                 <input type="text" name="tags" placeholder="Video Game, Unity, Narrative" class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm">
               </div>
               <div>
-                <label class="block text-xs font-mono-hud mb-1 opacity-80">Substory Badge #</label>
-                <input type="text" name="substoryNumber" placeholder="SUBSTORY #06" class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm">
+                <label class="block text-xs font-mono-hud mb-1 opacity-80">Project label</label>
+                <input type="text" name="substoryNumber" placeholder="MYTHIC TALE #06" class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm">
               </div>
               <div>
-                <label class="block text-xs font-mono-hud mb-1 opacity-80">Yakuza Substory Title</label>
+                <label class="block text-xs font-mono-hud mb-1 opacity-80">Case study title</label>
                 <input type="text" name="substoryTitle" placeholder="The Architect's Gambit" class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm">
               </div>
             </div>
@@ -441,8 +454,8 @@ window.PortfolioEditor = {
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label class="block text-xs font-mono-hud mb-1 opacity-80">Tactical Assess / Behind-the-Scenes Lore</label>
-                <textarea name="substoryLore" rows="2" placeholder="Detailed breakdown shown when a visitor clicks 'Assess Intel'..." class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm"></textarea>
+                <label class="block text-xs font-mono-hud mb-1 opacity-80">Case study details</label>
+                <textarea name="substoryLore" rows="2" placeholder="Describe your contribution and the result..." class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm"></textarea>
               </div>
               <div>
                 <label class="block text-xs font-mono-hud mb-1 opacity-80">Challenge / Problem Solved ("Weakness")</label>
@@ -451,7 +464,7 @@ window.PortfolioEditor = {
             </div>
 
             <div>
-              <label class="block text-xs font-mono-hud mb-1.5 opacity-80">Link Equipped Materia (Skills Used):</label>
+              <label class="block text-xs font-mono-hud mb-1.5 opacity-80">Skills used in this project</label>
               <div class="flex flex-wrap gap-2">
                 ${data.materia.map(m => `
                   <label class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-slate-950 border border-slate-700 text-xs cursor-pointer">
@@ -471,7 +484,7 @@ window.PortfolioEditor = {
           <!-- Existing Works List -->
           <div class="space-y-2.5">
             <h4 class="text-xs font-mono-hud uppercase tracking-wider opacity-70">
-              Current Featured Works (${data.works.length})
+              Your projects (${data.works.length})
             </h4>
             ${data.works.map((w, idx) => `
               <div class="flex flex-wrap items-center justify-between gap-3 p-3.5 rounded-lg bg-slate-900/70 border border-slate-800">
@@ -482,7 +495,7 @@ window.PortfolioEditor = {
                       <span>${esc(w.title)}</span>
                       <span class="text-[11px] font-mono-hud px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300">${esc(w.status)}</span>
                     </div>
-                    <div class="text-xs opacity-70 font-mono-hud">${esc(w.role)} • ${(w.tags || []).join(', ')}</div>
+                    <div class="text-xs opacity-70 font-mono-hud">${esc(w.role)} • ${esc((w.tags || []).join(', '))}</div>
                   </div>
                 </div>
                 <div class="flex items-center gap-1.5">
@@ -506,15 +519,15 @@ window.PortfolioEditor = {
         <div class="space-y-6">
           <form id="cms-materia-form" class="bg-slate-900/90 border border-emerald-500/30 rounded-lg p-5 space-y-4">
             <h4 class="text-sm font-mono-hud uppercase text-emerald-400 font-bold">
-              + Equip New Skill Materia
+              + Add a skill
             </h4>
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div>
-                <label class="block text-xs font-mono-hud mb-1 opacity-80">Skill / Materia Name *</label>
+                <label class="block text-xs font-mono-hud mb-1 opacity-80">Skill name *</label>
                 <input type="text" name="name" required placeholder="e.g. Unreal Engine 5" class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm">
               </div>
               <div>
-                <label class="block text-xs font-mono-hud mb-1 opacity-80">Materia Color Type *</label>
+                <label class="block text-xs font-mono-hud mb-1 opacity-80">Discipline *</label>
                 <select name="type" class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm">
                   <option value="magic">🟢 Magic (Creative & Design)</option>
                   <option value="command">🟡 Command (Engineering & Coding)</option>
@@ -527,7 +540,7 @@ window.PortfolioEditor = {
                 <input type="number" name="level" min="1" max="5" value="4" class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm">
               </div>
               <div>
-                <label class="block text-xs font-mono-hud mb-1 opacity-80">AP Status Label</label>
+                <label class="block text-xs font-mono-hud mb-1 opacity-80">Proficiency label</label>
                 <input type="text" name="ap" value="MASTER" placeholder="MASTER or 4,500 AP" class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm">
               </div>
             </div>
@@ -704,15 +717,18 @@ window.PortfolioEditor = {
       return `
         <form id="cms-profile-form" class="bg-slate-900/90 border border-emerald-500/30 rounded-lg p-5 space-y-4">
           <h4 class="text-sm font-mono-hud uppercase text-emerald-400 font-bold">
-            Edit Character Status HUD & Personal Bio
+            Edit Profile
           </h4>
+<label>Portrait image URL<input name="avatarUrl" value="${esc(p.avatarUrl || '')}" type="text"></label>
+<label>Resume URL<input name="resumeUrl" value="${esc(p.resumeUrl || '')}" type="text"></label>
+<label>University<input name="university" value="${esc(p.university || '')}" type="text"></label>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <label class="block text-xs font-mono-hud mb-1 opacity-80">Full Name</label>
               <input type="text" name="name" value="${esc(p.name)}" class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm">
             </div>
             <div>
-              <label class="block text-xs font-mono-hud mb-1 opacity-80">FF7 Class / Role Title</label>
+              <label class="block text-xs font-mono-hud mb-1 opacity-80">Role Title</label>
               <input type="text" name="classTitle" value="${esc(p.classTitle)}" class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm">
             </div>
             <div>
@@ -723,7 +739,7 @@ window.PortfolioEditor = {
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label class="block text-xs font-mono-hud mb-1 opacity-80">Yakuza 0 Dynamic Subtitle Stamp</label>
+              <label class="block text-xs font-mono-hud mb-1 opacity-80">Professional Subtitle</label>
               <input type="text" name="yakuzaTitle" value="${esc(p.yakuzaTitle)}" class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm">
             </div>
             <div>
@@ -748,14 +764,14 @@ window.PortfolioEditor = {
           </div>
 
           <button type="submit" class="px-5 py-2 rounded text-xs font-mono-hud font-bold bg-emerald-500 hover:bg-emerald-400 text-slate-950 transition">
-            <i class="fa-solid fa-floppy-disk mr-1"></i> Save Profile & HUD Changes
+            <i class="fa-solid fa-floppy-disk mr-1"></i> Save Profile
           </button>
         </form>
       `;
     }
 
     /* ------------------------------------------------------------------------
-       TAB 6: LIVE CLOUD SYNC (GITHUB + VERCEL) & PASSCODE SETTINGS
+       TAB 6: PUBLISHING (GITHUB + VERCEL) & PASSCODE SETTINGS
        ------------------------------------------------------------------------ */
     const savedGhToken = localStorage.getItem('jehrome_gh_token') || '';
     const savedGhRepo = localStorage.getItem('jehrome_gh_repo') || 'jhrmmartin/IT-Portfolio';
@@ -796,7 +812,7 @@ window.PortfolioEditor = {
 
           <div class="flex flex-wrap items-center gap-3">
             <button type="submit" class="px-5 py-2 rounded text-xs font-mono-hud font-bold bg-emerald-500 hover:bg-emerald-400 text-slate-950 transition">
-              <i class="fa-solid fa-floppy-disk mr-1"></i> Save Token & Publish Live Now
+              <i class="fa-solid fa-floppy-disk mr-1"></i> Save Publishing Settings
             </button>
             ${savedGhToken ? `<span class="text-xs font-mono-hud text-emerald-400"><i class="fa-solid fa-circle-check mr-1"></i> Token Saved in Browser</span>` : `<span class="text-xs font-mono-hud text-amber-400">Token not set yet</span>`}
           </div>
@@ -827,12 +843,16 @@ window.PortfolioEditor = {
     const dialog = document.getElementById('cms-modal');
 
     // Close Modal
-    document.getElementById('cms-close-btn')?.addEventListener('click', () => dialog?.close());
+    document.getElementById('cms-close-btn')?.addEventListener('click', () => {
+      if (app?.closeTopLayer) app.closeTopLayer(dialog);
+      else dialog?.close();
+    });
 
     // Lock Terminal Button
     document.getElementById('cms-lock-btn')?.addEventListener('click', () => {
       this.isAuthenticated = false;
-      dialog?.close();
+      if (app?.closeTopLayer) app.closeTopLayer(dialog);
+      else dialog?.close();
     });
 
     // Tab Switching
@@ -1113,6 +1133,9 @@ window.PortfolioEditor = {
         const fd = new FormData(profileForm);
         const name = fd.get('name').trim();
         const parts = name.split(' ');
+        app.data.profile.avatarUrl = fd.get('avatarUrl').trim();
+        app.data.profile.resumeUrl = fd.get('resumeUrl').trim();
+        app.data.profile.university = fd.get('university').trim();
         app.data.profile.name = name;
         app.data.profile.firstName = parts[0] || name;
         app.data.profile.lastName = parts.slice(1).join(' ') || '';
@@ -1142,7 +1165,7 @@ window.PortfolioEditor = {
         const fd = new FormData(ghSyncForm);
         localStorage.setItem('jehrome_gh_repo', fd.get('ghRepo').trim());
         localStorage.setItem('jehrome_gh_token', fd.get('ghToken').trim());
-        this.publishToGitHub();
+        this.flashStatus('Publishing settings saved. Use Publish Live when ready.');
       });
     }
 
@@ -1168,6 +1191,7 @@ window.PortfolioEditor = {
 
   async publishToGitHub() {
     const app = window.PortfolioApp;
+    if (!this.isAuthenticated) return;
     const token = localStorage.getItem('jehrome_gh_token');
     const repo = localStorage.getItem('jehrome_gh_repo') || 'jhrmmartin/IT-Portfolio';
 
@@ -1186,6 +1210,7 @@ window.PortfolioEditor = {
     this.flashStatus('Connecting to GitHub API and publishing live to all browsers...');
 
     try {
+      if (!/^[\w.-]+\/[\w.-]+$/.test(repo)) throw new Error('Enter a repository as owner/name.');
       const apiUrl = `https://api.github.com/repos/${repo}/contents/data/portfolio-data.json`;
       const headers = {
         'Authorization': `Bearer ${token}`,
@@ -1195,14 +1220,16 @@ window.PortfolioEditor = {
 
       // 1. Get current file SHA from GitHub
       let sha = undefined;
-      const getRes = await fetch(apiUrl, { headers, cache: 'no-store' });
+      const getRes = await fetch(apiUrl + '?ref=main', { headers, cache: 'no-store' });
+      if (!getRes.ok && getRes.status !== 404) throw new Error('Could not read the current published version.');
       if (getRes.ok) {
         const fileMeta = await getRes.json();
         sha = fileMeta.sha;
       }
 
       // 2. Encode UTF-8 JSON to Base64 safely
-      const jsonStr = JSON.stringify(app.data, null, 2);
+      const publishedData = structuredClone(app.data);
+      const jsonStr = JSON.stringify(publishedData, null, 2);
       const utf8Bytes = new TextEncoder().encode(jsonStr);
       let binary = '';
       for (let i = 0; i < utf8Bytes.length; i++) {
@@ -1215,7 +1242,7 @@ window.PortfolioEditor = {
         method: 'PUT',
         headers,
         body: JSON.stringify({
-          message: 'Live portfolio update via Tactical Terminal CMS',
+          message: 'Live portfolio update via Portfolio Editor',
           content: base64Content,
           sha,
           branch: 'main'
@@ -1227,9 +1254,11 @@ window.PortfolioEditor = {
         throw new Error(errData.message || `GitHub API returned ${putRes.status}`);
       }
 
-      app.saveData(app.data, false);
+      if (JSON.stringify(app.data) === JSON.stringify(publishedData)) {
+        app.saveData(publishedData, false);
+      }
       this.renderEditorUI();
-      this.flashStatus('PUBLISHED LIVE! Your changes are now live for everyone on all browsers & devices!');
+      this.flashStatus('Published to GitHub. Visitors will receive the update when they reload.');
     } catch (err) {
       if (btn) {
         btn.disabled = false;
@@ -1244,10 +1273,13 @@ window.PortfolioEditor = {
     if (el) {
       el.textContent = `✓ ${msg}`;
       el.classList.add('text-emerald-400');
+      el.dataset.state = 'saved';
     }
   }
 };
 
-document.addEventListener('DOMContentLoaded', () => {
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => window.PortfolioEditor.init(), { once: true });
+} else {
   window.PortfolioEditor.init();
-});
+}

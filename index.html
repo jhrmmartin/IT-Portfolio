@@ -1,930 +1,324 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth" data-theme="mako">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <!-- Android & Chrome Status Bar Theming -->
-    <meta name="theme-color" content="#070b14">
-    <!-- MANDATORY per modern-web-guidance (dark-mode): Declare support for both light and dark themes -->
-    <meta name="color-scheme" content="light dark">
-    <title>Jehrome Martin | Game Designer & IT Specialist Portfolio</title>
-    <meta name="description" content="Portfolio of Jehrome Martin — Indie Game Designer and Cisco-Certified IT Specialist featuring Final Fantasy VII & Yakuza 0 tactical interactive themes.">
-
-    <!-- Open Graph / Discord / LinkedIn / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://martin-it-portfolio.vercel.app/">
-    <meta property="og:title" content="Jehrome Martin | Game Designer & IT Specialist Portfolio">
-    <meta property="og:description" content="Indie Game Designer and Cisco-Certified IT Specialist. Featuring interactive FF7 Materia loadouts, Tactical Assess modals, and Yakuza 0 themes.">
-    <meta property="og:image" content="https://martin-it-portfolio.vercel.app/favicon.png">
-
-    <!-- Twitter / X -->
-    <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="Jehrome Martin | Game Designer & IT Specialist Portfolio">
-    <meta name="twitter:description" content="Indie Game Designer and Cisco-Certified IT Specialist. Featuring interactive FF7 Materia loadouts, Tactical Assess modals, and Yakuza 0 themes.">
-    <meta name="twitter:image" content="https://martin-it-portfolio.vercel.app/favicon.png">
-
-    <!-- Cloud Strife Favicon -->
-    <link rel="icon" type="image/png" href="favicon.png">
-    <link rel="apple-touch-icon" href="favicon.png">
-
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- FontAwesome for Icons -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-
-    <!-- Custom FF7 (Remake + Classic 1997) & Yakuza 0 Theme Styles -->
-    <link rel="stylesheet" href="css/styles.css">
+<script src="js/theme.js">
+</script>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<link rel="preload" href="css/editorial.css" as="style"/>
+<link rel="preload" href="js/theme.js" as="script"/>
+<link rel="preload" href="js/editorial-data.js" as="script"/>
+<title>Jehrome Martin | Game Design &amp; IT Systems</title>
+<meta name="description" content="Selected game design, digital systems, and collaborative projects by Jehrome Martin."/>
+<link rel="icon" href="favicon.png"/>
+<link rel="stylesheet" href="css/editorial.css"/>
 </head>
-<body class="bg-tactical-grid antialiased selection:bg-emerald-500/30 selection:text-emerald-200 relative min-h-screen">
-
-    <!-- Background Lifestream / Mako Particle Canvas -->
-    <canvas id="mako-canvas" class="fixed inset-0 pointer-events-none z-0 opacity-65" aria-hidden="true"></canvas>
-
-    <!-- ======================================================================
-         NAVIGATION BAR (TACTICAL COMMAND BAR + 3-MODE THEME + SFX + CMS)
-         ====================================================================== -->
-    <nav class="fixed w-full z-40 top-0 backdrop-blur-md border-b border-emerald-500/20 bg-slate-950/80 transition-colors duration-300">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16 gap-4">
-                <!-- Logo / Character ID -->
-                <a href="#home" class="flex items-center gap-3 group">
-                    <span class="w-9 h-9 rounded bg-emerald-500/15 border border-emerald-400/50 flex items-center justify-center overflow-hidden p-0.5 group-hover:scale-105 transition">
-                        <img src="favicon.png" alt="Cloud Strife Icon" class="w-full h-full object-contain">
-                    </span>
-                    <div>
-                        <span id="nav-name" class="font-bold text-base tracking-tight block leading-none">Jehrome Martin</span>
-                        <span class="text-[10px] font-mono-hud text-emerald-400 tracking-widest uppercase">SOLDIER // DEV LOG</span>
-                    </div>
-                </a>
-
-                <!-- Desktop Menu Links -->
-                <div class="hidden lg:flex items-center space-x-7 text-sm font-mono-hud">
-                    <a href="#home" class="ff-cursor-item hover:text-emerald-400 transition">01. STATUS</a>
-                    <a href="#about" class="ff-cursor-item hover:text-emerald-400 transition">02. MATERIA & CERT</a>
-                    <a href="#works" class="ff-cursor-item hover:text-emerald-400 transition">03. QUEST LOG</a>
-                    <a href="#contact" class="ff-cursor-item hover:text-emerald-400 transition">04. COMMS</a>
-                </div>
-
-                <!-- Tactical Controls: 3-Way Theme Switcher, Retro SFX, & No-Code Editor -->
-                <div class="flex items-center gap-2 sm:gap-3">
-                    <!-- 3-Way Theme Selector -->
-                    <div id="nav-theme-controls" class="hidden sm:flex items-center bg-slate-900/90 border border-slate-700/80 rounded-lg p-1 gap-1" role="group" aria-label="Visual Theme Selector">
-                        <button
-                            type="button"
-                            data-theme-btn="mako"
-                            class="px-2.5 py-1 rounded text-[11px] font-mono-hud text-emerald-300 hover:bg-emerald-500/15 transition"
-                            title="FF7 Remake Mako Tactical Dark Theme"
-                        >
-                            MAKO
-                        </button>
-                        <button
-                            type="button"
-                            data-theme-btn="classic"
-                            class="px-2.5 py-1 rounded text-[11px] font-mono-hud text-blue-300 hover:bg-blue-500/20 transition"
-                            title="Classic 1997 Final Fantasy VII Blue Window Theme"
-                        >
-                            1997
-                        </button>
-                        <button
-                            type="button"
-                            data-theme-btn="yakuza"
-                            class="px-2.5 py-1 rounded text-[11px] font-mono-hud text-amber-400 hover:bg-amber-500/20 transition"
-                            title="Yakuza 0 (1988 Kamurocho Dragon Gold & Crimson Theme)"
-                        >
-                            YAKUZA
-                        </button>
-                    </div>
-
-                    <!-- Retro SFX Toggle (Muted by default for office safety) -->
-                    <button
-                        type="button"
-                        id="sfx-toggle-btn"
-                        class="min-h-[40px] px-2.5 py-1.5 rounded-lg bg-slate-900/90 border border-slate-700/80 hover:border-emerald-400/60 active:scale-95 text-xs font-mono-hud flex items-center gap-1.5 transition"
-                        title="Toggle Classic FF7 & Yakuza 0 Sound Effects"
-                        aria-label="Toggle Sound Effects"
-                    >
-                        <i id="sfx-toggle-icon" class="fa-solid fa-volume-xmark opacity-60"></i>
-                        <span id="sfx-toggle-label" class="hidden md:inline">SFX: OFF</span>
-                    </button>
-
-                    <!-- Retro SFX Jukebox & Soundboard Modal Trigger -->
-                    <button
-                        type="button"
-                        id="sfx-soundboard-btn"
-                        class="min-h-[40px] px-2.5 py-1.5 rounded-lg bg-slate-900/90 border border-slate-700/80 hover:border-cyan-400/60 active:scale-95 text-xs font-mono-hud flex items-center gap-1.5 transition"
-                        title="Open Retro SFX Jukebox (Sample FF7 & Yakuza 0 Sounds)"
-                        aria-label="Open Retro Soundboard"
-                    >
-                        <i class="fa-solid fa-music text-cyan-400"></i>
-                        <span class="hidden xl:inline text-cyan-300">JUKEBOX</span>
-                    </button>
-
-                    <!-- Guided Mission Briefing Tour Trigger -->
-                    <button
-                        type="button"
-                        id="start-tour-nav-btn"
-                        class="min-h-[40px] px-2.5 py-1.5 rounded-lg bg-slate-900/90 border border-slate-700/80 hover:border-emerald-400/60 active:scale-95 text-xs font-mono-hud flex items-center gap-1.5 transition"
-                        title="Start Interactive Guided Tour (Mission Briefing)"
-                        aria-label="Start Tour"
-                    >
-                        <i class="fa-solid fa-compass text-emerald-400"></i>
-                        <span class="hidden xl:inline text-emerald-300">TOUR</span>
-                    </button>
-
-                    <!-- Mobile Hamburger Button (44x44px touch target) -->
-                    <button
-                        type="button"
-                        id="mobile-menu-btn"
-                        class="lg:hidden w-11 h-11 flex items-center justify-center rounded-lg border border-slate-700 text-slate-300 hover:text-emerald-400 active:scale-95 transition"
-                        aria-label="Toggle Mobile Navigation"
-                    >
-                        <i id="mobile-menu-icon" class="fa-solid fa-bars text-lg"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Mobile Menu Dropdown -->
-        <div id="mobile-menu" class="hidden lg:hidden bg-slate-950/98 backdrop-blur-xl border-b border-emerald-500/20 px-4 pt-3 pb-6 space-y-3.5 shadow-2xl">
-            <div class="flex flex-col space-y-1 font-mono-hud text-sm">
-                <a href="#home" class="mobile-link min-h-[44px] flex items-center px-3.5 py-2.5 rounded-lg hover:bg-emerald-500/15 active:bg-emerald-500/25 transition">01. STATUS (Home)</a>
-                <a href="#about" class="mobile-link min-h-[44px] flex items-center px-3.5 py-2.5 rounded-lg hover:bg-emerald-500/15 active:bg-emerald-500/25 transition">02. MATERIA & CERT (About & Skills)</a>
-                <a href="#works" class="mobile-link min-h-[44px] flex items-center px-3.5 py-2.5 rounded-lg hover:bg-emerald-500/15 active:bg-emerald-500/25 transition">03. QUEST LOG (Featured Works)</a>
-                <a href="#contact" class="mobile-link min-h-[44px] flex items-center px-3.5 py-2.5 rounded-lg hover:bg-emerald-500/15 active:bg-emerald-500/25 transition">04. COMMS (Contact & Resume)</a>
-            </div>
-            <div class="pt-3 border-t border-slate-800 flex items-center justify-between">
-                <span class="text-xs font-mono-hud opacity-70">UI Mode:</span>
-                <div class="flex gap-2">
-                    <button type="button" data-theme-btn="mako" class="min-h-[40px] px-3 py-1.5 rounded-lg text-xs font-mono-hud bg-slate-900 border border-slate-700 active:scale-95">MAKO</button>
-                    <button type="button" data-theme-btn="classic" class="min-h-[40px] px-3 py-1.5 rounded-lg text-xs font-mono-hud bg-slate-900 border border-slate-700 active:scale-95">1997</button>
-                    <button type="button" data-theme-btn="yakuza" class="min-h-[40px] px-3 py-1.5 rounded-lg text-xs font-mono-hud bg-slate-900 border border-slate-700 text-amber-400 active:scale-95">YAKUZA</button>
-                </div>
-            </div>
-            <div class="pt-3 border-t border-slate-800 flex gap-2.5">
-                <button
-                    type="button"
-                    id="mobile-tour-btn"
-                    class="flex-1 min-h-[44px] py-2.5 rounded-lg bg-emerald-950/50 border border-emerald-500/50 text-emerald-300 text-xs font-mono-hud flex items-center justify-center gap-2 hover:bg-emerald-900/40 active:scale-95 transition"
-                >
-                    <i class="fa-solid fa-compass"></i> Tour
-                </button>
-                <button
-                    type="button"
-                    id="mobile-soundboard-btn"
-                    class="flex-1 min-h-[44px] py-2.5 rounded-lg bg-cyan-950/50 border border-cyan-500/50 text-cyan-300 text-xs font-mono-hud flex items-center justify-center gap-2 hover:bg-cyan-900/40 active:scale-95 transition"
-                >
-                    <i class="fa-solid fa-music"></i> Jukebox
-                </button>
-            </div>
-        </div>
-    </nav>
-
-    <!-- ======================================================================
-         01. HERO & CHARACTER STATUS HUD SECTION
-         ====================================================================== -->
-    <section id="home" class="relative z-10 pt-28 pb-20 lg:pt-40 lg:pb-28 overflow-hidden">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col-reverse lg:flex-row items-center justify-between gap-12">
-
-                <!-- Left Column: Hero Briefing & Yakuza 0 Dynamic Title Stamp -->
-                <div class="lg:w-7/12 fade-in-up">
-                    <!-- Yakuza 0 Style Introduction Stamp -->
-                    <div class="yakuza-banner mb-5 inline-block rounded-r">
-                        <p id="hero-yakuza-title" class="text-xs font-mono-hud text-amber-400 font-bold tracking-widest uppercase">
-                            CREATIVE SYSTEMS ARCHITECT • BAKUNAWA STUDIOS COLLABORATOR
-                        </p>
-                    </div>
-
-                    <p class="text-xs font-mono-hud text-emerald-400 tracking-widest uppercase mb-1">
-                        // RECORD INITIALIZED • PAMANTASAN NG LUNGSOD NG VALENZUELA
-                    </p>
-
-                    <h1 class="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight mb-3 leading-[1.05]">
-                        <span id="hero-first-name">Jehrome</span>
-                        <span id="hero-last-name" class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">Martin</span>
-                    </h1>
-
-                    <h2 class="text-lg sm:text-xl font-mono-hud text-cyan-300 mb-6 min-h-[2rem] typing-cursor" id="typing-text"></h2>
-
-                    <p id="hero-intro" class="text-base sm:text-lg opacity-85 mb-8 max-w-2xl leading-relaxed">
-                        A 4th Year BSIT Student at Pamantasan Ng Lungsod Ng Valenzuela, passionate about blending technical expertise with creative game design to craft meaningful digital experiences.
-                    </p>
-
-                    <!-- Tactical Command Buttons -->
-                    <div class="flex flex-col sm:flex-row flex-wrap gap-3">
-                        <a href="#works" class="ff-cursor-item min-h-[44px] px-6 py-3.5 rounded bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-mono-hud font-bold text-xs uppercase tracking-wider shadow-lg shadow-emerald-500/20 transition transform hover:-translate-y-0.5 active:scale-95 flex items-center justify-center gap-2">
-                            <i class="fa-solid fa-gamepad"></i> Inspect Quest Log (Works)
-                        </a>
-                        <a href="#about" class="ff-cursor-item min-h-[44px] px-5 py-3.5 rounded ff-panel hover:border-emerald-400 font-mono-hud font-semibold text-xs uppercase tracking-wider transition transform hover:-translate-y-0.5 active:scale-95 flex items-center justify-center gap-2">
-                            <i class="fa-solid fa-circle-dot text-emerald-400"></i> Materia Loadout
-                        </a>
-                        <button
-                            type="button"
-                            id="start-tour-hero-btn"
-                            class="ff-cursor-item min-h-[44px] px-5 py-3.5 rounded ff-panel border-cyan-500/40 hover:border-cyan-400 bg-cyan-950/30 text-cyan-300 font-mono-hud font-semibold text-xs uppercase tracking-wider transition transform hover:-translate-y-0.5 active:scale-95 flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/10"
-                        >
-                            <i class="fa-solid fa-compass text-cyan-400"></i> Mission Briefing (Tour)
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Right Column: FF7 Remake + Classic Character Status HUD Card -->
-                <div class="lg:w-5/12 w-full flex justify-center fade-in-up" style="transition-delay: 150ms;">
-                    <div id="hero-status-card" class="ff-panel p-6 w-full max-w-md relative">
-                        <!-- Top HUD Header -->
-                        <div class="flex items-center justify-between border-b border-emerald-500/25 pb-3 mb-5">
-                            <div>
-                                <span class="text-[10px] font-mono-hud uppercase tracking-widest text-emerald-400 block">ACTIVE PARTY LEADER</span>
-                                <span id="hud-class" class="text-xs font-mono-hud font-bold">SOLDIER 1st Class / Game Designer</span>
-                            </div>
-                            <div class="text-right font-mono-hud">
-                                <span class="text-xs opacity-70">LV</span>
-                                <span id="hud-level" class="text-2xl font-bold text-emerald-400 ml-1">04</span>
-                            </div>
-                        </div>
-
-                        <!-- Avatar + Status Bars -->
-                        <div class="flex flex-col sm:flex-row items-center gap-5">
-                            <div class="relative w-32 h-32 sm:w-36 sm:h-36 shrink-0 float-slow">
-                                <div class="absolute inset-0 rounded-full bg-emerald-400/25 blur-xl"></div>
-                                <img
-                                    id="hero-avatar"
-                                    src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Profile%20Picture-CXzJFdP48c1peUFMtOS2rL481xFrEn.png"
-                                    alt="Jehrome Martin Portrait"
-                                    class="relative w-full h-full object-cover rounded-full border-2 border-emerald-400/70 shadow-xl"
-                                >
-                            </div>
-
-                            <!-- Classic FF7 HP / MP / LIMIT Gauges -->
-                            <div class="w-full space-y-3 font-mono-hud text-xs">
-                                <!-- HP Bar -->
-                                <div>
-                                    <div class="flex justify-between mb-1">
-                                        <span class="text-emerald-400 font-bold">HP <span class="text-[10px] opacity-70 font-normal">(DRIVE)</span></span>
-                                        <span id="hud-hp">4,200 / 4,200</span>
-                                    </div>
-                                    <div class="h-2 w-full bg-slate-800 rounded-full overflow-hidden">
-                                        <div class="h-full bg-gradient-to-r from-emerald-500 to-teal-300 w-full"></div>
-                                    </div>
-                                </div>
-
-                                <!-- MP Bar -->
-                                <div>
-                                    <div class="flex justify-between mb-1">
-                                        <span class="text-cyan-400 font-bold">MP <span class="text-[10px] opacity-70 font-normal">(CREATIVITY)</span></span>
-                                        <span id="hud-mp">999 / 999</span>
-                                    </div>
-                                    <div class="h-2 w-full bg-slate-800 rounded-full overflow-hidden">
-                                        <div class="h-full bg-gradient-to-r from-cyan-500 to-blue-400 w-full"></div>
-                                    </div>
-                                </div>
-
-                                <!-- LIMIT Bar -->
-                                <div>
-                                    <div class="flex justify-between mb-1">
-                                        <span class="text-amber-400 font-bold">LIMIT <span class="text-[10px] opacity-70 font-normal">(PASSION)</span></span>
-                                        <span id="hud-limit-pct" class="text-amber-300">88%</span>
-                                    </div>
-                                    <div class="h-2 w-full bg-slate-800 rounded-full overflow-hidden">
-                                        <div class="h-full bg-gradient-to-r from-amber-500 via-pink-500 to-cyan-400 w-[88%] animate-pulse"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Equipped Weapon Materia Sockets Preview -->
-                        <div class="mt-5 pt-4 border-t border-emerald-500/20 flex items-center justify-between gap-2">
-                            <span class="text-[11px] font-mono-hud uppercase opacity-75">EQUIPPED SLOTS:</span>
-                            <div id="weapon-materia-rack" class="flex items-center"></div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- ======================================================================
-         02. ABOUT, INTERACTIVE MATERIA LOADOUT (SKILLS) & CISCO CERTIFICATIONS
-         ====================================================================== -->
-    <section id="about" class="relative z-10 py-20 border-t border-emerald-500/15">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-14">
-
-            <!-- Bio & Career Goals Row -->
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 fade-in-up">
-                <div class="lg:col-span-7 ff-panel p-7">
-                    <p class="text-xs font-mono-hud text-emerald-400 uppercase tracking-widest mb-1">
-                        // CHARACTER DOSSIER
-                    </p>
-                    <h2 class="text-3xl font-bold mb-4">About Me</h2>
-                    <p id="about-bio" class="text-base leading-relaxed opacity-90 mb-6">
-                        I'm a 4th Year BSIT student at Pamantasan Ng Lungsod Ng Valenzuela with a deep passion for game design and development. I believe in the power of games to educate, entertain, and create meaningful experiences that connect people.
-                    </p>
-                    <div class="flex flex-wrap gap-2">
-                        <span class="px-3 py-1 rounded-full text-xs font-mono-hud bg-emerald-500/15 border border-emerald-500/30 text-emerald-300">
-                            <i class="fa-solid fa-gamepad mr-1"></i> Game Design
-                        </span>
-                        <span class="px-3 py-1 rounded-full text-xs font-mono-hud bg-cyan-500/15 border border-cyan-500/30 text-cyan-300">
-                            <i class="fa-solid fa-film mr-1"></i> Film & Media
-                        </span>
-                        <span class="px-3 py-1 rounded-full text-xs font-mono-hud bg-amber-500/15 border border-amber-500/30 text-amber-300">
-                            <i class="fa-solid fa-book-open mr-1"></i> Interactive Storytelling
-                        </span>
-                        <span class="px-3 py-1 rounded-full text-xs font-mono-hud bg-purple-500/15 border border-purple-500/30 text-purple-300">
-                            <i class="fa-solid fa-network-wired mr-1"></i> Technical & Network Support
-                        </span>
-                    </div>
-                </div>
-
-                <div class="lg:col-span-5 ff-panel p-7 flex flex-col justify-between">
-                    <div>
-                        <p class="text-xs font-mono-hud text-amber-400 uppercase tracking-widest mb-1">
-                            // MAIN OBJECTIVE
-                        </p>
-                        <h3 class="text-2xl font-bold mb-3">Career Goals</h3>
-                        <p id="about-career-goals" class="text-sm leading-relaxed opacity-90">
-                            Aspiring to become an Indie Game Designer, creating meaningful, entertaining, and immersive games to contribute not just in the Technology Industry but also in the Game Industry. I also aim to expand my knowledge in Technical Support to provide comprehensive solutions and assistance in IT environments.
-                        </p>
-                    </div>
-                    <div class="mt-6 pt-4 border-t border-emerald-500/20 flex items-center justify-between text-xs font-mono-hud opacity-75">
-                        <span>INSPIRATIONS: FFVII • YAKUZA 0</span>
-                        <span class="text-emerald-400">READY FOR DEPLOYMENT</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Interactive FF7 Materia Loadout (Skills) & Cisco Certifications -->
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 fade-in-up">
-
-                <!-- Left 7 Cols: Interactive Materia Equipment System -->
-                <div class="lg:col-span-7 ff-panel p-7 space-y-6">
-                    <div class="flex flex-wrap items-center justify-between gap-4">
-                        <div>
-                            <p class="text-xs font-mono-hud text-emerald-400 uppercase tracking-widest mb-1">
-                                // INTERACTIVE FF7 MATERIA SYSTEM
-                            </p>
-                            <h3 class="text-2xl font-bold">Materia Loadout (Skills & Tech Stack)</h3>
-                            <p class="text-xs opacity-75 mt-1">
-                                Click any Materia orb below to inspect mastery details and view linked projects.
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- Recruiter & Visitor Guide: How Materia Works -->
-                    <div class="p-4 rounded-lg bg-emerald-950/40 border border-emerald-500/30 flex items-start gap-3.5">
-                        <div class="w-8 h-8 rounded-full bg-emerald-500/20 border border-emerald-400/50 flex items-center justify-center shrink-0 mt-0.5">
-                            <i class="fa-solid fa-lightbulb text-emerald-400 text-sm"></i>
-                        </div>
-                        <div class="space-y-1 text-xs">
-                            <div class="flex items-center gap-2 flex-wrap">
-                                <span class="font-mono-hud font-bold text-emerald-300 uppercase tracking-wider">HOW THE MATERIA MATRIX WORKS</span>
-                                <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] font-mono-hud font-semibold">MATERIA = SKILLS & TECH</span>
-                            </div>
-                            <p class="leading-relaxed opacity-90 text-slate-300">
-                                In Final Fantasy VII, Materia represents equipped skills. In this portfolio, each glowing orb represents one of Jehrome's core technical proficiencies.
-                                <strong>Click any orb below</strong> to inspect proficiency, abilities, and immediately view the real-world games, applications, and IT systems built with that skill.
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- Materia Type Filter Pills -->
-                    <div class="flex flex-wrap gap-2 text-xs font-mono-hud">
-                        <button type="button" data-materia-filter="all" class="px-3 py-1.5 rounded border border-emerald-400 bg-emerald-500/20 text-emerald-300 transition">
-                            All Materia
-                        </button>
-                        <button type="button" data-materia-filter="magic" class="px-3 py-1.5 rounded border border-slate-700 hover:border-emerald-400 transition flex items-center gap-1.5">
-                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span> Creative / Design
-                        </button>
-                        <button type="button" data-materia-filter="command" class="px-3 py-1.5 rounded border border-slate-700 hover:border-amber-400 transition flex items-center gap-1.5">
-                            <span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span> Code / Engine
-                        </button>
-                        <button type="button" data-materia-filter="support" class="px-3 py-1.5 rounded border border-slate-700 hover:border-cyan-400 transition flex items-center gap-1.5">
-                            <span class="w-2.5 h-2.5 rounded-full bg-cyan-400"></span> IT / Docs
-                        </button>
-                        <button type="button" data-materia-filter="independent" class="px-3 py-1.5 rounded border border-slate-700 hover:border-purple-400 transition flex items-center gap-1.5">
-                            <span class="w-2.5 h-2.5 rounded-full bg-purple-400"></span> Leadership
-                        </button>
-                    </div>
-
-                    <!-- Materia Orbs Grid -->
-                    <div id="materia-slots-container" class="flex flex-wrap gap-2.5"></div>
-
-                    <!-- Active Materia Inspector Window -->
-                    <div id="materia-inspector-box" class="p-5 rounded-lg bg-slate-950/75 border border-emerald-500/30"></div>
-                </div>
-
-                <!-- Right 5 Cols: Cisco NetAcad Certifications ("Key Items / Accredited Licenses") -->
-                <div class="lg:col-span-5 ff-panel p-7 flex flex-col justify-between">
-                    <div>
-                        <p class="text-xs font-mono-hud text-cyan-400 uppercase tracking-widest mb-1">
-                            // ACCREDITED KEY ITEMS & CREDENTIALS
-                        </p>
-                        <h3 class="text-2xl font-bold mb-2">Cisco NetAcad Certifications</h3>
-                        <p class="text-xs opacity-75 mb-5">
-                            Verified networking, infrastructure configuration, and cybersecurity credentials.
-                        </p>
-                        <ul id="certifications-list" class="space-y-3"></ul>
-                    </div>
-
-                    <div class="mt-6 p-4 rounded-lg bg-cyan-500/10 border border-cyan-500/25 flex items-center justify-between gap-3">
-                        <div class="text-xs font-mono-hud">
-                            <span class="text-cyan-300 font-bold block">VERIFIED CISCO NETACAD CREDENTIALS</span>
-                            <span class="opacity-75">Click "VERIFY" on any license above to inspect the official certificate PDF.</span>
-                        </div>
-                        <i class="fa-solid fa-circle-check text-cyan-400 text-lg shrink-0"></i>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- ======================================================================
-         03. FEATURED WORKS ("QUEST & SUBSTORY LOG" + TACTICAL ASSESS)
-         ====================================================================== -->
-    <section id="works" class="relative z-10 py-20 border-t border-emerald-500/15">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-            <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 fade-in-up">
-                <div>
-                    <p class="text-xs font-mono-hud text-emerald-400 uppercase tracking-widest mb-1">
-                        // MISSION & SUBSTORY ARCHIVE
-                    </p>
-                    <h2 class="text-3xl sm:text-4xl font-bold tracking-tight">Featured Works</h2>
-                    <p class="text-sm opacity-80 mt-1">
-                        Click <strong>"ASSESS INTEL"</strong> on any project to inspect its tactical breakdown and behind-the-scenes development story.
-                    </p>
-                </div>
-
-                <!-- Category Filter Bar -->
-                <div class="flex flex-wrap gap-2 text-xs font-mono-hud">
-                    <button type="button" data-work-filter="all" class="px-3.5 py-1.5 rounded border border-emerald-400 bg-emerald-500/20 text-emerald-300 transition">
-                        All Quests
-                    </button>
-                    <button type="button" data-work-filter="games" class="px-3.5 py-1.5 rounded border border-slate-700 hover:border-emerald-400 transition">
-                        Games & Tabletop
-                    </button>
-                    <button type="button" data-work-filter="web-it" class="px-3.5 py-1.5 rounded border border-slate-700 hover:border-emerald-400 transition">
-                        Web & Documentation
-                    </button>
-                    <button type="button" data-work-filter="completed" class="px-3.5 py-1.5 rounded border border-slate-700 hover:border-emerald-400 transition">
-                        Completed
-                    </button>
-                    <button type="button" data-work-filter="in-progress" class="px-3.5 py-1.5 rounded border border-slate-700 hover:border-amber-400 transition">
-                        In Progress
-                    </button>
-                </div>
-            </div>
-
-            <!-- Active Materia Filter Indicator -->
-            <div id="active-materia-work-banner" class="hidden mb-8 text-center"></div>
-
-            <!-- Dynamic Works Grid -->
-            <div id="works-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 fade-in-up"></div>
-
-        </div>
-    </section>
-
-    <!-- ======================================================================
-         DYNAMIC CUSTOM FLEXIBLE MODULES MOUNT CONTAINER
-         ====================================================================== -->
-    <div id="custom-modules-container" class="relative z-10"></div>
-
-    <!-- ======================================================================
-         04. CONTACT & RESUME SECTION ("PARTY RECRUITMENT & COMMS")
-         ====================================================================== -->
-    <section id="contact" class="relative z-10 py-20 border-t border-emerald-500/15">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <p class="text-xs font-mono-hud text-emerald-400 uppercase tracking-widest mb-2 fade-in-up">
-                // OPEN TRANSMISSION CHANNEL
-            </p>
-            <h2 class="text-3xl sm:text-4xl font-bold mb-4 fade-in-up">Let's Connect</h2>
-            <p class="text-base sm:text-lg opacity-85 mb-10 max-w-2xl mx-auto fade-in-up">
-                Feel free to reach out if you'd like to discuss a game project, IT support role, collaboration, or just want to talk about Final Fantasy VII and Yakuza 0. Or send a direct transmission below.
-            </p>
-
-            <!-- Highlighted Resume Dossier Button -->
-            <div class="flex justify-center mb-12 fade-in-up">
-                <a
-                    id="contact-resume-link"
-                    href="resume.pdf"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="ff-panel px-10 py-5 border-emerald-400/60 hover:border-emerald-300 shadow-[0_0_25px_rgba(0,229,176,0.25)] hover:shadow-[0_0_38px_rgba(0,229,176,0.45)] hover:-translate-y-1 transition-all duration-300 flex items-center gap-4 group"
-                >
-                    <div class="w-12 h-12 rounded-lg bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-400 text-2xl group-hover:scale-110 transition">
-                        <i class="fa-solid fa-file-pdf"></i>
-                    </div>
-                    <div class="text-left">
-                        <span class="text-[11px] font-mono-hud text-emerald-400 uppercase tracking-widest block">OFFICIAL PERSONNEL FILE</span>
-                        <span class="text-lg font-bold leading-none">View My Resume (PDF)</span>
-                    </div>
-                </a>
-            </div>
-
-            <!-- Direct Transmission Composer (Web3Forms relay — no backend, no cookies) -->
-            <div class="ff-panel p-6 sm:p-7 mb-10 text-left fade-in-up">
-                <div class="flex flex-wrap items-start justify-between gap-3 mb-5">
-                    <div>
-                        <p class="text-xs font-mono-hud text-emerald-400 uppercase tracking-widest mb-1">
-                            // DIRECT TRANSMISSION COMPOSER
-                        </p>
-                        <h3 class="text-2xl font-bold">Send a Message</h3>
-                    </div>
-                    <span class="text-[11px] font-mono-hud px-2.5 py-1 rounded border border-emerald-500/30 bg-emerald-500/10 text-emerald-300 whitespace-nowrap">
-                        <i class="fa-solid fa-clock mr-1"></i> REPLIES &lt; 24H
-                    </span>
-                </div>
-                <p class="text-sm opacity-80 mb-5">
-                    Goes straight to my inbox — no account, no cookies, no newsletter.
-                </p>
-
-                <form id="contact-form" action="https://api.web3forms.com/submit" method="POST" novalidate>
-                    <!-- Get your free access key at https://web3forms.com and paste it below.
-                         This key is designed to be public: it only routes mail to the owner's inbox. -->
-                    <input type="hidden" name="access_key" value="0f4694f6-15ee-4eb6-8c54-a734968e587f">
-                    <input type="hidden" name="subject" value="New portfolio transmission">
-                    <!-- Honeypot: bots tick this, humans never see it -->
-                    <input type="checkbox" name="botcheck" class="hidden" tabindex="-1" autocomplete="off" aria-hidden="true">
-
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                            <label for="contact-name" class="block text-xs font-mono-hud uppercase tracking-wider opacity-75 mb-1.5">
-                                Your Name <span class="text-emerald-400" aria-hidden="true">*</span>
-                            </label>
-                            <input
-                                id="contact-name"
-                                name="name"
-                                type="text"
-                                required
-                                minlength="2"
-                                autocomplete="name"
-                                class="contact-input"
-                                placeholder="Cid Highwind"
-                                aria-describedby="contact-name-error"
-                            >
-                            <p id="contact-name-error" class="hidden text-xs text-red-400 mt-1"></p>
-                        </div>
-
-                        <div>
-                            <label for="contact-email" class="block text-xs font-mono-hud uppercase tracking-wider opacity-75 mb-1.5">
-                                Return Channel (Email) <span class="text-emerald-400" aria-hidden="true">*</span>
-                            </label>
-                            <input
-                                id="contact-email"
-                                name="email"
-                                type="email"
-                                required
-                                autocomplete="email"
-                                inputmode="email"
-                                class="contact-input"
-                                placeholder="you@company.com"
-                                aria-describedby="contact-email-error"
-                            >
-                            <p id="contact-email-error" class="hidden text-xs text-red-400 mt-1"></p>
-                        </div>
-                    </div>
-
-                    <div class="mt-4">
-                        <label for="contact-topic" class="block text-xs font-mono-hud uppercase tracking-wider opacity-75 mb-1.5">
-                            Transmission Type
-                        </label>
-                        <select id="contact-topic" name="topic" class="contact-input">
-                            <option value="Job Opportunity">Job Opportunity</option>
-                            <option value="Collaboration">Collaboration</option>
-                            <option value="Project Inquiry">Project Inquiry</option>
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
-
-                    <div class="mt-4">
-                        <label for="contact-message" class="block text-xs font-mono-hud uppercase tracking-wider opacity-75 mb-1.5">
-                            Message <span class="text-emerald-400" aria-hidden="true">*</span>
-                        </label>
-                        <textarea
-                            id="contact-message"
-                            name="message"
-                            rows="5"
-                            required
-                            minlength="10"
-                            maxlength="2000"
-                            class="contact-input resize-y"
-                            placeholder="Tell me about the role, project, or idea..."
-                            aria-describedby="contact-message-error"
-                        ></textarea>
-                        <p id="contact-message-error" class="hidden text-xs text-red-400 mt-1"></p>
-                    </div>
-
-                    <div class="mt-5 flex flex-col sm:flex-row sm:items-center gap-3">
-                        <button
-                            type="submit"
-                            id="contact-submit-btn"
-                            class="ff-cursor-item w-full sm:w-auto min-h-[46px] px-7 py-3 rounded bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-mono-hud font-bold text-xs uppercase tracking-wider shadow-lg shadow-emerald-500/20 active:scale-95 transition flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
-                        >
-                            <i class="fa-solid fa-paper-plane"></i> <span>Transmit Message</span>
-                        </button>
-                        <p class="text-[11px] font-mono-hud opacity-60">
-                            Your details are only used to reply to you.
-                        </p>
-                    </div>
-
-                    <div id="contact-form-status" role="status" aria-live="polite" class="mt-3 text-xs font-mono-hud"></div>
-
-                    <noscript>
-                        <p class="mt-3 text-xs text-amber-300">
-                            This form needs JavaScript. You can email me directly at
-                            <a href="mailto:martinjehrome72@gmail.com" class="underline">martinjehrome72@gmail.com</a>.
-                        </p>
-                    </noscript>
-                </form>
-            </div>
-
-            <!-- Direct Comms Channels -->
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-5 fade-in-up">
-                <!-- Gmail -->
-                <a
-                    id="contact-email-link"
-                    href="mailto:martinjehrome72@gmail.com"
-                    class="ff-panel ff-panel-interactive p-5 flex items-center gap-3.5 text-left"
-                >
-                    <div class="w-10 h-10 rounded-lg bg-red-500/15 border border-red-500/30 flex items-center justify-center text-red-400 text-lg shrink-0">
-                        <i class="fa-solid fa-envelope"></i>
-                    </div>
-                    <div class="min-w-0">
-                        <p class="text-xs font-mono-hud opacity-65">Gmail</p>
-                        <p id="contact-email-txt" class="font-semibold text-sm truncate">martinjehrome72@gmail.com</p>
-                    </div>
-                </a>
-
-                <!-- LinkedIn -->
-                <a
-                    id="contact-linkedin-link"
-                    href="https://www.linkedin.com/in/jehrome-martin-1662a4412"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="ff-panel ff-panel-interactive p-5 flex items-center gap-3.5 text-left"
-                >
-                    <div class="w-10 h-10 rounded-lg bg-blue-500/15 border border-blue-500/30 flex items-center justify-center text-blue-400 text-lg shrink-0">
-                        <i class="fa-brands fa-linkedin"></i>
-                    </div>
-                    <div class="min-w-0">
-                        <p class="text-xs font-mono-hud opacity-65">LinkedIn</p>
-                        <p id="contact-linkedin-txt" class="font-semibold text-sm truncate">Jehrome Martin</p>
-                    </div>
-                </a>
-
-                <!-- Facebook -->
-                <a
-                    id="contact-facebook-link"
-                    href="https://www.facebook.com/Rokuuu.ro"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="ff-panel ff-panel-interactive p-5 flex items-center gap-3.5 text-left"
-                >
-                    <div class="w-10 h-10 rounded-lg bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-400 text-lg shrink-0">
-                        <i class="fa-brands fa-facebook"></i>
-                    </div>
-                    <div class="min-w-0">
-                        <p class="text-xs font-mono-hud opacity-65">Facebook</p>
-                        <p id="contact-facebook-txt" class="font-semibold text-sm truncate">Rokuuu.ro</p>
-                    </div>
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- ======================================================================
-         FOOTER
-         ====================================================================== -->
-    <footer class="relative z-10 bg-slate-950/90 border-t border-emerald-500/20 pt-8 pb-24 text-xs font-mono-hud text-slate-400">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-4">
-            <div>
-                <p>&copy; 2026 Jehrome Martin. All rights reserved.</p>
-                <p id="footer-university" class="opacity-70 mt-0.5">BSIT Student at Pamantasan Ng Lungsod Ng Valenzuela</p>
-            </div>
-            <div class="flex items-center gap-4">
-                <span
-                    id="secret-admin-trigger"
-                    class="opacity-40 select-none cursor-default"
-                    title="System Build 2026.7"
-                >
-                    SYS.BUILD // FF7-Y0
-                </span>
-            </div>
-        </div>
-    </footer>
-
-    <!-- ======================================================================
-         INTERACTIVE CHARACTER SPRITE COMPANION STAGE
-         - MAKO / 1997 Theme: Cloud Strife (Interactive Walk + Cheer/Jump)
-         - YAKUZA Theme: Kazuma Kiryu & Goro Majima (Walking Animation + Substory Chat)
-         ====================================================================== -->
-    <div id="companion-dialogue" class="companion-dialogue hidden-bubble ff-panel p-3.5 sm:p-4 shadow-2xl" role="status" aria-live="polite">
-        <div id="companion-bubble-tail" class="companion-bubble-tail" aria-hidden="true"></div>
-        <div id="companion-header" class="flex items-center justify-between gap-3 border-b border-emerald-500/25 pb-2 mb-2">
-            <span id="companion-speaker" class="text-xs font-mono-hud font-bold uppercase tracking-wider text-emerald-400">
-                CLOUD STRIFE // SOLDIER 1ST CLASS
-            </span>
-            <button type="button" id="companion-close-bubble" class="text-xs opacity-60 hover:opacity-100" aria-label="Dismiss dialogue">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-        </div>
-        <p id="companion-text" class="text-xs sm:text-sm leading-relaxed mb-3">
-            "Not interested... unless you're checking out Jehrome's Featured Works."
-        </p>
-        <!-- Normal Conversation Controls -->
-        <div id="companion-normal-controls" class="flex flex-wrap items-center gap-2 text-[11px] font-mono-hud">
-            <button type="button" id="companion-next-quote-btn" class="px-2.5 py-1 rounded bg-emerald-500/20 hover:bg-emerald-500/35 border border-emerald-400/40 text-emerald-300 transition">
-                <i class="fa-solid fa-comment-dots mr-1"></i> Talk Again
-            </button>
-            <button type="button" id="companion-patrol-toggle-btn" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 border border-slate-600 text-slate-200 transition">
-                <i class="fa-solid fa-person-walking mr-1"></i> <span id="companion-patrol-label">Pause Walk</span>
-            </button>
-            <button type="button" id="companion-start-tour-btn" class="px-2.5 py-1 rounded bg-cyan-500/15 hover:bg-cyan-500/30 border border-cyan-400/40 text-cyan-300 transition" title="Start Guided Tour">
-                <i class="fa-solid fa-compass mr-1"></i> Tour
-            </button>
-        </div>
-
-        <!-- Mission Briefing / Tour Controls -->
-        <div id="companion-tour-controls" class="hidden flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono-hud pt-2 border-t border-slate-700/60">
-            <div class="flex items-center gap-1.5">
-                <span id="tour-step-badge" class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 text-[10px] font-bold">
-                    STEP 1/5
-                </span>
-                <button type="button" id="tour-prev-btn" class="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 transition disabled:opacity-40 disabled:pointer-events-none" disabled aria-label="Previous step">
-                    <i class="fa-solid fa-chevron-left text-[9px]"></i>
-                </button>
-                <button type="button" id="tour-next-btn" class="px-3 py-1 rounded bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold transition flex items-center gap-1" aria-label="Next step">
-                    <span>Next</span> <i class="fa-solid fa-chevron-right text-[9px]"></i>
-                </button>
-            </div>
-            <button type="button" id="tour-exit-btn" class="text-[10px] opacity-70 hover:opacity-100 hover:text-red-400 transition" title="Exit Tour (Esc)">
-                Exit [Esc]
-            </button>
-        </div>
-    </div>
-
-    <div id="companion-stage" class="companion-stage" aria-label="Interactive Character Companion Stage">
-        <!-- Cloud Strife Actor (Shown in MAKO & 1997 modes) -->
-        <div id="actor-cloud" class="companion-actor group" style="left: 48px;" title="Click to interact with Cloud Strife!">
-            <span class="px-2 py-0.5 rounded bg-slate-950/90 border border-emerald-400/50 text-[10px] font-mono-hud text-emerald-300 mb-3 opacity-85 group-hover:opacity-100 transition whitespace-nowrap shadow">
-                <i class="fa-solid fa-hand-pointer mr-1 text-[9px]"></i>CLOUD
-            </span>
-            <div id="sprite-cloud-el" class="pixel-sprite sprite-cloud"></div>
-        </div>
-
-        <!-- Kazuma Kiryu Actor (Shown in YAKUZA mode) -->
-        <div id="actor-kiryu" class="companion-actor group hidden" style="left: 140px;" title="Click to talk to Kazuma Kiryu!">
-            <span class="px-2 py-0.5 rounded bg-slate-950/90 border border-red-500/60 text-[10px] font-mono-hud text-amber-300 mb-1 opacity-85 group-hover:opacity-100 transition whitespace-nowrap shadow">
-                <i class="fa-solid fa-dragon mr-1 text-red-400 text-[9px]"></i>KIRYU
-            </span>
-            <div id="sprite-kiryu-el" class="pixel-sprite sprite-kiryu"></div>
-        </div>
-
-        <!-- Goro Majima Actor (Shown in YAKUZA mode) -->
-        <div id="actor-majima" class="companion-actor group hidden" style="left: 48px;" title="Click to talk to Goro Majima!">
-            <span class="px-2 py-0.5 rounded bg-slate-950/90 border border-amber-400/60 text-[10px] font-mono-hud text-amber-300 mb-1 opacity-85 group-hover:opacity-100 transition whitespace-nowrap shadow">
-                <i class="fa-solid fa-eye-slash mr-1 text-amber-400 text-[9px]"></i>MAJIMA
-            </span>
-            <div id="sprite-majima-el" class="pixel-sprite sprite-majima"></div>
-        </div>
-    </div>
-
-    <!-- Floating Companion Dock / Minimize Control -->
-    <button
-        type="button"
-        id="companion-dock-btn"
-        class="companion-dock-btn ff-cursor-item"
-        title="Dock / Undock character companions"
-        aria-label="Toggle character companions visibility"
-    >
-        <i class="fa-solid fa-user-group text-xs text-emerald-400" id="companion-dock-icon"></i>
-        <span id="companion-dock-label" class="text-[11px] font-mono-hud font-semibold">Companions</span>
-        <span id="companion-dock-indicator" class="w-2 h-2 rounded-full bg-emerald-400"></span>
-    </button>
-
-    <!-- ======================================================================
-         MODAL 1: FF7 REMAKE "TACTICAL ASSESS" & YAKUZA 0 "SUBSTORY" DIALOG
-         Uses declarative closedby="any" per modern-web-guidance
-         ====================================================================== -->
-    <dialog id="assess-modal" class="ff-dialog" closedby="any" aria-labelledby="assessModalTitle">
-        <div id="assess-modal-content" class="ff-panel p-6 sm:p-8 bg-slate-950/95 text-slate-100 border border-emerald-400/50"></div>
-    </dialog>
-
-    <!-- ======================================================================
-         MODAL 2: NO-CODE "TACTICAL TERMINAL" MODULE EDITOR (CMS)
-         Uses declarative closedby="any" per modern-web-guidance
-         ====================================================================== -->
-    <dialog id="cms-modal" class="ff-dialog ff-dialog-wide" closedby="any" aria-labelledby="cmsModalTitle">
-        <div id="cms-modal-content" class="ff-panel p-6 sm:p-8 bg-slate-950/95 text-slate-100 border border-emerald-400/50"></div>
-    </dialog>
-
-    <!-- ======================================================================
-         MODAL 3: RETRO SFX JUKEBOX & SOUNDBOARD
-         Uses declarative closedby="any" per modern-web-guidance
-         ====================================================================== -->
-    <dialog id="soundboard-modal" class="ff-dialog ff-dialog-wide" closedby="any" aria-labelledby="soundboardModalTitle">
-        <div id="soundboard-modal-content" class="ff-panel p-6 sm:p-8 bg-slate-950/95 text-slate-100 border border-emerald-400/50 max-w-3xl w-full">
-            <!-- Header -->
-            <div class="flex items-center justify-between border-b border-emerald-500/25 pb-3 mb-5">
-                <div class="flex items-center gap-3">
-                    <span class="w-3 h-3 rounded-full bg-emerald-400 animate-pulse"></span>
-                    <h2 id="soundboardModalTitle" class="text-sm sm:text-base font-mono-hud font-bold uppercase tracking-wider text-emerald-400">
-                        RETRO SFX JUKEBOX // FF7 & YAKUZA 0 SOUNDBOARD
-                    </h2>
-                </div>
-                <button type="button" id="soundboard-close-btn" class="min-h-[38px] px-3.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 active:scale-95 text-slate-300 hover:text-white transition font-mono-hud text-xs flex items-center gap-1.5" aria-label="Close soundboard">
-                    <i class="fa-solid fa-xmark"></i> <span>CLOSE</span>
-                </button>
-            </div>
-
-            <p class="text-xs sm:text-sm text-slate-300 mb-5 leading-relaxed font-mono-hud">
-                Real-time procedural Web Audio synthesis engine (zero audio files / 0kb bandwidth). Click any sound below to sample the soundscape!
-            </p>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                <!-- Final Fantasy VII Section -->
-                <div class="p-4 rounded-xl bg-slate-900/80 border border-emerald-500/30">
-                    <div class="flex items-center justify-between mb-3 pb-2 border-b border-emerald-500/20 text-emerald-400 font-mono-hud text-xs font-bold uppercase">
-                        <span class="flex items-center gap-2"><i class="fa-solid fa-meteor"></i> Final Fantasy VII & Cloud</span>
-                        <span class="text-[10px] text-emerald-500/80">SOLDIER 1st Class</span>
-                    </div>
-                    <div class="grid grid-cols-1 gap-2">
-                        <button type="button" data-sfx-play="cursor" class="px-3 py-2 rounded bg-slate-950/80 hover:bg-emerald-500/20 border border-emerald-500/30 hover:border-emerald-400 text-xs font-mono-hud text-left flex items-center justify-between transition group">
-                            <span><i class="fa-solid fa-play text-emerald-400 mr-2 text-[10px] group-hover:scale-125 transition-transform"></i>Cursor Move</span>
-                            <span class="text-[10px] opacity-60">Iconic Blip</span>
-                        </button>
-                        <button type="button" data-sfx-play="select" class="px-3 py-2 rounded bg-slate-950/80 hover:bg-emerald-500/20 border border-emerald-500/30 hover:border-emerald-400 text-xs font-mono-hud text-left flex items-center justify-between transition group">
-                            <span><i class="fa-solid fa-play text-emerald-400 mr-2 text-[10px] group-hover:scale-125 transition-transform"></i>Menu Confirm</span>
-                            <span class="text-[10px] opacity-60">Crystal Triad</span>
-                        </button>
-                        <button type="button" data-sfx-play="cancel" class="px-3 py-2 rounded bg-slate-950/80 hover:bg-emerald-500/20 border border-emerald-500/30 hover:border-emerald-400 text-xs font-mono-hud text-left flex items-center justify-between transition group">
-                            <span><i class="fa-solid fa-play text-emerald-400 mr-2 text-[10px] group-hover:scale-125 transition-transform"></i>Cancel / Dismiss</span>
-                            <span class="text-[10px] opacity-60">Falling Chirp</span>
-                        </button>
-                        <button type="button" data-sfx-play="materia" class="px-3 py-2 rounded bg-slate-950/80 hover:bg-emerald-500/20 border border-emerald-500/30 hover:border-emerald-400 text-xs font-mono-hud text-left flex items-center justify-between transition group">
-                            <span><i class="fa-solid fa-play text-emerald-400 mr-2 text-[10px] group-hover:scale-125 transition-transform"></i>Materia Equip</span>
-                            <span class="text-[10px] opacity-60">Crystal Shimmer</span>
-                        </button>
-                        <button type="button" data-sfx-play="cloudFanfare" class="px-3 py-2 rounded bg-slate-950/80 hover:bg-emerald-500/20 border border-emerald-500/30 hover:border-emerald-400 text-xs font-mono-hud text-left flex items-center justify-between transition group">
-                            <span><i class="fa-solid fa-play text-emerald-400 mr-2 text-[10px] group-hover:scale-125 transition-transform"></i>Cloud Victory Fanfare</span>
-                            <span class="text-[10px] opacity-60">Victory Brass Motif</span>
-                        </button>
-                        <button type="button" data-sfx-play="swordSlash" class="px-3 py-2 rounded bg-slate-950/80 hover:bg-emerald-500/20 border border-emerald-500/30 hover:border-emerald-400 text-xs font-mono-hud text-left flex items-center justify-between transition group">
-                            <span><i class="fa-solid fa-play text-emerald-400 mr-2 text-[10px] group-hover:scale-125 transition-transform"></i>Buster Sword Cleave</span>
-                            <span class="text-[10px] opacity-60">Blade Whoosh</span>
-                        </button>
-                        <button type="button" data-sfx-play="limitBreak" class="px-3 py-2 rounded bg-slate-950/80 hover:bg-emerald-500/20 border border-emerald-500/30 hover:border-emerald-400 text-xs font-mono-hud text-left flex items-center justify-between transition group">
-                            <span><i class="fa-solid fa-play text-emerald-400 mr-2 text-[10px] group-hover:scale-125 transition-transform"></i>Limit Break Charge</span>
-                            <span class="text-[10px] opacity-60">Mako Surge</span>
-                        </button>
-                        <button type="button" data-sfx-play="assess" class="px-3 py-2 rounded bg-slate-950/80 hover:bg-emerald-500/20 border border-emerald-500/30 hover:border-emerald-400 text-xs font-mono-hud text-left flex items-center justify-between transition group">
-                            <span><i class="fa-solid fa-play text-emerald-400 mr-2 text-[10px] group-hover:scale-125 transition-transform"></i>Tactical Assess</span>
-                            <span class="text-[10px] opacity-60">Intel Chord</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Yakuza 0 Section -->
-                <div class="p-4 rounded-xl bg-slate-900/80 border border-red-500/30">
-                    <div class="flex items-center justify-between mb-3 pb-2 border-b border-red-500/20 text-red-400 font-mono-hud text-xs font-bold uppercase">
-                        <span class="flex items-center gap-2"><i class="fa-solid fa-dragon"></i> Yakuza 0, Kiryu & Majima</span>
-                        <span class="text-[10px] text-amber-400">Kamurocho 1988</span>
-                    </div>
-                    <div class="grid grid-cols-1 gap-2">
-                        <button type="button" data-sfx-play="substory" class="px-3 py-2 rounded bg-slate-950/80 hover:bg-red-500/20 border border-red-500/30 hover:border-red-400 text-xs font-mono-hud text-left flex items-center justify-between transition group">
-                            <span><i class="fa-solid fa-play text-red-400 mr-2 text-[10px] group-hover:scale-125 transition-transform"></i>Substory Intro</span>
-                            <span class="text-[10px] opacity-60">Dramatic Chord</span>
-                        </button>
-                        <button type="button" data-sfx-play="kiryuHeat" class="px-3 py-2 rounded bg-slate-950/80 hover:bg-red-500/20 border border-red-500/30 hover:border-red-400 text-xs font-mono-hud text-left flex items-center justify-between transition group">
-                            <span><i class="fa-solid fa-play text-red-400 mr-2 text-[10px] group-hover:scale-125 transition-transform"></i>Kiryu Dragon Punch</span>
-                            <span class="text-[10px] opacity-60">Heavy Heat Hit</span>
-                        </button>
-                        <button type="button" data-sfx-play="majimaSting" class="px-3 py-2 rounded bg-slate-950/80 hover:bg-amber-500/20 border border-amber-500/30 hover:border-amber-400 text-xs font-mono-hud text-left flex items-center justify-between transition group">
-                            <span><i class="fa-solid fa-play text-amber-400 mr-2 text-[10px] group-hover:scale-125 transition-transform"></i>Majima Whistle & Gleam</span>
-                            <span class="text-[10px] opacity-60">"Kiryu-chan!"</span>
-                        </button>
-                        <button type="button" data-sfx-play="money" class="px-3 py-2 rounded bg-slate-950/80 hover:bg-amber-500/20 border border-amber-500/30 hover:border-amber-400 text-xs font-mono-hud text-left flex items-center justify-between transition group">
-                            <span><i class="fa-solid fa-play text-amber-400 mr-2 text-[10px] group-hover:scale-125 transition-transform"></i>Cash Fountain Explosion</span>
-                            <span class="text-[10px] opacity-60">Bubble Economy</span>
-                        </button>
-                        <button type="button" data-sfx-play="stamp" class="px-3 py-2 rounded bg-slate-950/80 hover:bg-red-500/20 border border-red-500/30 hover:border-red-400 text-xs font-mono-hud text-left flex items-center justify-between transition group">
-                            <span><i class="fa-solid fa-play text-red-400 mr-2 text-[10px] group-hover:scale-125 transition-transform"></i>Chapter Title Stamp</span>
-                            <span class="text-[10px] opacity-60">Heavy Sub Thud</span>
-                        </button>
-                        <button type="button" data-sfx-play="yakuzaSelect" class="px-3 py-2 rounded bg-slate-950/80 hover:bg-red-500/20 border border-red-500/30 hover:border-red-400 text-xs font-mono-hud text-left flex items-center justify-between transition group">
-                            <span><i class="fa-solid fa-play text-red-400 mr-2 text-[10px] group-hover:scale-125 transition-transform"></i>Arcade Menu Strike</span>
-                            <span class="text-[10px] opacity-60">Snappy Click</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </dialog>
-
-    <!-- Core Portfolio Application & No-Code Editor Scripts -->
-    <script src="js/app.js"></script>
-    <script src="js/editor.js"></script>
+<body>
+<main id="home">
+<a class="skip-link" href="#works">Skip to selected work</a>
+<header class="masthead">
+<a href="#home">JEHROME MARTIN</a>
+<nav aria-label="Main navigation">
+<a href="#about">Profile</a>
+<a href="#works">Work</a>
+<a href="#contact">Contact ↗</a>
+<button type="button" class="theme-toggle" data-theme-toggle="true" aria-label="Switch between light and dark theme"><svg class="theme-light-label" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></svg><svg class="theme-dark-label" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.9 13A9 9 0 0 1 11 3.1 9 9 0 1 0 20.9 13Z"/></svg></button>
+</nav>
+</header>
+<section class="opening" aria-label="Portfolio introduction">
+<h1>PORTFOLIO</h1>
+<div class="cinema">
+<video id="hero-video" data-light-video="videos/light-mode.mp4?v=972879759009" data-dark-video="videos/dark-mode.mp4?v=17a4442ffb04" autoplay muted loop playsinline preload="auto" aria-label="Cinematic portfolio background"></video>
+<div class="cinema-caption">
+<span>DESIGNING EXPERIENCES.<br/>BUILDING CONNECTIONS.</span>
+<a href="#works">EXPLORE SELECTED WORK ↓</a>
+</div>
+</div>
+<div class="role-strip">
+<h2>GAME DESIGN / IT SYSTEMS</h2>
+<p>CREATIVE THINKING. TECHNICAL CRAFT. MEANINGFUL EXPERIENCES.</p>
+</div>
+</section>
+<section id="about" class="profile-section">
+<div class="portrait">
+<img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Profile%20Picture-CXzJFdP48c1peUFMtOS2rL481xFrEn.png" alt="Jehrome Martin" loading="lazy"/>
+<h2>JEHROME<br/>MARTIN</h2>
+</div>
+<div class="profile-copy">
+<span class="eyebrow">01 / INTRODUCTION</span>
+<h2>My Profile</h2>
+<p>I&#x27;m a 4th Year BSIT student at Pamantasan Ng Lungsod Ng Valenzuela with a deep passion for game design and development. I believe in the power of games to educate, entertain, and create meaningful experiences that connect people.</p>
+<p>Aspiring to become an Indie Game Designer, creating meaningful, entertaining, and immersive games to contribute not just in the Technology Industry but also in the Game Industry. I also aim to expand my knowledge in Technical Support to provide comprehensive solutions and assistance in IT environments.</p>
+<a class="text-link" href="resume.pdf" target="_blank" rel="noreferrer">View my resume ↗</a>
+</div>
+<div class="profile-facts">
+<div>
+<h3>Education</h3>
+<p>Pamantasan Ng Lungsod Ng Valenzuela</p>
+<p>Bachelor of Science in Information Technology</p>
+</div>
+<div>
+<h3>Skills &amp; expertise</h3>
+<ul>
+<li>Game Design</li>
+<li>Storytelling &amp; Narrative</li>
+<li>Figma &amp; UI/UX</li>
+<li>Unity Engine</li>
+<li>HTML / CSS / JavaScript</li>
+<li>Python &amp; C</li>
+<li>IT &amp; Network Support</li>
+<li>System Documentation</li>
+<li>Project Management &amp; Comms</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="works" class="work-section">
+<div class="section-heading">
+<div>
+<span class="eyebrow">02 / SELECTED PROJECTS</span>
+<h2>Ideas into<br/>experiences.</h2>
+</div>
+<p>A selection of game design, digital systems, and collaborative work.</p>
+</div>
+<div class="filters" role="group" aria-label="Filter projects">
+<button data-filter="All work" type="button" aria-pressed="true">All work</button>
+<button data-filter="Game design" type="button" aria-pressed="false">Game design</button>
+<button data-filter="IT &amp; systems" type="button" aria-pressed="false">IT &amp; systems</button>
+</div>
+<p class="result-count" aria-live="polite">5 projects</p>
+<div class="project-grid">
+<article class="project" data-category="IT &amp; systems">
+<a class="project-image" href="https://app-dev-teal.vercel.app/" target="_blank" rel="noreferrer">
+<img src="valyou.png" alt="ValYOU" loading="lazy"/>
+<span aria-hidden="true">↗</span>
+</a>
+<div class="project-title">
+<h3>ValYOU</h3>
+<span>01</span>
+</div>
+<dl>
+<div>
+<dt>Role</dt>
+<dd>Documentation Lead</dd>
+</div>
+<div>
+<dt>Focus</dt>
+<dd>WebApp / Documentation / ARTA</dd>
+</div>
+</dl>
+<p>A web application designed to automate an ARTA-compliant Customer Satisfaction Survey system. Managed the full documentation process including process flows, compliance records, and design assets using Google Docs, Excel, and Canva.</p>
+<details>
+<summary>Project details</summary>
+<p>Faced with complex Anti-Red Tape Authority (ARTA) compliance requirements for citizen feedback, led the structured documentation architecture—translating regulatory mandates into clear process flows, data schemas, and accessible UI assets.</p>
+<a class="text-link" href="https://app-dev-teal.vercel.app/" target="_blank" rel="noreferrer">Visit Web App ↗</a>
+</details>
+</article>
+<article class="project" data-category="Game design">
+<a class="project-image" href="https://bakunawa-studios.itch.io/shadow-of-the-past" target="_blank" rel="noreferrer">
+<img src="shadow.jpg" alt="Shadow of the Past" loading="lazy"/>
+<span aria-hidden="true">↗</span>
+</a>
+<div class="project-title">
+<h3>Shadow of the Past</h3>
+<span>02</span>
+</div>
+<dl>
+<div>
+<dt>Role</dt>
+<dd>Lead Game Designer</dd>
+</div>
+<div>
+<dt>Focus</dt>
+<dd>Horror Game / Narrative / Slasher Film</dd>
+</div>
+</dl>
+<p>A slasher horror game built around an atmospheric, real-camera video experience. Developed the complete spatial map layout and game environmental layers to create an immersive, tension-filled cinematic atmosphere.</p>
+<details>
+<summary>Project details</summary>
+<p>Designed the complete spatial map architecture and environmental layering for Bakunawa Studios&#x27; slasher horror title. Balanced sightlines, choke points, and found-footage camera framing to sustain dread from start to finish.</p>
+<a class="text-link" href="https://bakunawa-studios.itch.io/shadow-of-the-past" target="_blank" rel="noreferrer">View on Itch.io ↗</a>
+</details>
+</article>
+<article class="project" data-category="Game design">
+<a class="project-image" href="https://www.youtube.com/watch?v=ww4mUkbBn_o" target="_blank" rel="noreferrer">
+<img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Piso%20Politiko%20Gamecon-TC1ZV07pV1XXnAPVE4GKgJWC4JbpWg.jpg" alt="Piso Politiko" loading="lazy"/>
+<span aria-hidden="true">↗</span>
+</a>
+<div class="project-title">
+<h3>Piso Politiko</h3>
+<span>03</span>
+</div>
+<dl>
+<div>
+<dt>Role</dt>
+<dd>Lead Game Designer</dd>
+</div>
+<div>
+<dt>Focus</dt>
+<dd>Tabletop Game / Game Design / Strategy</dd>
+</div>
+</dl>
+<p>A hybrid tabletop game that explores Philippine politics through strategic gameplay, social deduction, and resource control.</p>
+<details>
+<summary>Project details</summary>
+<p>Created a satirical yet deeply strategic hybrid tabletop experience mirroring local political dynamics. Iterated extensively on economy balancing, player negotiation loops, and rulebook clarity for GameCon showcase.</p>
+<a class="text-link" href="https://www.youtube.com/watch?v=ww4mUkbBn_o" target="_blank" rel="noreferrer">Watch on YouTube ↗</a>
+</details>
+</article>
+<article class="project" data-category="Game design">
+<a class="project-image" href="https://bakunawa-studios.itch.io/buwaya-catch" target="_blank" rel="noreferrer">
+<img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Buwaya%20Catch%20Banner-E0eYYOC22VZisFWvnWG4PC7SZZ8x0h.jpg" alt="Buwaya Catch" loading="lazy"/>
+<span aria-hidden="true">↗</span>
+</a>
+<div class="project-title">
+<h3>Buwaya Catch</h3>
+<span>04</span>
+</div>
+<dl>
+<div>
+<dt>Role</dt>
+<dd>Game Designer</dd>
+</div>
+<div>
+<dt>Focus</dt>
+<dd>Video Game / Arcade / Unity</dd>
+</div>
+</dl>
+<p>A fast-paced video game spin-off of Piso Politiko featuring the iconic crocodile character in an arcade progression loop.</p>
+<details>
+<summary>Project details</summary>
+<p>Expanded the Piso Politiko universe into digital arcade territory using Unity. Tuned spawn curves, arcade scoring feedback, and hazard escalation to make every 60-second session immediately replayable.</p>
+<a class="text-link" href="https://bakunawa-studios.itch.io/buwaya-catch" target="_blank" rel="noreferrer">View on Itch.io ↗</a>
+</details>
+</article>
+<article class="project" data-category="Game design">
+<a class="project-image" href="https://readysetbag.website/landing.html" target="_blank" rel="noreferrer">
+<img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/GAME%20DOCU-p4YiK612wV33KIrxwkXfOeZeJeTee2.png" alt="Ready-Set-Bag!" loading="lazy"/>
+<span aria-hidden="true">↗</span>
+</a>
+<div class="project-title">
+<h3>Ready-Set-Bag!</h3>
+<span>05</span>
+</div>
+<dl>
+<div>
+<dt>Role</dt>
+<dd>Project Manager &amp; Game Designer</dd>
+</div>
+<div>
+<dt>Focus</dt>
+<dd>Educational / Mobile Game</dd>
+</div>
+</dl>
+<p>An educational mobile game teaching disaster preparedness and emergency go-bag readiness to Grade 6 students.</p>
+<details>
+<summary>Project details</summary>
+<p>Spearheading both project management and game design for our BSIT Capstone project. Translating disaster risk reduction curricula for Grade 6 learners into engaging mobile gameplay mechanics with measurable educational retention.</p>
+<a class="text-link" href="https://readysetbag.website/landing.html" target="_blank" rel="noreferrer">Visit Website ↗</a>
+</details>
+</article>
+</div>
+</section>
+<section class="credentials">
+<span class="eyebrow">03 / CONTINUED LEARNING</span>
+<h2>Credentials</h2>
+<div>
+<a href="https://blobs.vusercontent.net/blob/Cisco%20Networking%20Basics-ZQf1deEpcABQqvOUxFMZnA0HrzXAUZ.pdf" target="_blank" rel="noreferrer">
+<span>Cisco Networking Basics<small>Cisco Networking Academy · May 2025</small>
+</span>
+<span aria-hidden="true">↗</span>
+</a>
+<a href="https://blobs.vusercontent.net/blob/Cisco%20Network%20Addressing%20and%20Basic%20Troubleshooting-Wbo9ccMz6OPiW1zYyipg98v11Ys9dy.pdf" target="_blank" rel="noreferrer">
+<span>Network Addressing &amp; Basic Troubleshooting<small>Cisco Networking Academy · May 2025</small>
+</span>
+<span aria-hidden="true">↗</span>
+</a>
+<a href="https://blobs.vusercontent.net/blob/CIsco%20Network%20Devices%20and%20Configuration-e0ZqXuP3VZTfNSeh3QIvi4pXOcNoIS.pdf" target="_blank" rel="noreferrer">
+<span>Networking Devices &amp; Configuration<small>Cisco Networking Academy · May 2025</small>
+</span>
+<span aria-hidden="true">↗</span>
+</a>
+<a href="https://blobs.vusercontent.net/blob/Cisco%20Network%20Support%20and%20Security-4B0BB5L7E2fDJLMs0SjXdmDaf0zKlm.pdf" target="_blank" rel="noreferrer">
+<span>Network Support &amp; Security<small>Cisco Networking Academy · May 2025</small>
+</span>
+<span aria-hidden="true">↗</span>
+</a>
+</div>
+</section>
+<section class="timeline-section" aria-labelledby="timeline-heading">
+<span class="eyebrow">04 / EXPERIENCE</span>
+<h2 id="timeline-heading">The journey so far.</h2>
+<article>
+<p class="timeline-meta">2025 – Present • Pamantasan Ng Lungsod Ng Valenzuela</p>
+<div>
+<h3>Capstone Project Manager &amp; Game Designer — Ready-Set-Bag!</h3>
+<p>Leading the end-to-end development, documentation, and school testing of an educational mobile game for Grade 6 disaster preparedness.</p>
+</div>
+</article>
+<article>
+<p class="timeline-meta">May 2025 • IT Infrastructure &amp; Security</p>
+<div>
+<h3>Cisco Networking Academy — 4x Certification Completion</h3>
+<p>Completed comprehensive coursework and lab simulations across Networking Basics, Addressing &amp; Troubleshooting, Device Configuration, and Network Security.</p>
+</div>
+</article>
+<article>
+<p class="timeline-meta">2024 – 2025 • Indie Game Development</p>
+<div>
+<h3>Lead Game Designer — Bakunawa Studios Collaborations</h3>
+<p>Designed core mechanics, spatial layouts, and tabletop-to-digital systems for Shadow of the Past, Piso Politiko, and Buwaya Catch.</p>
+</div>
+</article>
+</section>
+<footer id="contact">
+<span class="eyebrow">05 / LET’S CONNECT</span>
+<h2>LET’S MAKE<br/>SOMETHING MATTER.</h2>
+<a class="email" href="mailto:martinjehrome72@gmail.com">martinjehrome72@gmail.com ↗</a>
+<form id="contact-form" class="message-form" action="https://api.web3forms.com/submit" method="POST">
+<h3>Send a Message</h3>
+<p>Have a project or opportunity in mind? Get in touch.</p>
+<input type="hidden" name="access_key" value="0f4694f6-15ee-4eb6-8c54-a734968e587f"/>
+<input type="checkbox" hidden="" tabindex="-1" aria-hidden="true" name="botcheck"/>
+<div class="message-fields">
+<label for="contact-name">Your name<input id="contact-name" required="" autocomplete="name" aria-describedby="contact-name-error" name="name"/>
+<span id="contact-name-error" class="hidden"></span>
+</label>
+<label for="contact-email">Email address<input id="contact-email" type="email" required="" autocomplete="email" aria-describedby="contact-email-error" name="email"/>
+<span id="contact-email-error" class="hidden"></span>
+</label>
+</div>
+<label for="contact-topic">Message type<select id="contact-topic" name="topic">
+<option>Job Opportunity</option>
+<option>Project Collaboration</option>
+<option>General Inquiry</option>
+</select>
+</label>
+<label for="contact-message">Your message<textarea id="contact-message" name="message" rows="6" required="" aria-describedby="contact-message-error"></textarea>
+<span id="contact-message-error" class="hidden"></span>
+</label>
+<button id="contact-submit-btn" type="submit">Send Message</button>
+<p id="contact-form-status" role="status" aria-live="polite"></p>
+</form>
+<div class="footer-bottom">
+<button type="button" id="secret-admin-trigger" class="signature">JEHROME MARTIN</button>
+<div>
+<a href="https://www.linkedin.com/in/jehrome-martin-1662a4412" target="_blank" rel="noreferrer">LinkedIn ↗</a>
+<a href="https://www.facebook.com/Rokuuu.ro" target="_blank" rel="noreferrer">Facebook ↗</a>
+<a href="#home">Back to top ↑</a>
+</div>
+</div>
+</footer>
+<dialog id="cms-modal" closedby="any" aria-label="Portfolio owner editor">
+<div id="cms-modal-content"></div>
+</dialog>
+</main>
+<script id="portfolio-defaults" type="application/json">{"profile":{"name":"Jehrome Martin","firstName":"Jehrome","lastName":"Martin","title":"Aspiring IT Specialist & Indie Game Designer","yakuzaTitle":"ARCHITECT OF INTERACTIVE WORLDS • BAKUNAWA STUDIOS COLLABORATOR","yakuzaSubtitle":"4th Year BSIT • Lead Game Designer & Cisco-Certified Network Specialist","level":4,"classTitle":"Lead Game Designer & Technical Support Specialist","hp":4200,"mp":999,"limitGauge":88,"university":"Pamantasan Ng Lungsod Ng Valenzuela","heroIntro":"A 4th Year BSIT Student at Pamantasan Ng Lungsod Ng Valenzuela, passionate about blending technical expertise with creative game design to craft meaningful digital experiences.","aboutBio":"I'm a 4th Year BSIT student at Pamantasan Ng Lungsod Ng Valenzuela with a deep passion for game design and development. I believe in the power of games to educate, entertain, and create meaningful experiences that connect people.","careerGoals":"Aspiring to become an Indie Game Designer, creating meaningful, entertaining, and immersive games to contribute not just in the Technology Industry but also in the Game Industry. I also aim to expand my knowledge in Technical Support to provide comprehensive solutions and assistance in IT environments.","avatarUrl":"https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Profile%20Picture-CXzJFdP48c1peUFMtOS2rL481xFrEn.png","resumeUrl":"resume.pdf","contact":{"email":"martinjehrome72@gmail.com","linkedinName":"Jehrome Martin","linkedinUrl":"https://www.linkedin.com/in/jehrome-martin-1662a4412","facebookName":"Rokuuu.ro","facebookUrl":"https://www.facebook.com/Rokuuu.ro"}},"materia":[{"id":"mat-gamedesign","name":"Game Design","type":"magic","categoryLabel":"Pillar I • Creative & Narrative Design","level":5,"maxLevel":5,"ap":"MASTER","description":"Core mechanics design, spatial level layout, player psychology, and rule balancing across digital and tabletop mediums.","linkedEffects":["Spatial Level Layout","Core Loop Balancing","Player Tension Pacing"]},{"id":"mat-storytelling","name":"Storytelling & Narrative","type":"magic","categoryLabel":"Pillar I • Creative & Narrative Design","level":5,"maxLevel":5,"ap":"MASTER","description":"Crafting atmospheric lore, environmental storytelling, and engaging scenarios inspired by cinema and interactive media.","linkedEffects":["Environmental Lore","Cinematic Direction","Dialogue & Pacing"]},{"id":"mat-figma","name":"Figma & UI/UX","type":"magic","categoryLabel":"Pillar I • Creative & Narrative Design","level":4,"maxLevel":5,"ap":"ADVANCED","description":"Wireframing, interactive interface prototyping, and visual asset assembly for web apps and game interfaces.","linkedEffects":["Interface Wireframing","Interactive Prototypes","Visual Systems"]},{"id":"mat-unity","name":"Unity Engine","type":"command","categoryLabel":"Pillar II • Software & Game Engineering","level":4,"maxLevel":5,"ap":"ADVANCED","description":"Building 2D/3D interactive gameplay systems, scene hierarchy management, and rapid game prototyping.","linkedEffects":["2D/3D Scene Assembly","Gameplay Scripting","Asset Integration"]},{"id":"mat-web","name":"HTML / CSS / JavaScript","type":"command","categoryLabel":"Pillar II • Software & Game Engineering","level":4,"maxLevel":5,"ap":"ADVANCED","description":"Developing responsive modern web applications, interactive UIs, and DOM-driven frontend experiences.","linkedEffects":["Responsive Layouts","Interactive DOM Logic","Modern CSS Architecture"]},{"id":"mat-python-c","name":"Python & C","type":"command","categoryLabel":"Pillar II • Software & Game Engineering","level":3,"maxLevel":5,"ap":"PROFICIENT","description":"Algorithmic problem solving, structured programming fundamentals, and automation scripting.","linkedEffects":["Algorithmic Logic","Memory & Structs","Backend Scripting"]},{"id":"mat-techsupport","name":"IT & Network Support","type":"support","categoryLabel":"Pillar III • IT Infrastructure & Systems","level":5,"maxLevel":5,"ap":"MASTER","description":"Cisco-certified network addressing, device configuration, security hardening, and end-user troubleshooting.","linkedEffects":["Network Diagnostics","Cisco IOS Config","Endpoint Security"]},{"id":"mat-docs","name":"System Documentation","type":"support","categoryLabel":"Pillar III • IT Infrastructure & Systems","level":5,"maxLevel":5,"ap":"MASTER","description":"Authoring Game Design Documents (GDD), ARTA compliance workflows, process flows, and technical specifications.","linkedEffects":["Game Design Docs (GDD)","ARTA Compliance","Process Flowcharts"]},{"id":"mat-leadership","name":"Project Management & Comms","type":"independent","categoryLabel":"Pillar IV • Leadership & Direction","level":5,"maxLevel":5,"ap":"MASTER","description":"Leading multidisciplinary student and indie teams, public speaking, stakeholder pitching, and agile task coordination.","linkedEffects":["Team Coordination","Public Speaking","Interpersonal Synergy"]}],"certifications":[{"id":"cert-1","title":"Cisco Networking Basics","issuer":"Cisco Networking Academy","date":"May 2025","url":"https://blobs.vusercontent.net/blob/Cisco%20Networking%20Basics-ZQf1deEpcABQqvOUxFMZnA0HrzXAUZ.pdf","code":"NET-101"},{"id":"cert-2","title":"Network Addressing & Basic Troubleshooting","issuer":"Cisco Networking Academy","date":"May 2025","url":"https://blobs.vusercontent.net/blob/Cisco%20Network%20Addressing%20and%20Basic%20Troubleshooting-Wbo9ccMz6OPiW1zYyipg98v11Ys9dy.pdf","code":"NET-204"},{"id":"cert-3","title":"Networking Devices & Configuration","issuer":"Cisco Networking Academy","date":"May 2025","url":"https://blobs.vusercontent.net/blob/CIsco%20Network%20Devices%20and%20Configuration-e0ZqXuP3VZTfNSeh3QIvi4pXOcNoIS.pdf","code":"NET-302"},{"id":"cert-4","title":"Network Support & Security","issuer":"Cisco Networking Academy","date":"May 2025","url":"https://blobs.vusercontent.net/blob/Cisco%20Network%20Support%20and%20Security-4B0BB5L7E2fDJLMs0SjXdmDaf0zKlm.pdf","code":"SEC-401"}],"works":[{"id":"work-valyou","title":"ValYOU","role":"Documentation Lead","status":"Completed","image":"valyou.png","url":"https://app-dev-teal.vercel.app/","actionLabel":"Visit Web App","actionIcon":"fa-solid fa-arrow-up-right-from-square","description":"A web application designed to automate an ARTA-compliant Customer Satisfaction Survey system. Managed the full documentation process including process flows, compliance records, and design assets using Google Docs, Excel, and Canva.","tags":["WebApp","Documentation","ARTA"],"linkedMateria":["mat-docs","mat-web","mat-figma","mat-leadership"],"substoryNumber":"CHRONICLE 01","substoryTitle":"Automating Citizen Feedback Workflows","substoryLore":"Faced with complex Anti-Red Tape Authority (ARTA) compliance requirements for citizen feedback, led the structured documentation architecture—translating regulatory mandates into clear process flows, data schemas, and accessible UI assets.","weakness":"Manual Survey Bottlenecks & Compliance Gaps","tacticalGauges":{"design":80,"engineering":70,"documentation":100,"leadership":90}},{"id":"work-shadow","title":"Shadow of the Past","role":"Lead Game Designer","status":"Completed","image":"shadow.jpg","url":"https://bakunawa-studios.itch.io/shadow-of-the-past","actionLabel":"View on Itch.io","actionIcon":"fa-solid fa-gamepad","description":"A slasher horror game built around an atmospheric, real-camera video experience. Developed the complete spatial map layout and game environmental layers to create an immersive, tension-filled cinematic atmosphere.","tags":["Horror Game","Narrative","Slasher Film"],"linkedMateria":["mat-gamedesign","mat-storytelling","mat-unity"],"substoryNumber":"CHRONICLE 02","substoryTitle":"Through the VHS Lens","substoryLore":"Designed the complete spatial map architecture and environmental layering for Bakunawa Studios' slasher horror title. Balanced sightlines, choke points, and found-footage camera framing to sustain dread from start to finish.","weakness":"Predictable Jump Scares (Solved via Spatial Tension)","tacticalGauges":{"design":100,"engineering":75,"documentation":85,"leadership":90}},{"id":"work-piso","title":"Piso Politiko","role":"Lead Game Designer","status":"Completed","image":"https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Piso%20Politiko%20Gamecon-TC1ZV07pV1XXnAPVE4GKgJWC4JbpWg.jpg","url":"https://www.youtube.com/watch?v=ww4mUkbBn_o","actionLabel":"Watch on YouTube","actionIcon":"fa-brands fa-youtube","description":"A hybrid tabletop game that explores Philippine politics through strategic gameplay, social deduction, and resource control.","tags":["Tabletop Game","Game Design","Strategy"],"linkedMateria":["mat-gamedesign","mat-storytelling","mat-leadership","mat-docs"],"substoryNumber":"CHRONICLE 03","substoryTitle":"The Campaign Trail Gambit","substoryLore":"Created a satirical yet deeply strategic hybrid tabletop experience mirroring local political dynamics. Iterated extensively on economy balancing, player negotiation loops, and rulebook clarity for GameCon showcase.","weakness":"Runaway Leader Problem (Solved via Dynamic Catch-up Mechanics)","tacticalGauges":{"design":100,"engineering":65,"documentation":95,"leadership":95}},{"id":"work-buwaya","title":"Buwaya Catch","role":"Game Designer","status":"Completed","image":"https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Buwaya%20Catch%20Banner-E0eYYOC22VZisFWvnWG4PC7SZZ8x0h.jpg","url":"https://bakunawa-studios.itch.io/buwaya-catch","actionLabel":"View on Itch.io","actionIcon":"fa-solid fa-gamepad","description":"A fast-paced video game spin-off of Piso Politiko featuring the iconic crocodile character in an arcade progression loop.","tags":["Video Game","Arcade","Unity"],"linkedMateria":["mat-gamedesign","mat-unity","mat-python-c"],"substoryNumber":"CHRONICLE 04","substoryTitle":"Arcade Velocity & Feedback Loops","substoryLore":"Expanded the Piso Politiko universe into digital arcade territory using Unity. Tuned spawn curves, arcade scoring feedback, and hazard escalation to make every 60-second session immediately replayable.","weakness":"Short Session Fatigue (Solved via Escalating Arcade Combos)","tacticalGauges":{"design":95,"engineering":85,"documentation":80,"leadership":80}},{"id":"work-readysetbag","title":"Ready-Set-Bag!","role":"Project Manager & Game Designer","status":"In Progress","image":"https://hebbkx1anhila5yf.public.blob.vercel-storage.com/GAME%20DOCU-p4YiK612wV33KIrxwkXfOeZeJeTee2.png","url":"https://readysetbag.website/landing.html","actionLabel":"Visit Website","actionIcon":"fa-solid fa-arrow-up-right-from-square","description":"An educational mobile game teaching disaster preparedness and emergency go-bag readiness to Grade 6 students.","tags":["Educational","Mobile Game"],"linkedMateria":["mat-gamedesign","mat-unity","mat-docs","mat-leadership"],"substoryNumber":"CHRONICLE 05","substoryTitle":"Operation Go-Bag Readiness","substoryLore":"Spearheading both project management and game design for our BSIT Capstone project. Translating disaster risk reduction curricula for Grade 6 learners into engaging mobile gameplay mechanics with measurable educational retention.","weakness":"Dry Educational Content (Solved via Gamified Time-Trial Packing)","tacticalGauges":{"design":95,"engineering":85,"documentation":90,"leadership":90}}],"customSections":[{"id":"sec-chronicle","title":"Career & Development Chronicle","subtitle":"KEY MILESTONES & ACADEMIC RECORD","layout":"timeline","items":[{"id":"item-1","title":"Capstone Project Manager & Game Designer — Ready-Set-Bag!","meta":"2025 – Present • Pamantasan Ng Lungsod Ng Valenzuela","badge":"In Progress","description":"Leading the end-to-end development, documentation, and school testing of an educational mobile game for Grade 6 disaster preparedness."},{"id":"item-2","title":"Cisco Networking Academy — 4x Certification Completion","meta":"May 2025 • IT Infrastructure & Security","badge":"Verified","description":"Completed comprehensive coursework and lab simulations across Networking Basics, Addressing & Troubleshooting, Device Configuration, and Network Security."},{"id":"item-3","title":"Lead Game Designer — Bakunawa Studios Collaborations","meta":"2024 – 2025 • Indie Game Development","badge":"Completed","description":"Designed core mechanics, spatial layouts, and tabletop-to-digital systems for Shadow of the Past, Piso Politiko, and Buwaya Catch."}]}]}</script>
+<script src="js/editorial.js" defer>
+</script>
+<script src="js/editorial-data.js" defer>
+</script>
+<script src="js/editor.js" defer>
+</script>
 </body>
 </html>
