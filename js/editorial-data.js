@@ -67,6 +67,7 @@
     document.querySelector('.credentials > div').innerHTML = data.certifications.map(cert => `<a href="${url(cert.url)}" target="_blank" rel="noreferrer"><span>${escape(cert.title)}<small>${escape(cert.issuer)} · ${escape(cert.date)}</small></span><span aria-hidden="true">&#8599;</span></a>`).join('');
     document.querySelector('.timeline-section').innerHTML = '<span class="eyebrow">04 / EXPERIENCE</span><h2 id="timeline-heading">The journey so far.</h2>' + data.customSections.flatMap(section => section.items || []).map(item => `<article><p class="timeline-meta">${escape(item.meta).replace(/\u0007/g, ' / ')}</p><div><h3>${escape(item.title)}</h3><p>${escape(item.description)}</p></div></article>`).join('');
     document.querySelector('[data-filter][aria-pressed="true"]')?.click();
+    if (typeof window.refreshPortfolioReveals === 'function') window.refreshPortfolioReveals();
   }
 
   let cachedCanTransitionDisplay;
