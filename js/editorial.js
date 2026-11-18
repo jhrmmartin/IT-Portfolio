@@ -156,15 +156,15 @@
       if (isOpen) return;
       drawer.showPopover();
       if (!window.CSS?.supports?.("scroll-initial-target", "nearest")) {
-        scroller.scrollTo({ left: scroller.offsetWidth, behavior: "instant" });
+        scroller.scrollTo({ left: 0, behavior: "instant" });
         await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
       }
-      scroller.scrollTo({ left: 0, behavior: "auto" });
+      scroller.scrollTo({ left: scroller.scrollWidth, behavior: "auto" });
     }
 
     function closeDrawer() {
       if (!drawer.matches(":popover-open")) return;
-      scroller.scrollTo({ left: scroller.offsetWidth, behavior: "auto" });
+      scroller.scrollTo({ left: 0, behavior: "auto" });
     }
 
     function onDrawerOpened() {
@@ -197,7 +197,7 @@
     if (!window.CSS?.supports?.("animation-timeline: scroll()")) {
       scroller.addEventListener("scroll", () => {
         const w = sheet.offsetWidth || 1;
-        const ratio = Math.max(0, Math.min(1, 1 - scroller.scrollLeft / w));
+        const ratio = Math.max(0, Math.min(1, scroller.scrollLeft / w));
         drawer.style.setProperty("--drawer-backdrop", ratio.toFixed(4));
       }, { passive: true });
     }
