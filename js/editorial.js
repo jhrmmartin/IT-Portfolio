@@ -140,4 +140,88 @@
 
   window.refreshPortfolioReveals = setupReveals;
   setupReveals();
+
+  // Swipeable mobile & tablet navigation drawer
+  const drawer = document.getElementById("mobile-drawer");
+  const openBtn = document.getElementById("drawer-open");
+  const closeBtn = document.getElementById("drawer-close");
+  const scroller = drawer?.querySelector(".drawer-scroller");
+  const sheet = drawer?.querySelector(".drawer-sheet");
+  const mainEl = document.querySelector("main");
+
+  if (drawer && openBtn && scroller && sheet && typeof drawer.showPopover === "function") {
+    let isOpen = false;
+
+    async function openDrawer() {
+      if (isOpen) return;
+      drawer.showPopover();
+      if (!window.CSS?.supports?.("scroll-initial-target", "nearest")) {
+        scroller.scrollTo({ left: scroller.offsetWidth, behavior: "instant" });
+        await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+      }
+      scroller.scrollTo({ left: 0, behavior: "auto" });
+    }
+
+    function closeDrawer() {
+      if (!drawer.matches(":popover-open")) return;
+      scroller.scrollTo({ left: scroller.offsetWidth, behavior: "auto" });
+    }
+
+    function onDrawerOpened() {
+      isOpen = true;
+      if (mainEl) mainEl.inert = true;
+      openBtn.setAttribute("aria-expanded", "true");
+      sheet.focus();
+    }
+
+    function onDrawerClosed() {
+      if (!drawer.matches(":popover-open") && !isOpen) return;
+      isOpen = false;
+      if (drawer.matches(":popover-open")) drawer.hidePopover();
+      if (mainEl) mainEl.inert = false;
+      openBtn.setAttribute("aria-expanded", "false");
+    }
+
+    const visibleThreshold = 1 / Math.max(window.innerWidth, 1);
+    const drawerObserver = new IntersectionObserver(
+      (entries) => {
+        const entry = entries.at(-1);
+        if (!entry) return;
+        if (entry.intersectionRatio < visibleThreshold) onDrawerClosed();
+        if (entry.intersectionRatio >= 0.99) onDrawerOpened();
+      },
+      { root: drawer, threshold: [visibleThreshold, 0.99] }
+    );
+    drawerObserver.observe(sheet);
+
+    if (!window.CSS?.supports?.("animation-timeline: scroll()")) {
+      scroller.addEventListener("scroll", () => {
+        const w = sheet.offsetWidth || 1;
+        const ratio = Math.max(0, Math.min(1, 1 - scroller.scrollLeft / w));
+        drawer.style.setProperty("--drawer-backdrop", ratio.toFixed(4));
+      }, { passive: true });
+    }
+
+    openBtn.addEventListener("click", openDrawer);
+    closeBtn?.addEventListener("click", closeDrawer);
+
+    drawer.addEventListener("click", (event) => {
+      if (event.target instanceof Element && event.target.closest("a[href^='#']")) {
+        closeDrawer();
+        return;
+      }
+      if (!sheet.contains(event.target)) closeDrawer();
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && drawer.matches(":popover-open")) {
+        closeDrawer();
+        openBtn.focus();
+      }
+    });
+
+    window.matchMedia("(min-width: 901px)").addEventListener("change", (mq) => {
+      if (mq.matches && drawer.matches(":popover-open")) onDrawerClosed();
+    });
+  }
 })();
