@@ -42,7 +42,14 @@
     };
     const escape = window.PortfolioApp.escapeHtml;
     const url = value => escape(safeUrl(value));
-    text('.masthead > a', profile.name.toUpperCase());
+    const mastheadBrand = document.querySelector('.masthead > a');
+    if (mastheadBrand) {
+      if (mastheadBrand.querySelector('.brand-logo')) {
+        mastheadBrand.setAttribute('aria-label', `ROKU — ${profile.name} Home`);
+      } else {
+        mastheadBrand.textContent = (profile.name || '').toUpperCase();
+      }
+    }
     const portraitHeading = document.querySelector('.portrait h2');
     if (portraitHeading) {
       const first = (profile.firstName || profile.name.split(' ')[0] || '').toUpperCase();
