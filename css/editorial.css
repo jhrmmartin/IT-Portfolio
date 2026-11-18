@@ -10,8 +10,18 @@ a:focus-visible,button:focus-visible,summary:focus-visible { outline:3px solid v
 section[id],footer[id] { scroll-margin-top:24px; }
 .skip-link { position:absolute; top:-100px; padding:16px; background:var(--paper); color:var(--ink); z-index:5; }
 .skip-link:focus { top:0; }
-.masthead { padding:28px 5%; display:flex; justify-content:space-between; align-items:center; font-size:12px; }
-.masthead nav { display:flex; gap:28px; }
+.masthead { padding:24px 5%; display:flex; justify-content:space-between; align-items:center; font-size:13px; }
+.masthead nav { display:flex; gap:26px; }
+.masthead nav > a { font-size:13px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; transition:color .2s ease,background-color .2s ease,border-color .2s ease; }
+.masthead nav > a:hover,
+.masthead nav > a:focus-visible { color:var(--red); }
+.masthead nav > a[href="#contact"] { padding:0 16px; border:1px solid #716e68; border-radius:999px; }
+.masthead nav > a[href="#contact"]::after { display:none; }
+.masthead nav > a[href="#contact"]:hover,
+.masthead nav > a[href="#contact"]:focus-visible { background:var(--red); border-color:var(--red); color:#080808; }
+html[data-color-theme=light] .masthead nav > a[href="#contact"] { border-color:#81796c; }
+html[data-color-theme=light] .masthead nav > a[href="#contact"]:hover,
+html[data-color-theme=light] .masthead nav > a[href="#contact"]:focus-visible { color:#fff; border-color:var(--red); }
 .brand-link { display:inline-flex; align-items:center; min-height:44px; flex-shrink:0; }
 .brand-logo { height:34px; width:auto; object-fit:contain; border-radius:4px; transition:opacity .2s ease,transform .22s ease; }
 .brand-logo-dark { display:block; }
