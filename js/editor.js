@@ -1018,7 +1018,7 @@ window.PortfolioEditor = {
           description: fd.get('description').trim(),
           tags: fd.get('tags').split(',').map(s => s.trim()).filter(Boolean),
           linkedMateria: selectedMateria,
-          substoryNumber: fd.get('substoryNumber').trim() || `CHRONICLE 0${app.data.works.length + 1}`,
+          substoryNumber: fd.get('substoryNumber').trim() || `PROJECT 0${app.data.works.length + 1}`,
           substoryTitle: fd.get('substoryTitle').trim() || fd.get('title').trim(),
           substoryLore: solutionBody,
           weakness: problemBody,

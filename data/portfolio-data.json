@@ -226,7 +226,7 @@
         "mat-figma",
         "mat-leadership"
       ],
-      "substoryNumber": "CHRONICLE 01",
+      "substoryNumber": "PROJECT 01",
       "substoryTitle": "Automating Citizen Feedback Workflows",
       "substoryLore": "Faced with complex Anti-Red Tape Authority (ARTA) compliance requirements for citizen feedback, led the structured documentation architecture—translating regulatory mandates into clear process flows, data schemas, and accessible UI assets.",
       "weakness": "Manual Survey Bottlenecks & Compliance Gaps",
@@ -341,7 +341,7 @@
         "mat-storytelling",
         "mat-unity"
       ],
-      "substoryNumber": "CHRONICLE 02",
+      "substoryNumber": "PROJECT 02",
       "substoryTitle": "Through the VHS Lens",
       "substoryLore": "Designed the complete spatial map architecture and environmental layering for Bakunawa Studios' slasher horror title. Balanced sightlines, choke points, and found-footage camera framing to sustain dread from start to finish.",
       "weakness": "Predictable Jump Scares (Solved via Spatial Tension)",
@@ -457,7 +457,7 @@
         "mat-leadership",
         "mat-docs"
       ],
-      "substoryNumber": "CHRONICLE 03",
+      "substoryNumber": "PROJECT 03",
       "substoryTitle": "The Campaign Trail Gambit",
       "substoryLore": "Created a satirical yet deeply strategic hybrid tabletop experience mirroring local political dynamics. Iterated extensively on economy balancing, player negotiation loops, and rulebook clarity for GameCon showcase.",
       "weakness": "Runaway Leader Problem (Solved via Dynamic Catch-up Mechanics)",
@@ -572,7 +572,7 @@
         "mat-unity",
         "mat-python-c"
       ],
-      "substoryNumber": "CHRONICLE 04",
+      "substoryNumber": "PROJECT 04",
       "substoryTitle": "Arcade Velocity & Feedback Loops",
       "substoryLore": "Expanded the Piso Politiko universe into digital arcade territory using Unity. Tuned spawn curves, arcade scoring feedback, and hazard escalation to make every 60-second session immediately replayable.",
       "weakness": "Short Session Fatigue (Solved via Escalating Arcade Combos)",
@@ -687,7 +687,7 @@
         "mat-docs",
         "mat-leadership"
       ],
-      "substoryNumber": "CHRONICLE 05",
+      "substoryNumber": "PROJECT 05",
       "substoryTitle": "Operation Go-Bag Readiness",
       "substoryLore": "Spearheading both project management and game design for our BSIT Capstone project. Translating disaster risk reduction curricula for Grade 6 learners into engaging mobile gameplay mechanics with measurable educational retention.",
       "weakness": "Dry Educational Content (Solved via Gamified Time-Trial Packing)",
