@@ -454,12 +454,43 @@ window.PortfolioEditor = {
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label class="block text-xs font-mono-hud mb-1 opacity-80">Case study details</label>
-                <textarea name="substoryLore" rows="2" placeholder="Describe your contribution and the result..." class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm"></textarea>
+                <label class="block text-xs font-mono-hud mb-1 opacity-80">The Solution (Case Study Overview)</label>
+                <textarea name="substoryLore" rows="2" placeholder="How your project solved the problem..." class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm"></textarea>
               </div>
               <div>
-                <label class="block text-xs font-mono-hud mb-1 opacity-80">Challenge / Problem Solved ("Weakness")</label>
-                <textarea name="weakness" rows="2" placeholder="e.g. Eliminated manual paperwork via automated workflows" class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm"></textarea>
+                <label class="block text-xs font-mono-hud mb-1 opacity-80">The Problem (Core Challenge Solved)</label>
+                <textarea name="weakness" rows="2" placeholder="What real-world problem or design gap existed..." class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm"></textarea>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <label class="block text-xs font-mono-hud mb-1 opacity-80">Category · Year Eyebrow</label>
+                <input type="text" name="csCategoryYear" placeholder="CAPSTONE PROJECT · 2025" class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm">
+              </div>
+              <div>
+                <label class="block text-xs font-mono-hud mb-1 opacity-80">Team / Studio Credits Line</label>
+                <input type="text" name="csCredits" placeholder="Lead Game Designer: Jehrome Martin • Bakunawa Studios" class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm">
+              </div>
+              <div>
+                <label class="block text-xs font-mono-hud mb-1 opacity-80">Problem Image URL (Optional)</label>
+                <input type="text" name="csProblemImage" placeholder="https://... or leave blank for diagnostic card" class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm">
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-mono-hud mb-1 opacity-80">Case Study Hero Elevator Pitch</label>
+              <input type="text" name="csPitch" placeholder="A 1-LINE UPPERCASE SUMMARY AT THE TOP OF THE CASE STUDY..." class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm">
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-mono-hud mb-1 opacity-80">Key Features (1 per line: Eyebrow | Headline | Description | ImageURL1,ImageURL2)</label>
+                <textarea name="csFeaturesText" rows="3" placeholder="01 / EXPLORATION | NAVIGATE ROOMS | Players explore rooms... | image1.png" class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm"></textarea>
+              </div>
+              <div>
+                <label class="block text-xs font-mono-hud mb-1 opacity-80">Tech Stack (1 per line: Tool Name | Specific Role)</label>
+                <textarea name="csTechText" rows="3" placeholder="Unity Engine | Core gameplay & UI systems&#10;C# | Gameplay scripting" class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm"></textarea>
               </div>
             </div>
 
@@ -923,6 +954,21 @@ window.PortfolioEditor = {
           workForm.elements.description.value = w.description || '';
           workForm.elements.substoryLore.value = w.substoryLore || '';
           workForm.elements.weakness.value = w.weakness || '';
+          const cs = w.caseStudy || {};
+          if (workForm.elements.csCategoryYear) workForm.elements.csCategoryYear.value = cs.categoryYear || '';
+          if (workForm.elements.csCredits) workForm.elements.csCredits.value = cs.credits || '';
+          if (workForm.elements.csPitch) workForm.elements.csPitch.value = cs.pitch || '';
+          if (workForm.elements.csProblemImage) workForm.elements.csProblemImage.value = cs.problem?.image || '';
+          if (workForm.elements.csFeaturesText) {
+            workForm.elements.csFeaturesText.value = (cs.features || []).map(f =>
+              [f.eyebrow || '', f.title || '', f.description || '', (f.images || []).join(',')].join(' | ')
+            ).join('\n');
+          }
+          if (workForm.elements.csTechText) {
+            workForm.elements.csTechText.value = (cs.techStack || []).map(t =>
+              `${t.name || ''} | ${t.role || ''}`
+            ).join('\n');
+          }
           workForm.querySelectorAll('input[name="linkedMateria"]').forEach(cb => {
             cb.checked = (w.linkedMateria || []).includes(cb.value);
           });
@@ -939,8 +985,29 @@ window.PortfolioEditor = {
         const fd = new FormData(workForm);
         const selectedMateria = Array.from(workForm.querySelectorAll('input[name="linkedMateria"]:checked')).map(cb => cb.value);
 
+        const existingWork = this.editingWorkIndex !== null ? app.data.works[this.editingWorkIndex] : null;
+        const prevCs = existingWork?.caseStudy || {};
+        const parsedFeatures = (fd.get('csFeaturesText') || '').split('\n').map(l => l.trim()).filter(Boolean).map((line, i) => {
+          const parts = line.split('|').map(s => s.trim());
+          const prevFeat = (prevCs.features || [])[i] || {};
+          return {
+            eyebrow: parts[0] || prevFeat.eyebrow || `0${i + 1} / KEY FEATURE`,
+            title: parts[1] || prevFeat.title || fd.get('title').trim(),
+            description: parts[2] || prevFeat.description || '',
+            images: parts[3] ? parts[3].split(',').map(s => s.trim()).filter(Boolean) : (prevFeat.images || []),
+            highlights: prevFeat.highlights || []
+          };
+        });
+        const parsedTech = (fd.get('csTechText') || '').split('\n').map(l => l.trim()).filter(Boolean).map(line => {
+          const [name, role] = line.split('|').map(s => s.trim());
+          return { name: name || '', role: role || fd.get('role').trim() };
+        }).filter(t => t.name);
+
+        const problemBody = fd.get('weakness').trim() || prevCs.problem?.body || 'Delivered full design & technical implementation.';
+        const solutionBody = fd.get('substoryLore').trim() || prevCs.solution?.body || fd.get('description').trim();
+
         const newWork = {
-          id: this.editingWorkIndex !== null ? app.data.works[this.editingWorkIndex].id : `work-${Date.now()}`,
+          id: existingWork ? existingWork.id : `work-${Date.now()}`,
           title: fd.get('title').trim(),
           role: fd.get('role').trim(),
           status: fd.get('status'),
@@ -951,11 +1018,30 @@ window.PortfolioEditor = {
           description: fd.get('description').trim(),
           tags: fd.get('tags').split(',').map(s => s.trim()).filter(Boolean),
           linkedMateria: selectedMateria,
-          substoryNumber: fd.get('substoryNumber').trim() || `SUBSTORY #0${app.data.works.length + 1}`,
+          substoryNumber: fd.get('substoryNumber').trim() || `CHRONICLE 0${app.data.works.length + 1}`,
           substoryTitle: fd.get('substoryTitle').trim() || fd.get('title').trim(),
-          substoryLore: fd.get('substoryLore').trim() || fd.get('description').trim(),
-          weakness: fd.get('weakness').trim() || 'Delivered full design & technical implementation.',
-          tacticalGauges: { design: 95, engineering: 85, documentation: 90, leadership: 90 }
+          substoryLore: solutionBody,
+          weakness: problemBody,
+          tacticalGauges: existingWork?.tacticalGauges || { design: 95, engineering: 85, documentation: 90, leadership: 90 },
+          caseStudy: {
+            pitch: (fd.get('csPitch') || '').trim() || prevCs.pitch || fd.get('description').trim().toUpperCase(),
+            categoryYear: (fd.get('csCategoryYear') || '').trim() || prevCs.categoryYear || 'PROJECT · 2025',
+            credits: (fd.get('csCredits') || '').trim() || prevCs.credits || `${fd.get('role').trim()} • Jehrome Martin`,
+            logoImage: prevCs.logoImage || '',
+            problem: {
+              heading: 'The Problem',
+              body: problemBody,
+              image: (fd.get('csProblemImage') || '').trim() || '',
+              highlights: prevCs.problem?.highlights || [problemBody]
+            },
+            solution: {
+              heading: 'The Solution',
+              body: solutionBody,
+              image: fd.get('image').trim()
+            },
+            features: parsedFeatures.length ? parsedFeatures : (prevCs.features || []),
+            techStack: parsedTech.length ? parsedTech : (prevCs.techStack || [])
+          }
         };
 
         if (this.editingWorkIndex !== null) {

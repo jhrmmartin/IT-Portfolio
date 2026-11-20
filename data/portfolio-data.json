@@ -235,6 +235,90 @@
         "engineering": 70,
         "documentation": 100,
         "leadership": 90
+      },
+      "caseStudy": {
+        "pitch": "AN ARTA-COMPLIANT CUSTOMER SATISFACTION SURVEY WEB APPLICATION BUILT TO AUTOMATE CITIZEN FEEDBACK AND SERVICE QUALITY AUDITING.",
+        "categoryYear": "CIVIC WEB SYSTEM · 2025",
+        "credits": "Documentation Lead & Visual Asset Direction by Jehrome Martin • Pamantasan Ng Lungsod Ng Valenzuela",
+        "logoImage": "",
+        "problem": {
+          "heading": "The Problem",
+          "body": "Public service offices operating under Anti-Red Tape Authority (ARTA) mandates struggle with paper-based citizen satisfaction surveys. Manual tallying delays service quality reports, introduces human transcription errors, and makes real-time compliance auditing difficult to sustain.",
+          "image": "",
+          "highlights": [
+            "Paper-based citizen feedback forms caused slow manual encoding",
+            "Strict ARTA Citizen's Charter & Service Quality Dimension (SQD) compliance requirements",
+            "Fragmented record keeping across departments without standardized process flows"
+          ]
+        },
+        "solution": {
+          "heading": "The Solution",
+          "body": "ValYOU digitizes the entire ARTA Customer Satisfaction Measurement (CSM) lifecycle into a responsive web platform. As Documentation Lead, I architected the end-to-end process flows, regulatory data schemas, compliance manuals, and UI design assets—bridging legal ARTA mandates with an intuitive digital experience.",
+          "image": "valyou.png"
+        },
+        "features": [
+          {
+            "eyebrow": "01 / ARTA COMPLIANCE ARCHITECTURE",
+            "title": "STANDARDIZED SERVICE QUALITY DIMENSIONS MAPPED DIRECTLY INTO THE WORKFLOW",
+            "description": "Translated official ARTA Citizen's Charter guidelines into structured digital survey questionnaires covering responsiveness, reliability, integrity, and outcome metrics.",
+            "images": [
+              "valyou.png"
+            ],
+            "highlights": [
+              "Full alignment with ARTA Memorandum Circular CSM standards",
+              "Clear bilingual/accessible prompt structure for citizens",
+              "Automated categorization by office, service type, and client classification"
+            ]
+          },
+          {
+            "eyebrow": "02 / PROCESS FLOW & SYSTEM SPECIFICATION",
+            "title": "END-TO-END TECHNICAL DOCUMENTATION GUIDING EVERY DEVELOPMENT SPRINT",
+            "description": "Authored comprehensive system flowcharts, data dictionaries, and compliance records in Google Docs and Excel so developers and stakeholders worked from a single source of truth.",
+            "images": [],
+            "highlights": [
+              "Data Flow Diagrams (DFD) & entity relationship mapping",
+              "Step-by-step user manuals and administrative audit guides",
+              "Structured Excel test matrices verifying form validation rules"
+            ]
+          },
+          {
+            "eyebrow": "03 / ACCESSIBLE UI & VISUAL ASSETS",
+            "title": "CLEAN, FRICTIONLESS INTERFACE ASSETS DESIGNED FOR FAST PUBLIC SUBMISSION",
+            "description": "Crafted cohesive visual banners, iconography, and form layout references using Canva and Figma to ensure visitors can complete feedback in under two minutes on any device.",
+            "images": [],
+            "highlights": [
+              "Mobile-first survey layout reducing drop-off rates",
+              "Visual rating scales for rapid citizen comprehension",
+              "Unified branding across digital forms and printable documentation"
+            ]
+          }
+        ],
+        "techStack": [
+          {
+            "name": "System Documentation",
+            "role": "Process flows, DFD diagrams & ARTA compliance specs"
+          },
+          {
+            "name": "Google Docs & Sheets",
+            "role": "Data dictionaries, test matrices & audit records"
+          },
+          {
+            "name": "Canva & Figma",
+            "role": "UI layout prototyping & visual branding assets"
+          },
+          {
+            "name": "HTML / CSS / JS",
+            "role": "Responsive frontend web application interface"
+          },
+          {
+            "name": "Vercel",
+            "role": "Cloud web deployment & live preview hosting"
+          },
+          {
+            "name": "ARTA CSM Framework",
+            "role": "Regulatory Service Quality Dimension standards"
+          }
+        ]
       }
     },
     {
@@ -266,6 +350,90 @@
         "engineering": 75,
         "documentation": 85,
         "leadership": 90
+      },
+      "caseStudy": {
+        "pitch": "AN ATMOSPHERIC FOUND-FOOTAGE SLASHER HORROR GAME ENGINEERED AROUND CLAUSTROPHOBIC SPATIAL LEVEL DESIGN AND REAL-CAMERA TENSION.",
+        "categoryYear": "INDIE HORROR GAME · 2024",
+        "credits": "Lead Game Designer & Spatial Level Architect: Jehrome Martin • Produced with Bakunawa Studios",
+        "logoImage": "",
+        "problem": {
+          "heading": "The Problem",
+          "body": "Many indie horror games rely on loud, repetitive jump scares that quickly lose their impact once players memorize the timing. Sustaining genuine psychological dread requires level geometry, sightlines, and environmental storytelling that make the player feel hunted even in silence.",
+          "image": "",
+          "highlights": [
+            "Cheap jump scares cause player desensitization after the first encounter",
+            "Open or poorly paced corridors break found-footage camera immersion",
+            "Need to guide players organically through dark environments without cluttered HUD markers"
+          ]
+        },
+        "solution": {
+          "heading": "The Solution",
+          "body": "Shadow of the Past frames its slasher narrative through a degraded real-camera VHS lens and deliberate spatial architecture. As Lead Game Designer at Bakunawa Studios, I designed the complete map layout and environmental layers—using tight choke points, occluded sightlines, and diegetic lighting cues to control player pacing and tension.",
+          "image": "shadow.jpg"
+        },
+        "features": [
+          {
+            "eyebrow": "01 / SPATIAL MAP ARCHITECTURE",
+            "title": "CHOREOGRAPHED SIGHTLINES AND CHOKE POINTS THAT SUSTAIN CONSTANT DREAD",
+            "description": "Every corridor, doorway, and blind corner was mapped to limit visibility just enough that players must commit to moving forward before knowing what waits around the bend.",
+            "images": [
+              "shadow.jpg"
+            ],
+            "highlights": [
+              "Asymmetric loop topology preventing safe backtracking",
+              "Calculated occlusion zones tailored to the VHS camera's field of view",
+              "Paced safe pockets that lower heart rate before major slasher encounters"
+            ]
+          },
+          {
+            "eyebrow": "02 / ENVIRONMENTAL STORYTELLING LAYERS",
+            "title": "DIEGETIC CLUES AND ATMOSPHERIC DETAILS REPLACE ARTIFICIAL UI WAYPOINTS",
+            "description": "Layered props, light pools, and environmental decay directly into the scene hierarchy so players piece together the backstory and navigate naturally through visual contrast.",
+            "images": [],
+            "highlights": [
+              "Zero-HUD navigation driven by light placement and ajar doors",
+              "Environmental narrative artifacts revealing the killer's history",
+              "Layered audio-visual triggers tied to spatial zones"
+            ]
+          },
+          {
+            "eyebrow": "03 / FOUND-FOOTAGE CAMERA FRAMING",
+            "title": "A REAL-CAMERA VIDEO EXPERIENCE THAT AMPLIFIES VULNERABILITY",
+            "description": "Balanced movement speed, camera shake, and flashlight falloff so exploring every room feels like stepping through a recovered slasher tape.",
+            "images": [],
+            "highlights": [
+              "Analog VHS distortion and scanline depth cues",
+              "Narrow flashlight cone forcing deliberate camera sweeping",
+              "High-contrast shadow pockets concealing environmental threats"
+            ]
+          }
+        ],
+        "techStack": [
+          {
+            "name": "Unity Engine",
+            "role": "3D scene assembly, lighting & horror atmosphere"
+          },
+          {
+            "name": "Spatial Level Design",
+            "role": "Top-down map blockouts, sightlines & choke points"
+          },
+          {
+            "name": "C# Scripting",
+            "role": "Trigger zones, interaction loops & camera behavior"
+          },
+          {
+            "name": "Environmental Art Layering",
+            "role": "Set dressing, diegetic wayfinding & lore placement"
+          },
+          {
+            "name": "Game Design Document",
+            "role": "Tension curve pacing, map blueprints & encounter rules"
+          },
+          {
+            "name": "Itch.io",
+            "role": "Indie game publishing & community release"
+          }
+        ]
       }
     },
     {
@@ -298,6 +466,90 @@
         "engineering": 65,
         "documentation": 95,
         "leadership": 95
+      },
+      "caseStudy": {
+        "pitch": "A SATIRICAL HYBRID TABLETOP STRATEGY GAME EXPLORING PHILIPPINE POLITICAL DYNAMICS THROUGH RESOURCE CONTROL AND SOCIAL DEDUCTION.",
+        "categoryYear": "HYBRID TABLETOP STRATEGY · 2024",
+        "credits": "Lead Game Designer & Systems Balancer: Jehrome Martin • Showcased at GameCon with Bakunawa Studios",
+        "logoImage": "",
+        "problem": {
+          "heading": "The Problem",
+          "body": "Designing a political strategy tabletop game carries two major traps: heavy civic themes can easily feel like a dry lecture, and competitive resource games frequently suffer from the 'runaway leader' problem where one early advantage decides the match long before the final round.",
+          "image": "",
+          "highlights": [
+            "Early resource snowballs in tabletop strategy often eliminate player tension by mid-game",
+            "Complex political mechanics risk overwhelming new players at live convention booths",
+            "Need to balance satirical social commentary with genuinely competitive replayability"
+          ]
+        },
+        "solution": {
+          "heading": "The Solution",
+          "body": "Piso Politiko turns campaign strategy, alliances, and public scrutiny into a fast-moving hybrid tabletop experience. As Lead Game Designer, I engineered the core economy, social deduction triggers, and dynamic catch-up mechanics—refining the rulebook through live GameCon playtesting so every turn sparks table negotiation.",
+          "image": "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Piso%20Politiko%20Gamecon-TC1ZV07pV1XXnAPVE4GKgJWC4JbpWg.jpg"
+        },
+        "features": [
+          {
+            "eyebrow": "01 / DYNAMIC CATCH-UP & ECONOMY BALANCING",
+            "title": "ANTI-SNOWBALL MECHANICS KEEP EVERY CANDIDATE CONTESTABLE UNTIL THE FINAL VOTE",
+            "description": "Mathematical spreadsheet modeling and iterative playtesting tuned campaign funds, influence tokens, and public exposure penalties so leading players attract higher scrutiny.",
+            "images": [
+              "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Piso%20Politiko%20Gamecon-TC1ZV07pV1XXnAPVE4GKgJWC4JbpWg.jpg"
+            ],
+            "highlights": [
+              "Balanced resource curves preventing uncounterable early leads",
+              "Risk-reward campaign actions tying high influence gains to public audit cards",
+              "Tuned 30-to-45 minute match length ideal for convention and classroom play"
+            ]
+          },
+          {
+            "eyebrow": "02 / SOCIAL DEDUCTION & COALITION LOOPS",
+            "title": "TABLE TALK, FRAGILE ALLIANCES, AND BLUFFING DRIVE THE CORE PLAYER FANTASY",
+            "description": "Designed action cards and voting phases that reward temporary coalitions while tempting players to defect at pivotal moments.",
+            "images": [],
+            "highlights": [
+              "Hidden agenda and event modifiers that shift table allegiances",
+              "Interactive negotiation phases where every player stays engaged off-turn",
+              "Satirical flavor text grounded in recognizable local campaign tropes"
+            ]
+          },
+          {
+            "eyebrow": "03 / GAMECON SHOWCASE & RULEBOOK CLARITY",
+            "title": "STREAMLINED ONBOARDING TESTED LIVE WITH CONVENTION PLAYTESTERS",
+            "description": "Authored a modular rulebook and quick-reference player aids so new groups at GameCon could learn the rules in under five minutes and jump straight into strategic play.",
+            "images": [],
+            "highlights": [
+              "1-page quick-start turn summary for rapid booth onboarding",
+              "Iterative rule revisions based on live player observation at GameCon",
+              "Expanded into the digital spin-off video game Buwaya Catch"
+            ]
+          }
+        ],
+        "techStack": [
+          {
+            "name": "Game Systems Design",
+            "role": "Core loop architecture, win conditions & turn economy"
+          },
+          {
+            "name": "Excel / Sheets Modeling",
+            "role": "Probability curves, resource economy & card balancing"
+          },
+          {
+            "name": "Rulebook & GDD Authoring",
+            "role": "Comprehensive ruleset, edge-case resolution & player aids"
+          },
+          {
+            "name": "Tabletop Prototyping",
+            "role": "Physical card, board & token iteration for live playtests"
+          },
+          {
+            "name": "Canva & Visual Layout",
+            "role": "Card iconography, readable typography & print templates"
+          },
+          {
+            "name": "Live Playtest Direction",
+            "role": "GameCon booth facilitation, telemetry & balance tuning"
+          }
+        ]
       }
     },
     {
@@ -329,6 +581,90 @@
         "engineering": 85,
         "documentation": 80,
         "leadership": 80
+      },
+      "caseStudy": {
+        "pitch": "A FAST-PACED UNITY ARCADE SPIN-OFF OF PISO POLITIKO BUILT FOR INSTANT PICK-UP-AND-PLAY VELOCITY AND HIGH-SCORE MASTERY.",
+        "categoryYear": "ARCADE VIDEO GAME · 2024",
+        "credits": "Game Designer & Progression Tuner: Jehrome Martin • Developed in Unity with Bakunawa Studios",
+        "logoImage": "",
+        "problem": {
+          "heading": "The Problem",
+          "body": "Translating a 40-minute tabletop strategy IP into a digital arcade spin-off requires distilling its satirical identity into seconds. Simple catch-and-dodge arcade games quickly suffer from session fatigue if spawn rates feel flat or if scoring lacks risk-reward depth.",
+          "image": "",
+          "highlights": [
+            "Flat difficulty curves make endless arcade loops feel repetitive within 60 seconds",
+            "Need to capture Piso Politiko's satirical tone in pure kinetic gameplay",
+            "Arcade controls must feel snappy and readable at high spawn velocities"
+          ]
+        },
+        "solution": {
+          "heading": "The Solution",
+          "body": "Buwaya Catch stars Piso Politiko's iconic crocodile mascot in a high-tempo Unity arcade loop. I designed the escalating hazard waves, combo multiplier thresholds, and tactile audio-visual feedback—turning a simple movement mechanic into a tight 'one-more-run' high-score chase.",
+          "image": "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Buwaya%20Catch%20Banner-E0eYYOC22VZisFWvnWG4PC7SZZ8x0h.jpg"
+        },
+        "features": [
+          {
+            "eyebrow": "01 / ESCALATING SPAWN & HAZARD CURVES",
+            "title": "DYNAMIC WAVE PACING RAMPS UP TENSION WITHOUT UNFAIR DIFFICULTY SPIKES",
+            "description": "Tuned object drop speeds, spawn intervals, and hazard ratios across progressive score tiers so players experience a smooth flow state from warm-up to frantic endgame.",
+            "images": [
+              "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Buwaya%20Catch%20Banner-E0eYYOC22VZisFWvnWG4PC7SZZ8x0h.jpg"
+            ],
+            "highlights": [
+              "Phased spawn tables introducing hazards at readable intervals",
+              "Guaranteed recovery windows preventing impossible unavoidable patterns",
+              " escalating speed tiers that reward predictive positioning"
+            ]
+          },
+          {
+            "eyebrow": "02 / RISK-REWARD COMBO MULTIPLIERS",
+            "title": "STREAK SCORING REWARDS AGGRESSIVE MOVEMENT AND CLEAN DODGES",
+            "description": "Added consecutive-catch combo chains and high-value bonus drops that tempt players into dangerous screen edges for leaderboard-breaking runs.",
+            "images": [],
+            "highlights": [
+              "Combo multiplier decay that encourages active chasing over passive camping",
+              "Instant visual and audio hit-markers on streak milestones",
+              " distinct silhouettes between high-value pickups and penalty hazards"
+            ]
+          },
+          {
+            "eyebrow": "03 / CROSS-MEDIUM IP EXPANSION",
+            "title": "BRIDGING TABLETOP SATIRE WITH DIGITAL ARCADE ACCESSIBILITY",
+            "description": "Extended the Piso Politiko universe onto Itch.io, giving convention visitors and online players an instant digital entry point into Bakunawa Studios' flagship IP.",
+            "images": [],
+            "highlights": [
+              " cohesive character art and thematic continuity with Piso Politiko",
+              "60-second session loop tailored for browser and desktop play",
+              "Published and playable on Bakunawa Studios' Itch.io page"
+            ]
+          }
+        ],
+        "techStack": [
+          {
+            "name": "Unity Engine",
+            "role": "2D arcade physics, collision & scene management"
+          },
+          {
+            "name": "C#",
+            "role": "Spawner state machine, score multipliers & input logic"
+          },
+          {
+            "name": "Arcade Progression Design",
+            "role": "Wave pacing, difficulty curves & combo math"
+          },
+          {
+            "name": "2D Asset Integration",
+            "role": "Character sprites, UI HUD & hit-feedback polish"
+          },
+          {
+            "name": "Playtest Telemetry",
+            "role": "Session duration tuning & hitbox fairness adjustments"
+          },
+          {
+            "name": "Itch.io",
+            "role": "Digital release & player distribution"
+          }
+        ]
       }
     },
     {
@@ -360,6 +696,90 @@
         "engineering": 85,
         "documentation": 90,
         "leadership": 90
+      },
+      "caseStudy": {
+        "pitch": "AN EDUCATIONAL MOBILE GAME TEACHING DISASTER PREPAREDNESS AND GO-BAG READINESS TO GRADE 6 STUDENTS.",
+        "categoryYear": "CAPSTONE PROJECT · 2025",
+        "credits": "Project Manager & Lead Game Designer: Jehrome Martin • BSIT Capstone at Pamantasan Ng Lungsod Ng Valenzuela",
+        "logoImage": "",
+        "problem": {
+          "heading": "The Problem",
+          "body": "Disaster Risk Reduction and Management (DRRM) lessons for elementary learners often rely on passive lectures and static checklists. Without hands-on simulation, Grade 6 students struggle to internalize which survival items belong in an emergency Go-Bag and how to react calmly under time pressure.",
+          "image": "",
+          "highlights": [
+            "Static emergency checklists fail to build procedural memory in young learners",
+            "Students frequently confuse non-essential household items with PHIVOLCS-recommended survival gear",
+            "Teachers lack an interactive tool to track individual student preparedness comprehension"
+          ]
+        },
+        "solution": {
+          "heading": "The Solution",
+          "body": "Ready-Set-Bag! transforms disaster preparedness into a structured Three-Stage Skill Acquisition mobile game (Cognitive, Associative, and Autonomous phases). Leading both Project Management and Game Design, I architected the Exploration, Packing, and Scenario Quiz gameplay loop alongside a Teacher-Facilitated Dashboard.",
+          "image": "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/GAME%20DOCU-p4YiK612wV33KIrxwkXfOeZeJeTee2.png"
+        },
+        "features": [
+          {
+            "eyebrow": "01 / EXPLORATION & HAZARD NAVIGATION PHASE",
+            "title": "PLAYERS NAVIGATE A SIMULATED HOME TO LOCATE PHIVOLCS-ALIGNED SURVIVAL GEAR",
+            "description": "Students explore familiar rooms—kitchen, bathroom, and bedroom—identifying essential survival supplies from the ground up before emergency timers expire.",
+            "images": [
+              "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/GAME%20DOCU-p4YiK612wV33KIrxwkXfOeZeJeTee2.png"
+            ],
+            "highlights": [
+              "Room-by-room spatial exploration grounded in Filipino household layouts",
+              "Three-Stage Skill Acquisition progression (Beginner guided cues → Autonomous time-pressure)",
+              "Authentic survival items aligned with PHIVOLCS and OCD preparedness standards"
+            ]
+          },
+          {
+            "eyebrow": "02 / GO-BAG PACKING & WEIGHT LIMIT MANAGEMENT",
+            "title": "STRATEGIC INVENTORY PRIORITIZATION WITH REAL-TIME RATIONALE FEEDBACK",
+            "description": "Every collected item carries weight and utility values. If a student exceeds the weight limit, movement slows and they must remove distractors—learning why each item is essential or non-essential through instant contextual feedback popups.",
+            "images": [],
+            "highlights": [
+              "Drag-and-drop Go-Bag inventory with dynamic weight-limit meter",
+              "Contextual feedback popups explaining survival rationale (e.g. why fragile glass or heavy toys are hazards)",
+              "Adaptive timers and dramatic panic cues that simulate real evacuation urgency"
+            ]
+          },
+          {
+            "eyebrow": "03 / SCENARIO QUIZ & TEACHER MANAGEMENT DASHBOARD",
+            "title": "POST-RUN SCENARIO QUIZZES SYNC DIRECTLY WITH TEACHER CLASSROOM RECORDS",
+            "description": "After packing, students answer situational earthquake and disaster response questions. Scores and packing accuracy feed directly into the Teacher Dashboard for classroom assessment.",
+            "images": [],
+            "highlights": [
+              "Situational drag-and-drop and multiple-choice DRRM scenario quizzes",
+              "Teacher-Facilitated Mode with class-code sessions and student progress tracking",
+              "Complete Game Design Document (GDD) & school playtesting validation"
+            ]
+          }
+        ],
+        "techStack": [
+          {
+            "name": "Unity Engine",
+            "role": "Mobile gameplay loop, room navigation & inventory UI"
+          },
+          {
+            "name": "C#",
+            "role": "Three-stage difficulty logic, weight math & quiz system"
+          },
+          {
+            "name": "Teacher Web Dashboard",
+            "role": "Class code sessions, student analytics & score records"
+          },
+          {
+            "name": "Game Design Document (GDD)",
+            "role": "Fitts & Posner skill acquisition model & PHIVOLCS mapping"
+          },
+          {
+            "name": "Figma & Canva",
+            "role": "UI/UX wireframing, HUD layout & educational infographics"
+          },
+          {
+            "name": "Agile Project Management",
+            "role": "Capstone team leadership, sprint tracking & school testing"
+          }
+        ]
       }
     }
   ],

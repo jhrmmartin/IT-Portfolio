@@ -681,11 +681,13 @@ html[data-color-theme=light] .theme-toggle .theme-dark-label { display:block; op
 
 @media (prefers-reduced-motion: reduce) {
   #cms-modal,
-  #cms-modal::backdrop {
+  #cms-modal::backdrop,
+  #case-study-modal,
+  #case-study-modal::backdrop {
     transform:none;
     transition-duration:.1s;
   }
-  :is(#cms-modal[open]):where(:not([data-closing])) {
+  :is(#cms-modal[open], #case-study-modal[open]):where(:not([data-closing])) {
     transform:none;
     @starting-style {
       transform:none;
@@ -860,4 +862,556 @@ html[data-color-theme=light] .drawer-footer { border-color:#c8bead; }
     0% { --drawer-backdrop:0; }
     100% { --drawer-backdrop:1; }
   }
+}
+
+/* ============================================================================
+   5-STAGE EDITORIAL PROJECT CASE STUDIES (ss1–ss11 ARCHITECTURE)
+   ============================================================================ */
+.project-actions {
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px 20px;
+  margin-top:22px;
+  padding-top:16px;
+  border-top:1px solid #34302c;
+}
+html[data-color-theme=light] .project-actions { border-color:#c1b8a7; }
+
+.case-study-btn {
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  min-height:44px;
+  padding:10px 18px;
+  border:1px solid var(--red);
+  border-radius:999px;
+  background:transparent;
+  color:var(--paper);
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  cursor:pointer;
+  transition:background-color .22s ease,color .22s ease,transform .18s ease,box-shadow .22s ease;
+}
+html[data-color-theme=light] .case-study-btn {
+  color:#191817;
+  border-color:#c82915;
+}
+.case-study-btn:hover,
+.case-study-btn:focus-visible {
+  background:var(--red);
+  color:#080808;
+  box-shadow:0 6px 20px #ed2c1328;
+  transform:translateY(-1px);
+}
+html[data-color-theme=light] .case-study-btn:hover,
+html[data-color-theme=light] .case-study-btn:focus-visible {
+  background:#c82915;
+  color:#fff;
+}
+.case-study-btn:active { transform:scale(.97); }
+
+/* Case study top-layer dialog */
+#case-study-modal {
+  width:min(1340px,95vw);
+  max-height:92dvh;
+  margin:auto;
+  padding:0;
+  border:1px solid #34302c;
+  border-radius:16px;
+  background:var(--ink);
+  color:var(--paper);
+  box-shadow:0 36px 140px #000d;
+  overflow-x:hidden;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  opacity:0;
+  transform:translateY(16px) scale(.98);
+  transition-property:opacity,transform,display,overlay;
+  transition-duration:.28s;
+  transition-timing-function:cubic-bezier(.16,1,.3,1);
+  transition-behavior:allow-discrete;
+}
+html[data-color-theme=light] #case-study-modal {
+  background:#f5f1e8;
+  color:#191817;
+  border-color:#c8bead;
+  box-shadow:0 30px 100px #19181738;
+}
+#case-study-modal::backdrop {
+  background-color:rgba(0,0,0,0);
+  backdrop-filter:blur(0px);
+  transition-property:background-color,backdrop-filter,display,overlay;
+  transition-duration:.28s;
+  transition-timing-function:cubic-bezier(.16,1,.3,1);
+  transition-behavior:allow-discrete;
+}
+:is(#case-study-modal[open]):where(:not([data-closing])) {
+  opacity:1;
+  transform:translateY(0) scale(1);
+  @starting-style {
+    opacity:0;
+    transform:translateY(16px) scale(.98);
+  }
+  &::backdrop {
+    background-color:rgba(4,4,4,.82);
+    backdrop-filter:blur(8px);
+    @starting-style {
+      background-color:rgba(0,0,0,0);
+      backdrop-filter:blur(0px);
+    }
+  }
+}
+
+/* Sticky top bar inside case study */
+.cs-topbar {
+  position:sticky;
+  top:0;
+  z-index:10;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  padding:16px 5%;
+  background:#080808eb;
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid #2b2724;
+}
+html[data-color-theme=light] .cs-topbar {
+  background:#f5f1e8eb;
+  border-color:#d5cbbd;
+}
+.cs-topbar-meta {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  font-size:11px;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  min-width:0;
+}
+.cs-topbar-index {
+  color:var(--red);
+  font-weight:700;
+}
+.cs-topbar-title {
+  font-weight:700;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.cs-topbar-actions {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-shrink:0;
+}
+.cs-ext-pill {
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  min-height:38px;
+  padding:8px 14px;
+  border:1px solid #555;
+  border-radius:999px;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  transition:border-color .2s ease,color .2s ease;
+}
+html[data-color-theme=light] .cs-ext-pill { border-color:#81796c; }
+.cs-ext-pill:hover { border-color:var(--red); color:var(--red); }
+.cs-close-btn {
+  display:inline-grid;
+  place-items:center;
+  width:42px;
+  height:42px;
+  border:1px solid #555;
+  border-radius:50%;
+  background:transparent;
+  color:inherit;
+  cursor:pointer;
+  font-size:18px;
+  line-height:1;
+  transition:border-color .2s ease,color .2s ease,transform .18s ease;
+}
+html[data-color-theme=light] .cs-close-btn { border-color:#81796c; }
+.cs-close-btn:hover { border-color:var(--red); color:var(--red); }
+.cs-close-btn:active { transform:scale(.94); }
+
+/* Stage 1: Hero Header (ss1) */
+.cs-hero {
+  text-align:center;
+  padding:72px 6% 64px;
+  border-bottom:1px solid #2b2724;
+  background:radial-gradient(circle at 50% 0%,rgba(237,44,19,.08),transparent 62%);
+}
+html[data-color-theme=light] .cs-hero {
+  border-color:#d5cbbd;
+  background:radial-gradient(circle at 50% 0%,rgba(200,41,21,.07),transparent 62%);
+}
+.cs-hero-logo {
+  max-width:240px;
+  max-height:110px;
+  width:auto;
+  height:auto;
+  margin:0 auto 24px;
+  object-fit:contain;
+}
+.cs-hero-badge {
+  display:inline-block;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--red);
+  margin-bottom:14px;
+}
+.cs-hero h2 {
+  font-size:clamp(38px,6.2vw,84px);
+  line-height:.94;
+  letter-spacing:-.06em;
+  font-weight:950;
+  text-transform:uppercase;
+  color:var(--paper);
+  margin-bottom:22px;
+}
+html[data-color-theme=light] .cs-hero h2 { color:#191817; }
+.cs-hero-pitch {
+  max-width:680px;
+  margin:0 auto 24px;
+  font-size:clamp(13px,1.35vw,16px);
+  line-height:1.65;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:#d8d2c5;
+}
+html[data-color-theme=light] .cs-hero-pitch { color:#3d3830; }
+.cs-hero-category {
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--red);
+  margin-bottom:12px;
+}
+.cs-hero-credits {
+  font-size:13px;
+  color:#a8a296;
+  max-width:640px;
+  margin:0 auto;
+  line-height:1.6;
+}
+html[data-color-theme=light] .cs-hero-credits { color:#5d564b; }
+
+/* Stage 2 & 3: The Problem & The Solution Split (ss2, ss3) */
+.cs-narrative {
+  padding:20px 6%;
+}
+.cs-split {
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,1.08fr);
+  align-items:center;
+  gap:40px 6%;
+  padding:52px 0;
+  border-bottom:1px solid #262320;
+}
+html[data-color-theme=light] .cs-split { border-color:#d8cfc2; }
+.cs-split:last-child { border-bottom:0; }
+.cs-split-reverse .cs-split-copy { order:2; }
+.cs-split-reverse .cs-split-media { order:1; }
+.cs-split-copy h3 {
+  font-size:clamp(28px,3.6vw,44px);
+  letter-spacing:-.045em;
+  margin-bottom:18px;
+  color:var(--paper);
+}
+html[data-color-theme=light] .cs-split-copy h3 { color:#191817; }
+.cs-split-copy p {
+  font-size:15px;
+  line-height:1.78;
+  color:#c9c3b6;
+  max-width:540px;
+}
+html[data-color-theme=light] .cs-split-copy p { color:#3a352e; }
+
+.cs-media-frame {
+  border-radius:12px;
+  overflow:hidden;
+  border:1px solid #34302c;
+  background:#141312;
+  box-shadow:0 16px 48px #0006;
+}
+html[data-color-theme=light] .cs-media-frame {
+  background:#fffcf5;
+  border-color:#c8bead;
+  box-shadow:0 12px 32px #19181714;
+}
+.cs-media-frame img {
+  width:100%;
+  height:auto;
+  aspect-ratio:16 / 10;
+  object-fit:cover;
+  display:block;
+}
+
+/* Architectural Diagnostic / Blueprint Card when an optional screenshot isn't set */
+.cs-blueprint-card {
+  padding:28px 26px;
+  border-radius:12px;
+  border:1px solid #34302c;
+  border-left:3px solid var(--red);
+  background:#121110;
+}
+html[data-color-theme=light] .cs-blueprint-card {
+  background:#eae4d7;
+  border-color:#c8bead;
+  border-left-color:#c82915;
+}
+.cs-blueprint-eyebrow {
+  display:block;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.15em;
+  text-transform:uppercase;
+  color:var(--red);
+  margin-bottom:10px;
+}
+.cs-blueprint-title {
+  font-size:18px;
+  font-weight:700;
+  letter-spacing:-.03em;
+  margin-bottom:16px;
+}
+.cs-blueprint-list {
+  list-style:none;
+  margin:0;
+  padding:0;
+  display:flex;
+  flex-direction:column;
+  gap:11px;
+}
+.cs-blueprint-list li {
+  display:grid;
+  grid-template-columns:24px 1fr;
+  align-items:baseline;
+  font-size:13px;
+  line-height:1.6;
+  color:#ccc5b8;
+}
+html[data-color-theme=light] .cs-blueprint-list li { color:#3a352e; }
+.cs-blueprint-list li span {
+  font-size:11px;
+  font-weight:700;
+  color:var(--red);
+}
+
+/* Stage 4: KEY FEATURES Banner & Alternating Zig-Zag Rows (ss4–ss10) */
+.cs-features-band {
+  padding:26px 6%;
+  background:var(--paper);
+  color:var(--ink);
+  text-align:center;
+  border-block:1px solid #34302c;
+}
+html[data-color-theme=light] .cs-features-band {
+  background:#e4ddd0;
+  color:#191817;
+  border-color:#c1b8a7;
+}
+.cs-features-band h3 {
+  font-size:clamp(20px,2.4vw,30px);
+  font-weight:900;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  margin:0;
+}
+
+.cs-features {
+  padding:24px 6% 40px;
+}
+.cs-feature {
+  display:grid;
+  grid-template-columns:minmax(0,1.08fr) minmax(0,1fr);
+  align-items:center;
+  gap:38px 6%;
+  padding:52px 0;
+  border-bottom:1px solid #262320;
+}
+html[data-color-theme=light] .cs-feature { border-color:#d8cfc2; }
+.cs-feature:last-child { border-bottom:0; }
+.cs-feature:nth-child(even) {
+  grid-template-columns:minmax(0,1fr) minmax(0,1.08fr);
+}
+.cs-feature:nth-child(even) .cs-feature-media { order:2; }
+.cs-feature:nth-child(even) .cs-feature-copy { order:1; }
+
+.cs-feature-media.is-stacked {
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+.cs-feature-eyebrow {
+  display:block;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--red);
+  margin-bottom:12px;
+}
+.cs-feature-copy h4 {
+  margin:0 0 16px;
+  font-size:clamp(22px,2.5vw,32px);
+  line-height:1.18;
+  letter-spacing:-.035em;
+  text-transform:uppercase;
+  color:var(--paper);
+}
+html[data-color-theme=light] .cs-feature-copy h4 { color:#191817; }
+.cs-feature-copy p {
+  font-size:14px;
+  line-height:1.75;
+  color:#c6bfb0;
+  max-width:520px;
+}
+html[data-color-theme=light] .cs-feature-copy p { color:#3d3830; }
+
+/* Stage 5: Primary CTA Pill & TECH STACK 3-Column Grid (ss11) */
+.cs-cta-row {
+  text-align:center;
+  padding:32px 6% 48px;
+}
+.cs-primary-cta {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  min-height:50px;
+  padding:14px 34px;
+  border-radius:999px;
+  background:var(--red);
+  color:#080808;
+  font-size:13px;
+  font-weight:800;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  box-shadow:0 10px 30px #ed2c1338;
+  transition:transform .2s ease,background-color .2s ease,box-shadow .2s ease;
+}
+html[data-color-theme=light] .cs-primary-cta {
+  background:#c82915;
+  color:#fff;
+}
+.cs-primary-cta:hover {
+  background:#ff5a43;
+  transform:translateY(-2px);
+  box-shadow:0 14px 36px #ed2c1350;
+}
+
+.cs-tech {
+  padding:56px 6% 64px;
+  border-top:1px solid #2b2724;
+  background:#0c0c0b;
+  text-align:center;
+}
+html[data-color-theme=light] .cs-tech {
+  background:#eae4d7;
+  border-color:#d5cbbd;
+}
+.cs-tech h3 {
+  font-size:clamp(22px,2.8vw,34px);
+  font-weight:900;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  margin-bottom:42px;
+}
+.cs-tech-grid {
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:34px 28px;
+  max-width:980px;
+  margin:0 auto;
+}
+.cs-tech-item strong {
+  display:block;
+  font-size:16px;
+  letter-spacing:-.02em;
+  margin-bottom:6px;
+  color:var(--paper);
+}
+html[data-color-theme=light] .cs-tech-item strong { color:#191817; }
+.cs-tech-item span {
+  display:block;
+  font-size:12px;
+  line-height:1.5;
+  color:#9e978a;
+}
+html[data-color-theme=light] .cs-tech-item span { color:#5d564b; }
+
+/* Footer Prev/Next Navigation inside Case Study */
+.cs-footer-nav {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  padding:22px 6%;
+  border-top:1px solid #2b2724;
+  background:var(--ink);
+}
+html[data-color-theme=light] .cs-footer-nav {
+  background:#f5f1e8;
+  border-color:#d5cbbd;
+}
+.cs-nav-btn {
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  min-height:44px;
+  padding:10px 18px;
+  border:1px solid #555;
+  border-radius:999px;
+  background:transparent;
+  color:inherit;
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  cursor:pointer;
+  transition:border-color .2s ease,color .2s ease;
+}
+html[data-color-theme=light] .cs-nav-btn { border-color:#81796c; }
+.cs-nav-btn:hover { border-color:var(--red); color:var(--red); }
+
+@media (max-width:860px) {
+  .cs-split,
+  .cs-feature,
+  .cs-feature:nth-child(even) {
+    grid-template-columns:minmax(0,1fr);
+    gap:24px;
+    padding:36px 0;
+  }
+  .cs-split-reverse .cs-split-copy,
+  .cs-feature:nth-child(even) .cs-feature-copy { order:1; }
+  .cs-split-reverse .cs-split-media,
+  .cs-feature:nth-child(even) .cs-feature-media { order:2; }
+  .cs-tech-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+}
+@media (max-width:560px) {
+  #case-study-modal {
+    width:100vw;
+    max-width:100vw;
+    height:100dvh;
+    max-height:100dvh;
+    border-radius:0;
+    border:0;
+  }
+  .cs-hero { padding:48px 5% 44px; }
+  .cs-tech-grid { grid-template-columns:minmax(0,1fr); gap:24px; }
+  .cs-footer-nav { flex-direction:column; align-items:stretch; }
+  .cs-nav-btn { justify-content:center; }
 }
