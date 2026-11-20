@@ -311,7 +311,7 @@ html[data-color-theme=light] .message-form input,html[data-color-theme=light] .m
 .cinema-caption { text-shadow:0 1px 6px #000; color:#fff8ed; }
 
 /* Landscape banner fills the viewport cleanly right before the role strip. */
-.cinema:has(>video) { width:100%; height:clamp(300px,calc(100svh - 315px),720px); aspect-ratio:auto; min-height:0; max-height:none; background:#080808; }
+.cinema:has(>video) { width:100%; height:clamp(320px,calc(100dvh - 280px),780px); aspect-ratio:auto; min-height:0; max-height:none; background:#080808; }
 
 .cinema:has(>video)>video { position:absolute; inset:0; }
 
@@ -415,7 +415,7 @@ html[data-color-theme=light] .theme-toggle .theme-dark-label { display:block; op
   .masthead { padding-block:12px; }
   section[id],footer[id] { scroll-margin-top:88px; }
   .opening h1 { font-size:clamp(48px,11.2vw,160px); line-height:.92; padding-top:0; padding-bottom:14px; }
-  .cinema:has(>video) { height:clamp(280px,calc(100svh - 236px),480px); }
+  .cinema:has(>video) { height:clamp(280px,calc(100dvh - 215px),520px); }
   .role-strip { padding:18px 5% 22px; }
   .profile-section { padding-block:56px; }
   .portrait { min-height:460px; }
