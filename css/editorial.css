@@ -37,8 +37,8 @@ html[data-color-theme=light] .brand-logo-light { display:block; }
 .role-strip h2 { font-size:clamp(22px,4.2vw,68px); letter-spacing:-.06em; line-height:1; }
 .role-strip p { font-size:10px; margin-top:10px; font-weight:700; letter-spacing:.04em; }
 .profile-section { display:grid; grid-template-columns:38% 1fr; gap:0 5%; padding:80px 5%; background:var(--paper); }
-.portrait { grid-row:span 2; position:relative; min-height:540px; }
-.portrait img { height:100%; position:absolute; object-position:center top; }
+.portrait { grid-row:span 2; position:relative; min-height:540px; overflow:hidden; }
+.portrait img { height:100%; position:absolute; object-position:center 15%; }
 .portrait h2 { position:absolute; bottom:16px; left:20px; font-size:clamp(36px,6vw,90px); line-height:.86; letter-spacing:-.065em; color:var(--red); text-shadow:0 2px 18px #0008; }
 .profile-copy { color:var(--ink); padding:0 0 40px; }
 .eyebrow { display:block; font-size:10px; letter-spacing:.13em; margin-bottom:18px; }
@@ -361,8 +361,11 @@ html[data-color-theme=light] .theme-toggle .theme-dark-label { display:block; op
 #cms-modal button { min-height:44px; white-space:normal; overflow-wrap:anywhere; }
 #cms-status-msg { overflow-wrap:anywhere; }
 @media(max-width:1000px) and (min-width:761px) {
-  .profile-facts { grid-template-columns:1fr; padding:24px 20px; }
-  .profile-section { padding-block:56px; }
+  .profile-section { padding-block:56px; row-gap:32px; }
+  .portrait { grid-row:auto; min-height:0; aspect-ratio:4 / 5; max-height:min(440px,76dvh); align-self:start; }
+  .portrait h2 { font-size:clamp(30px,5vw,56px); }
+  .profile-copy { padding-bottom:0; }
+  .profile-facts { grid-column:1 / -1; grid-template-columns:repeat(2,minmax(0,1fr)); padding:24px; }
 }
 @media(max-width:760px) {
   .masthead { padding:12px 5%; font-size:12px; }
