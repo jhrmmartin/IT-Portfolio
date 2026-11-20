@@ -254,9 +254,9 @@ window.PortfolioEditor = {
     const tabs = [
       { id: 'works', label: 'Projects', icon: 'fa-solid fa-gamepad' },
       { id: 'materia', label: 'Skills', icon: 'fa-solid fa-circle-dot' },
-      { id: 'certs', label: 'Certifications', icon: 'fa-solid fa-certificate' },
-      { id: 'custom', label: 'Custom Modules', icon: 'fa-solid fa-layer-group' },
-      { id: 'profile', label: 'Profile', icon: 'fa-solid fa-user-astronaut' },
+      { id: 'certs', label: 'Credentials', icon: 'fa-solid fa-certificate' },
+      { id: 'custom', label: 'Experience', icon: 'fa-solid fa-layer-group' },
+      { id: 'profile', label: 'Profile & Contact', icon: 'fa-solid fa-user-astronaut' },
       { id: 'security', label: 'Live Cloud Sync & Security', icon: 'fa-solid fa-cloud-arrow-up' }
     ];
 
@@ -408,11 +408,10 @@ window.PortfolioEditor = {
                 <input type="text" name="role" required placeholder="e.g. Lead Game Designer" class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm">
               </div>
               <div>
-                <label class="block text-xs font-mono-hud mb-1 opacity-80">Status</label>
-                <select name="status" class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm">
-                  <option value="Completed">Completed</option>
-                  <option value="In Progress">In Progress</option>
-                  <option value="Prototype">Prototype</option>
+                <label class="block text-xs font-mono-hud mb-1 opacity-80">Filter Category *</label>
+                <select name="filterCategory" class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm">
+                  <option value="Game design">Game design</option>
+                  <option value="IT & systems">IT &amp; systems</option>
                 </select>
               </div>
             </div>
@@ -432,18 +431,14 @@ window.PortfolioEditor = {
               </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label class="block text-xs font-mono-hud mb-1 opacity-80">Tags (comma-separated)</label>
+                <label class="block text-xs font-mono-hud mb-1 opacity-80">Focus Tags (comma-separated)</label>
                 <input type="text" name="tags" placeholder="Video Game, Unity, Narrative" class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm">
               </div>
               <div>
-                <label class="block text-xs font-mono-hud mb-1 opacity-80">Project label</label>
+                <label class="block text-xs font-mono-hud mb-1 opacity-80">Project Badge #</label>
                 <input type="text" name="substoryNumber" placeholder="PROJECT 06" class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm">
-              </div>
-              <div>
-                <label class="block text-xs font-mono-hud mb-1 opacity-80">Case study title</label>
-                <input type="text" name="substoryTitle" placeholder="The Architect's Gambit" class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm">
               </div>
             </div>
 
@@ -500,19 +495,6 @@ window.PortfolioEditor = {
               </div>
             </div>
 
-            <div>
-              <label class="block text-xs font-mono-hud mb-1.5 opacity-80">Skills used in this project</label>
-              <div class="flex flex-wrap gap-2">
-                ${data.materia.map(m => `
-                  <label class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-slate-950 border border-slate-700 text-xs cursor-pointer">
-                    <input type="checkbox" name="linkedMateria" value="${esc(m.id)}">
-                    <span class="materia-orb materia-${m.type} scale-75"></span>
-                    <span>${esc(m.name)}</span>
-                  </label>
-                `).join('')}
-              </div>
-            </div>
-
             <button type="submit" class="px-5 py-2 rounded text-xs font-mono-hud font-bold bg-emerald-500 hover:bg-emerald-400 text-slate-950 transition">
               <i class="fa-solid fa-floppy-disk mr-1"></i> ${this.editingWorkIndex !== null ? 'Update Project' : 'Add Project to Portfolio'}
             </button>
@@ -530,7 +512,7 @@ window.PortfolioEditor = {
                   <div>
                     <div class="font-bold text-sm flex items-center gap-2">
                       <span>${esc(w.title)}</span>
-                      <span class="text-[11px] font-mono-hud px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300">${esc(w.status)}</span>
+                      <span class="text-[11px] font-mono-hud px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300">${(w.linkedMateria || []).includes('mat-gamedesign') ? 'Game design' : 'IT &amp; systems'}</span>
                     </div>
                     <div class="text-xs opacity-70 font-mono-hud">${esc(w.role)} • ${esc((w.tags || []).join(', '))}</div>
                   </div>
@@ -549,64 +531,47 @@ window.PortfolioEditor = {
     }
 
     /* ------------------------------------------------------------------------
-       TAB 2: MATERIA LOADOUT (SKILLS)
+       TAB 2: SKILLS & EXPERTISE
        ------------------------------------------------------------------------ */
     if (this.activeTab === 'materia') {
       return `
         <div class="space-y-6">
           <form id="cms-materia-form" class="bg-slate-900/90 border border-emerald-500/30 rounded-lg p-5 space-y-4">
             <h4 class="text-sm font-mono-hud uppercase text-emerald-400 font-bold">
-              + Add a skill
+              + Add Skill &amp; Expertise
             </h4>
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label class="block text-xs font-mono-hud mb-1 opacity-80">Skill name *</label>
+                <label class="block text-xs font-mono-hud mb-1 opacity-80">Skill Name *</label>
                 <input type="text" name="name" required placeholder="e.g. Unreal Engine 5" class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm">
               </div>
               <div>
-                <label class="block text-xs font-mono-hud mb-1 opacity-80">Discipline *</label>
+                <label class="block text-xs font-mono-hud mb-1 opacity-80">Discipline Pillar</label>
                 <select name="type" class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm">
-                  <option value="magic">Pillar I • Creative & Narrative Design</option>
-                  <option value="command">Pillar II • Software & Game Engineering</option>
-                  <option value="support">Pillar III • IT Infrastructure & Systems</option>
-                  <option value="independent">Pillar IV • Leadership & Direction</option>
+                  <option value="magic">Creative &amp; Narrative Design</option>
+                  <option value="command">Software &amp; Game Engineering</option>
+                  <option value="support">IT Infrastructure &amp; Systems</option>
+                  <option value="independent">Leadership &amp; Direction</option>
                 </select>
-              </div>
-              <div>
-                <label class="block text-xs font-mono-hud mb-1 opacity-80">Mastery Level (1–5)</label>
-                <input type="number" name="level" min="1" max="5" value="4" class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm">
-              </div>
-              <div>
-                <label class="block text-xs font-mono-hud mb-1 opacity-80">Proficiency label</label>
-                <input type="text" name="ap" value="MASTER" placeholder="MASTER or ADVANCED" class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm">
               </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label class="block text-xs font-mono-hud mb-1 opacity-80">Description *</label>
-                <input type="text" name="description" required placeholder="How you apply this skill..." class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm">
-              </div>
-              <div>
-                <label class="block text-xs font-mono-hud mb-1 opacity-80">Equipped Abilities (comma-separated)</label>
-                <input type="text" name="linkedEffects" placeholder="Blueprints, Shader Graph, Level Blockout" class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm">
-              </div>
+            <div>
+              <label class="block text-xs font-mono-hud mb-1 opacity-80">Short Note (Optional)</label>
+              <input type="text" name="description" placeholder="How you apply this skill..." class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm">
             </div>
 
             <button type="submit" class="px-5 py-2 rounded text-xs font-mono-hud font-bold bg-emerald-500 hover:bg-emerald-400 text-slate-950 transition">
-              <i class="fa-solid fa-plus mr-1"></i> Add Skill Materia
+              <i class="fa-solid fa-plus mr-1"></i> Add Skill
             </button>
           </form>
 
           <div class="space-y-2">
             ${data.materia.map((m, idx) => `
               <div class="flex items-center justify-between gap-3 p-3 rounded-lg bg-slate-900/70 border border-slate-800">
-                <div class="flex items-center gap-3">
-                  <span class="materia-orb materia-${m.type}"></span>
-                  <div>
-                    <div class="font-bold text-sm">${esc(m.name)} <span class="text-xs font-mono-hud text-amber-400 ml-1">LV.${m.level}</span></div>
-                    <div class="text-xs opacity-70">${esc(m.description)}</div>
-                  </div>
+                <div>
+                  <div class="font-bold text-sm">${esc(m.name)}</div>
+                  <div class="text-xs opacity-70">${esc(m.description || m.categoryLabel || '')}</div>
                 </div>
                 <button type="button" data-materia-delete="${idx}" class="px-3 py-1 rounded bg-red-500/20 hover:bg-red-500/35 text-red-300 border border-red-500/30 text-xs font-mono-hud">
                   Remove
@@ -634,20 +599,20 @@ window.PortfolioEditor = {
                 <input type="text" name="title" required placeholder="e.g. CompTIA A+ / Cisco CyberOps" class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm">
               </div>
               <div>
-                <label class="block text-xs font-mono-hud mb-1 opacity-80">Code / Issuer</label>
-                <input type="text" name="code" placeholder="CISCO-501" class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm">
+                <label class="block text-xs font-mono-hud mb-1 opacity-80">Issuing Organization *</label>
+                <input type="text" name="issuer" required placeholder="e.g. Cisco Networking Academy / University of Makati" class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm">
               </div>
               <div>
                 <label class="block text-xs font-mono-hud mb-1 opacity-80">Date Earned *</label>
-                <input type="text" name="date" required placeholder="June 2026" class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm">
+                <input type="text" name="date" required placeholder="November 2026" class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm">
               </div>
             </div>
             <div>
               <label class="block text-xs font-mono-hud mb-1 opacity-80">Certificate PDF / Verification Link *</label>
-              <input type="text" name="url" required placeholder="https://..." class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm">
+              <input type="text" name="url" required placeholder="UMAK.pdf or https://..." class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm">
             </div>
             <button type="submit" class="px-5 py-2 rounded text-xs font-mono-hud font-bold bg-emerald-500 hover:bg-emerald-400 text-slate-950 transition">
-              <i class="fa-solid fa-plus mr-1"></i> Add Certification
+              <i class="fa-solid fa-plus mr-1"></i> Add Credential
             </button>
           </form>
 
@@ -656,7 +621,7 @@ window.PortfolioEditor = {
               <div class="flex items-center justify-between gap-3 p-3 rounded-lg bg-slate-900/70 border border-slate-800">
                 <div>
                   <div class="font-bold text-sm">${esc(c.title)}</div>
-                  <div class="text-xs font-mono-hud opacity-70">${esc(c.code || 'CERT')} • ${esc(c.date)}</div>
+                  <div class="text-xs font-mono-hud opacity-70">${esc(c.issuer || 'Certified Credential')} · ${esc(c.date)}</div>
                 </div>
                 <button type="button" data-cert-delete="${idx}" class="px-3 py-1 rounded bg-red-500/20 hover:bg-red-500/35 text-red-300 border border-red-500/30 text-xs font-mono-hud">
                   Delete
@@ -747,68 +712,60 @@ window.PortfolioEditor = {
     }
 
     /* ------------------------------------------------------------------------
-       TAB 5: PROFILE & HUD STATS
+       TAB 5: PROFILE & CONTACT LINKS
        ------------------------------------------------------------------------ */
     if (this.activeTab === 'profile') {
       const p = data.profile;
       return `
         <form id="cms-profile-form" class="bg-slate-900/90 border border-emerald-500/30 rounded-lg p-5 space-y-4">
           <h4 class="text-sm font-mono-hud uppercase text-emerald-400 font-bold">
-            Edit Profile
+            Edit Profile &amp; Contact Links
           </h4>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label class="block text-xs font-mono-hud mb-1 opacity-80">Portrait image URL</label>
-              <input name="avatarUrl" value="${esc(p.avatarUrl || '')}" type="text">
-            </div>
-            <div>
-              <label class="block text-xs font-mono-hud mb-1 opacity-80">Resume URL</label>
-              <input name="resumeUrl" value="${esc(p.resumeUrl || '')}" type="text">
+              <label class="block text-xs font-mono-hud mb-1 opacity-80">Full Name *</label>
+              <input type="text" name="name" required value="${esc(p.name)}" class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm">
             </div>
             <div>
               <label class="block text-xs font-mono-hud mb-1 opacity-80">University</label>
-              <input name="university" value="${esc(p.university || '')}" type="text">
-            </div>
-          </div>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-              <label class="block text-xs font-mono-hud mb-1 opacity-80">Full Name</label>
-              <input type="text" name="name" value="${esc(p.name)}" class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm">
+              <input type="text" name="university" value="${esc(p.university || '')}" class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm">
             </div>
             <div>
-              <label class="block text-xs font-mono-hud mb-1 opacity-80">Role Title</label>
-              <input type="text" name="classTitle" value="${esc(p.classTitle)}" class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm">
-            </div>
-            <div>
-              <label class="block text-xs font-mono-hud mb-1 opacity-80">Level / Year (e.g. 4)</label>
-              <input type="number" name="level" value="${esc(p.level)}" class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm">
+              <label class="block text-xs font-mono-hud mb-1 opacity-80">Email Address *</label>
+              <input type="email" name="email" required value="${esc(p.contact?.email || '')}" class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm">
             </div>
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label class="block text-xs font-mono-hud mb-1 opacity-80">Professional Subtitle</label>
-              <input type="text" name="yakuzaTitle" value="${esc(p.yakuzaTitle)}" class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm">
+              <label class="block text-xs font-mono-hud mb-1 opacity-80">Portrait Image URL</label>
+              <input type="text" name="avatarUrl" value="${esc(p.avatarUrl || '')}" class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm">
             </div>
             <div>
-              <label class="block text-xs font-mono-hud mb-1 opacity-80">Email Address</label>
-              <input type="email" name="email" value="${esc(p.contact?.email || '')}" class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm">
+              <label class="block text-xs font-mono-hud mb-1 opacity-80">Resume PDF Path or URL</label>
+              <input type="text" name="resumeUrl" value="${esc(p.resumeUrl || '')}" class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm">
             </div>
           </div>
 
-          <div>
-            <label class="block text-xs font-mono-hud mb-1 opacity-80">Hero Intro Paragraph</label>
-            <textarea name="heroIntro" rows="2" class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm">${esc(p.heroIntro)}</textarea>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-mono-hud mb-1 opacity-80">LinkedIn URL</label>
+              <input type="text" name="linkedinUrl" value="${esc(p.contact?.linkedinUrl || '')}" class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm">
+            </div>
+            <div>
+              <label class="block text-xs font-mono-hud mb-1 opacity-80">Facebook URL</label>
+              <input type="text" name="facebookUrl" value="${esc(p.contact?.facebookUrl || '')}" class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm">
+            </div>
           </div>
 
           <div>
             <label class="block text-xs font-mono-hud mb-1 opacity-80">About Me Bio</label>
-            <textarea name="aboutBio" rows="2" class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm">${esc(p.aboutBio)}</textarea>
+            <textarea name="aboutBio" rows="3" class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm">${esc(p.aboutBio)}</textarea>
           </div>
 
           <div>
             <label class="block text-xs font-mono-hud mb-1 opacity-80">Career Goals</label>
-            <textarea name="careerGoals" rows="2" class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm">${esc(p.careerGoals)}</textarea>
+            <textarea name="careerGoals" rows="3" class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm">${esc(p.careerGoals)}</textarea>
           </div>
 
           <button type="submit" class="px-5 py-2 rounded text-xs font-mono-hud font-bold bg-emerald-500 hover:bg-emerald-400 text-slate-950 transition">
@@ -961,13 +918,14 @@ window.PortfolioEditor = {
         if (w) {
           workForm.elements.title.value = w.title || '';
           workForm.elements.role.value = w.role || '';
-          workForm.elements.status.value = w.status || 'Completed';
+          if (workForm.elements.filterCategory) {
+            workForm.elements.filterCategory.value = (w.linkedMateria || []).includes('mat-gamedesign') ? 'Game design' : 'IT & systems';
+          }
           workForm.elements.image.value = w.image || '';
           workForm.elements.url.value = w.url || '';
           workForm.elements.actionLabel.value = w.actionLabel || 'Visit Website';
           workForm.elements.tags.value = (w.tags || []).join(', ');
           workForm.elements.substoryNumber.value = w.substoryNumber || '';
-          workForm.elements.substoryTitle.value = w.substoryTitle || '';
           workForm.elements.description.value = w.description || '';
           workForm.elements.substoryLore.value = w.substoryLore || '';
           workForm.elements.weakness.value = w.weakness || '';
@@ -987,9 +945,6 @@ window.PortfolioEditor = {
               `${t.name || ''} | ${t.role || ''}`
             ).join('\n');
           }
-          workForm.querySelectorAll('input[name="linkedMateria"]').forEach(cb => {
-            cb.checked = (w.linkedMateria || []).includes(cb.value);
-          });
         }
       }
 
@@ -1001,9 +956,12 @@ window.PortfolioEditor = {
       workForm.addEventListener('submit', (e) => {
         e.preventDefault();
         const fd = new FormData(workForm);
-        const selectedMateria = Array.from(workForm.querySelectorAll('input[name="linkedMateria"]:checked')).map(cb => cb.value);
-
+        const filterCategory = fd.get('filterCategory') || 'Game design';
         const existingWork = this.editingWorkIndex !== null ? app.data.works[this.editingWorkIndex] : null;
+        const prevLinked = Array.isArray(existingWork?.linkedMateria) ? existingWork.linkedMateria : [];
+        const selectedMateria = filterCategory === 'Game design'
+          ? Array.from(new Set(['mat-gamedesign', ...prevLinked]))
+          : prevLinked.filter(id => id !== 'mat-gamedesign');
         const prevCs = existingWork?.caseStudy || {};
         const parsedFeatures = (fd.get('csFeaturesText') || '').split('\n').map(l => l.trim()).filter(Boolean).map((line, i) => {
           const parts = line.split('|').map(s => s.trim());
@@ -1028,7 +986,7 @@ window.PortfolioEditor = {
           id: existingWork ? existingWork.id : `work-${Date.now()}`,
           title: fd.get('title').trim(),
           role: fd.get('role').trim(),
-          status: fd.get('status'),
+          status: existingWork?.status || 'Completed',
           image: fd.get('image').trim(),
           url: fd.get('url').trim(),
           actionLabel: fd.get('actionLabel').trim() || 'Open Project',
@@ -1037,7 +995,7 @@ window.PortfolioEditor = {
           tags: fd.get('tags').split(',').map(s => s.trim()).filter(Boolean),
           linkedMateria: selectedMateria,
           substoryNumber: fd.get('substoryNumber').trim() || `PROJECT 0${app.data.works.length + 1}`,
-          substoryTitle: fd.get('substoryTitle').trim() || fd.get('title').trim(),
+          substoryTitle: existingWork?.substoryTitle || fd.get('title').trim(),
           substoryLore: solutionBody,
           weakness: problemBody,
           tacticalGauges: existingWork?.tacticalGauges || { design: 95, engineering: 85, documentation: 90, leadership: 90 },
@@ -1105,7 +1063,7 @@ window.PortfolioEditor = {
       });
     });
 
-    /* --- Materia Form Events --- */
+    /* --- Skills Form Events --- */
     const matForm = document.getElementById('cms-materia-form');
     if (matForm) {
       matForm.addEventListener('submit', (e) => {
@@ -1113,25 +1071,25 @@ window.PortfolioEditor = {
         const fd = new FormData(matForm);
         const type = fd.get('type');
         const labels = {
-          magic: 'Magic Materia • Creative & Design',
-          command: 'Command Materia • Engineering & Dev',
-          support: 'Support Materia • IT & Infrastructure',
-          independent: 'Independent Materia • Leadership & Soft Skills'
+          magic: 'Pillar I • Creative & Narrative Design',
+          command: 'Pillar II • Software & Game Engineering',
+          support: 'Pillar III • IT Infrastructure & Systems',
+          independent: 'Pillar IV • Leadership & Direction'
         };
         app.data.materia.push({
           id: `mat-${Date.now()}`,
           name: fd.get('name').trim(),
           type,
-          categoryLabel: labels[type] || 'Materia',
-          level: Number(fd.get('level')) || 4,
+          categoryLabel: labels[type] || 'Skill',
+          level: 5,
           maxLevel: 5,
-          ap: fd.get('ap').trim() || 'MASTER',
-          description: fd.get('description').trim(),
-          linkedEffects: fd.get('linkedEffects').split(',').map(s => s.trim()).filter(Boolean)
+          ap: 'MASTER',
+          description: (fd.get('description') || '').trim(),
+          linkedEffects: []
         });
         app.saveData(app.data);
         this.renderEditorUI();
-        this.flashStatus('Equipped new Skill Materia!');
+        this.flashStatus('Added new skill!');
       });
     }
 
@@ -1153,8 +1111,8 @@ window.PortfolioEditor = {
         app.data.certifications.push({
           id: `cert-${Date.now()}`,
           title: fd.get('title').trim(),
-          code: fd.get('code').trim() || 'CERT',
-          issuer: 'Certified Credential',
+          code: 'CERT',
+          issuer: (fd.get('issuer') || '').trim() || 'Certified Credential',
           date: fd.get('date').trim(),
           url: fd.get('url').trim()
         });
@@ -1243,17 +1201,15 @@ window.PortfolioEditor = {
         app.data.profile.name = name;
         app.data.profile.firstName = parts[0] || name;
         app.data.profile.lastName = parts.slice(1).join(' ') || '';
-        app.data.profile.classTitle = fd.get('classTitle').trim();
-        app.data.profile.level = Number(fd.get('level')) || 4;
-        app.data.profile.yakuzaTitle = fd.get('yakuzaTitle').trim();
-        app.data.profile.heroIntro = fd.get('heroIntro').trim();
         app.data.profile.aboutBio = fd.get('aboutBio').trim();
         app.data.profile.careerGoals = fd.get('careerGoals').trim();
         if (app.data.profile.contact) {
           app.data.profile.contact.email = fd.get('email').trim();
+          app.data.profile.contact.linkedinUrl = (fd.get('linkedinUrl') || '').trim() || app.data.profile.contact.linkedinUrl;
+          app.data.profile.contact.facebookUrl = (fd.get('facebookUrl') || '').trim() || app.data.profile.contact.facebookUrl;
         }
         app.saveData(app.data);
-        this.flashStatus('Updated Profile & Character HUD!');
+        this.flashStatus('Updated Profile & Contact Links!');
       });
     }
 
