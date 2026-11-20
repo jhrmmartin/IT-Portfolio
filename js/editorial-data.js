@@ -115,7 +115,7 @@
         <dl><div><dt>Role</dt><dd>${escape(work.role)}</dd></div><div><dt>Focus</dt><dd>${escape(work.tags.join(' / '))}</dd></div></dl>
         <p>${escape(work.description)}</p>
         <div class="project-actions">
-          <button type="button" class="case-study-btn" data-open-case-study="${escape(work.id)}">View case study &rarr;</button>
+          <button type="button" class="case-study-btn" data-open-case-study="${escape(work.id)}">View Project &rarr;</button>
           <a class="text-link" href="${url(work.url)}" target="_blank" rel="noreferrer">${escape(work.actionLabel)} &#8599;</a>
         </div>
       </article>`).join('');
