@@ -439,7 +439,7 @@ window.PortfolioEditor = {
               </div>
               <div>
                 <label class="block text-xs font-mono-hud mb-1 opacity-80">Project label</label>
-                <input type="text" name="substoryNumber" placeholder="MYTHIC TALE #06" class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm">
+                <input type="text" name="substoryNumber" placeholder="PROJECT 06" class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm">
               </div>
               <div>
                 <label class="block text-xs font-mono-hud mb-1 opacity-80">Case study title</label>
@@ -478,9 +478,15 @@ window.PortfolioEditor = {
               </div>
             </div>
 
-            <div>
-              <label class="block text-xs font-mono-hud mb-1 opacity-80">Case Study Hero Elevator Pitch</label>
-              <input type="text" name="csPitch" placeholder="A 1-LINE UPPERCASE SUMMARY AT THE TOP OF THE CASE STUDY..." class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-mono-hud mb-1 opacity-80">Case Study Hero Elevator Pitch</label>
+                <input type="text" name="csPitch" placeholder="A 1-LINE UPPERCASE SUMMARY AT THE TOP OF THE CASE STUDY..." class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm">
+              </div>
+              <div>
+                <label class="block text-xs font-mono-hud mb-1 opacity-80">Project Logo Image URL (Optional)</label>
+                <input type="text" name="csLogoImage" placeholder="https://... (replaces text title if provided)" class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm">
+              </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -560,10 +566,10 @@ window.PortfolioEditor = {
               <div>
                 <label class="block text-xs font-mono-hud mb-1 opacity-80">Discipline *</label>
                 <select name="type" class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm">
-                  <option value="magic">🟢 Magic (Creative & Design)</option>
-                  <option value="command">🟡 Command (Engineering & Coding)</option>
-                  <option value="support">🔵 Support (IT, Networking & Docs)</option>
-                  <option value="independent">🟣 Independent (Leadership & Soft Skills)</option>
+                  <option value="magic">Pillar I • Creative & Narrative Design</option>
+                  <option value="command">Pillar II • Software & Game Engineering</option>
+                  <option value="support">Pillar III • IT Infrastructure & Systems</option>
+                  <option value="independent">Pillar IV • Leadership & Direction</option>
                 </select>
               </div>
               <div>
@@ -572,7 +578,7 @@ window.PortfolioEditor = {
               </div>
               <div>
                 <label class="block text-xs font-mono-hud mb-1 opacity-80">Proficiency label</label>
-                <input type="text" name="ap" value="MASTER" placeholder="MASTER or 4,500 AP" class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm">
+                <input type="text" name="ap" value="MASTER" placeholder="MASTER or ADVANCED" class="w-full px-3 py-2 rounded bg-slate-950 border border-slate-700 text-sm">
               </div>
             </div>
 
@@ -750,9 +756,20 @@ window.PortfolioEditor = {
           <h4 class="text-sm font-mono-hud uppercase text-emerald-400 font-bold">
             Edit Profile
           </h4>
-<label>Portrait image URL<input name="avatarUrl" value="${esc(p.avatarUrl || '')}" type="text"></label>
-<label>Resume URL<input name="resumeUrl" value="${esc(p.resumeUrl || '')}" type="text"></label>
-<label>University<input name="university" value="${esc(p.university || '')}" type="text"></label>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label class="block text-xs font-mono-hud mb-1 opacity-80">Portrait image URL</label>
+              <input name="avatarUrl" value="${esc(p.avatarUrl || '')}" type="text">
+            </div>
+            <div>
+              <label class="block text-xs font-mono-hud mb-1 opacity-80">Resume URL</label>
+              <input name="resumeUrl" value="${esc(p.resumeUrl || '')}" type="text">
+            </div>
+            <div>
+              <label class="block text-xs font-mono-hud mb-1 opacity-80">University</label>
+              <input name="university" value="${esc(p.university || '')}" type="text">
+            </div>
+          </div>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <label class="block text-xs font-mono-hud mb-1 opacity-80">Full Name</label>
@@ -958,6 +975,7 @@ window.PortfolioEditor = {
           if (workForm.elements.csCategoryYear) workForm.elements.csCategoryYear.value = cs.categoryYear || '';
           if (workForm.elements.csCredits) workForm.elements.csCredits.value = cs.credits || '';
           if (workForm.elements.csPitch) workForm.elements.csPitch.value = cs.pitch || '';
+          if (workForm.elements.csLogoImage) workForm.elements.csLogoImage.value = cs.logoImage || '';
           if (workForm.elements.csProblemImage) workForm.elements.csProblemImage.value = cs.problem?.image || '';
           if (workForm.elements.csFeaturesText) {
             workForm.elements.csFeaturesText.value = (cs.features || []).map(f =>
@@ -1027,7 +1045,7 @@ window.PortfolioEditor = {
             pitch: (fd.get('csPitch') || '').trim() || prevCs.pitch || fd.get('description').trim().toUpperCase(),
             categoryYear: (fd.get('csCategoryYear') || '').trim() || prevCs.categoryYear || 'PROJECT · 2025',
             credits: (fd.get('csCredits') || '').trim() || prevCs.credits || `${fd.get('role').trim()} • Jehrome Martin`,
-            logoImage: prevCs.logoImage || '',
+            logoImage: (fd.get('csLogoImage') || '').trim() || '',
             problem: {
               heading: 'The Problem',
               body: problemBody,

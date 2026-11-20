@@ -203,6 +203,7 @@ footer h2 { color:var(--red); font-size:clamp(35px,7.6vw,115px); line-height:.95
 #cms-status-msg { padding:12px 16px; border:1px solid #49423b; border-radius:8px; background:#25211e; color:#d9c5ae; line-height:1.6; }
 #cms-status-msg[data-state=saved] { border-color:#386b56; color:#afe2c4; background:#142b22; }
 #cms-status-msg[data-state=pending] { border-color:#9e7735; color:#f7d397; background:#322718; }
+#cms-tab-body { max-height:60dvh; overflow-y:auto; padding-right:4px; }
 #cms-modal i { display:inline-block; width:1em; font-style:normal; font-size:15px; line-height:1; }
 #cms-modal .fa-lock::before { content:'\25C6'; }
 #cms-modal .fa-key::before { content:'\2192'; }
@@ -276,6 +277,9 @@ html[data-color-theme=light] #cms-modal-content>div:nth-child(2):has([data-cms-t
 html[data-color-theme=light] #cms-modal [data-work-delete],
 html[data-color-theme=light] #cms-modal [data-cert-delete],
 html[data-color-theme=light] #cms-modal [data-materia-delete] { color:#a02520; }
+html[data-color-theme=light] #cms-status-msg { background:#eae3d6; border-color:#c8bead; color:#4e473e; }
+html[data-color-theme=light] #cms-status-msg[data-state=saved] { background:#e2f0e6; border-color:#53916a; color:#1d5a34; }
+html[data-color-theme=light] #cms-status-msg[data-state=pending] { background:#f5ebd6; border-color:#b3812d; color:#6b480e; }
 @media(max-width:600px) { .masthead { flex-wrap:wrap; gap:6px 16px; } .masthead nav { flex-wrap:wrap; align-items:center; } .theme-toggle { padding:8px 10px; } }
 /* Persistent navigation and restored contact composer. */
 .masthead { position:sticky; top:0; z-index:40; background:#080808ed; backdrop-filter:blur(14px); border-bottom:1px solid #34302c; }
